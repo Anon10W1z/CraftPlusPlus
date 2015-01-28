@@ -5,5 +5,3 @@ tile.charcoalBlock.name=Block of Charcoal
 tile.buttonStone.name=Stone Button
 tile.buttonWood.name=Wooden Button
 tile.sand.name=Sand/Red Sand
-
-commands.give.notFoundId=There is no such item with ID %s

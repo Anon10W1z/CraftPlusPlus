@@ -1,10 +1,14 @@
 package com.anon10w1z.craftPP.main;
 
 import com.google.common.collect.Iterables;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import java.lang.ref.WeakReference;
@@ -45,5 +49,17 @@ public class CppUtils {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	/**
+	 * Registers a storage block recipe
+	 *
+	 * @param input The ingredient of the recipe
+	 * @param output The output (storage block) of the recipe
+	 */
+	public static void registerStorageRecipes(ItemStack input, Block output) {
+		GameRegistry.addRecipe(new ItemStack(output), "III", "III", "III", 'I', input);
+		input.stackSize = 9;
+		GameRegistry.addShapelessRecipe(input, output);
 	}
 }
