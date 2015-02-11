@@ -12,21 +12,22 @@ import net.minecraft.item.Item;
  *
  * @author Anon10W1z
  */
+@SuppressWarnings("unused")
 public class CppClientProxy extends CppCommonProxy {
 	@Override
 	public void registerBlockInventoryRenderers() {
-		registerBlockInventoryRenderer(CppBlocks.flint_block, "flint_block");
-		registerBlockInventoryRenderer(CppBlocks.sugar_block, "sugar_block");
-		registerBlockInventoryRenderer(CppBlocks.charcoal_block, "charcoal_block");
+		registerBlockInventoryRenderer(CppBlocks.flint_block, "flint");
+		registerBlockInventoryRenderer(CppBlocks.sugar_block, "sugar");
+		registerBlockInventoryRenderer(CppBlocks.charcoal_block, "charcoal");
 	}
 
 	/**
-	 * Registers a renderer for a block in the inventory, regardless of metadata
+	 * Registers a renderer for a block in the inventory
 	 *
-	 * @param block     - The block
-	 * @param blockName - The name of the block
+	 * @param block      - The block
+	 * @param namePrefix - The name prefix of the block
 	 */
-	private void registerBlockInventoryRenderer(Block block, String blockName) {
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(block), 0, new ModelResourceLocation(CppReferences.MOD_ID + ":" + blockName, "inventory"));
+	private void registerBlockInventoryRenderer(Block block, String namePrefix) {
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(block), 0, new ModelResourceLocation(CppReferences.MOD_ID + ":" + namePrefix + "_block", "inventory"));
 	}
 }

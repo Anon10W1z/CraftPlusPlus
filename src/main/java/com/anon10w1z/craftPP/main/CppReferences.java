@@ -14,7 +14,7 @@ public class CppReferences {
 	/**
 	 * Craft++'s version
 	 */
-	public static final String VERSION = "2.0";
+	public static final String VERSION = "2.1";
 
 	/**
 	 * Craft++'s package location

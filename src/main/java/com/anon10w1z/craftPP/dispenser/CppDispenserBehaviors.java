@@ -17,10 +17,10 @@ public class CppDispenserBehaviors {
 	/**
 	 * Registers the dispenser behaviors for Craft++
 	 */
+	@SuppressWarnings("unchecked")
 	public static void registerDispenserBehaviors() {
 		//Iterating Items
-		@SuppressWarnings("unchecked") Item[] items = CppUtils.getArray(Item.itemRegistry, Item.class);
-		for (Item item : items) {
+		for (Item item : CppUtils.getArray(Item.itemRegistry, Item.class)) {
 			//Falling Blocks
 			if (item instanceof ItemBlock) {
 				Block block = ((ItemBlock) item).block;
@@ -44,7 +44,8 @@ public class CppDispenserBehaviors {
 		String localizedName = StatCollector.translateToLocal(item.getUnlocalizedName() + ".name");
 		if (dispenserBehavior.getClass() != BehaviorDefaultDispenseItem.class)
 			CraftPlusPlus.logInfo("Registering dispenser behavior for " + localizedName);
-		else CraftPlusPlus.logInfo("Removing dispenser behavior for " + localizedName);
+		else
+			CraftPlusPlus.logInfo("Registering default dispenser behavior for " + localizedName);
 		BlockDispenser.dispenseBehaviorRegistry.putObject(item, dispenserBehavior);
 	}
 }

@@ -1,5 +1,5 @@
 {
-"variants": {
-"normal": { "model": "craft++:flint_block" }
-}
+  "variants": {
+    "normal": {"model": "craft++:flint_block"}
+  }
 }

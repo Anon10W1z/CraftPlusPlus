@@ -1,6 +1,6 @@
 {
-    "parent": "block/cube_all",
-    "textures": {
-        "all": "craft++:blocks/flint_block"
-    }
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "craft++:blocks/flint_block"
+  }
 }

@@ -1,14 +1,10 @@
 package com.anon10w1z.craftPP.main;
 
 import com.google.common.collect.Iterables;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import java.lang.ref.WeakReference;
@@ -20,14 +16,24 @@ import java.lang.reflect.Field;
 @SuppressWarnings("unchecked")
 public class CppUtils {
 	/**
-	 * @param world The world to store this fake player
-	 * @return A new fake player
+	 * The way Minecraft Forge handles this is odd. <br>
+	 * Getting a fake player for the first time returns a new fake player. <br>
+	 * Subsequent calls to get a new fake player will return the first fake player created.
+	 *
+	 * @param world The world to store this fake player in
+	 * @return A fake player
 	 */
 	public static FakePlayer getFakePlayer(World world) {
-		return !world.isRemote ? new WeakReference<FakePlayer>(FakePlayerFactory.getMinecraft((WorldServer) world)).get() : null;
+		try {
+			return new WeakReference<FakePlayer>(FakePlayerFactory.getMinecraft(null)).get();
+		} catch (Exception ignored) {
+			return !world.isRemote ? new WeakReference<FakePlayer>(FakePlayerFactory.getMinecraft((WorldServer) world)).get() : null;
+		}
 	}
 
 	/**
+	 * Returns an array containing all of the specified iterable's elements, with the specified type
+	 *
 	 * @param iterable    The iterable object to convert into an array
 	 * @param elementType The class type of elements in the iterable
 	 * @param <T>         The data type of elements in the iterable
@@ -38,28 +44,20 @@ public class CppUtils {
 	}
 
 	/**
-	 * @param fieldContainer The class that contains this field
-	 * @param fieldNames     All possible names of the field to find
-	 * @return The field with the first possible of the specified names
+	 * Finds an object by the specified name(s) in the specified instance
+	 *
+	 * @param instance    The instance to find the object in
+	 * @param objectNames A list of all possible names for the object
+	 * @param <T>         The data type of the object
+	 * @return An object of the specified type with the first possible of the passed names
 	 */
-	public static Field findField(Class<?> fieldContainer, String... fieldNames) {
+	public static <T> T findObject(Object instance, String... objectNames) {
 		try {
-			return ReflectionHelper.findField(fieldContainer, fieldNames);
+			Field field = ReflectionHelper.findField(instance.getClass(), objectNames);
+			return (T) field.get(instance);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
-	}
-
-	/**
-	 * Registers a storage block recipe
-	 *
-	 * @param input The ingredient of the recipe
-	 * @param output The output (storage block) of the recipe
-	 */
-	public static void registerStorageRecipes(ItemStack input, Block output) {
-		GameRegistry.addRecipe(new ItemStack(output), "III", "III", "III", 'I', input);
-		input.stackSize = 9;
-		GameRegistry.addShapelessRecipe(input, output);
 	}
 }

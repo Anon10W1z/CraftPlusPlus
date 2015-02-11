@@ -1,5 +1,5 @@
 {
-"variants": {
-"normal": { "model": "craft++:charcoal_block" }
-}
+  "variants": {
+    "normal": {"model": "craft++:charcoal_block"}
+  }
 }

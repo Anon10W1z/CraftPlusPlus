@@ -52,7 +52,8 @@ public class CppEventHandler {
 	public void onLivingDrops(LivingDropsEvent event) {
 		Entity entity = event.entity;
 		World world = entity.worldObj;
-		if (!world.isRemote) {
+		//New Drops
+		if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doMobLoot")) {
 			//Living entities drop their name tags
 			String entityNameTag = entity.getCustomNameTag();
 			if (!entityNameTag.equals("")) {
@@ -61,22 +62,9 @@ public class CppEventHandler {
 				entity.entityDropItem(nameTag, 0);
 				entity.setCustomNameTag("");
 			}
-			//Drop removals
-			List<EntityItem> dropsCopy = new ArrayList<EntityItem>(event.drops);
-			for (EntityItem dropEntity : dropsCopy) {
-				ItemStack dropItem = dropEntity.getEntityItem();
-				if (event.source.getEntity() != null) {
-					Item drop = dropItem.getItem();
-					Entity source = event.source.getEntity();
-					if (source instanceof EntityWolf && entity instanceof EntitySheep) {
-						if (drop == Items.mutton || drop == Items.cooked_mutton) event.drops.remove(dropEntity);
-					} else if (source instanceof EntityOcelot && entity instanceof EntityChicken) {
-						if (drop == Items.chicken || drop == Items.cooked_chicken) event.drops.remove(dropEntity);
-					}
-				}
-			}
 			//Bats drop leather
-			if (entity instanceof EntityBat && CppConfigHandler.enableBatLeatherDrop) entity.dropItem(Items.leather, 1);
+			if (entity instanceof EntityBat && CppConfigHandler.enableBatLeatherDrop)
+				entity.dropItem(Items.leather, 1);
 				//Enderman drop the block they are carrying
 			else if (entity instanceof EntityEnderman && CppConfigHandler.enableEndermanBlockDrop) {
 				EntityEnderman enderman = (EntityEnderman) entity;
@@ -91,6 +79,22 @@ public class CppEventHandler {
 				if (world.rand.nextInt(10) == 0 && CppConfigHandler.creeperDropTnt && event.source.damageType != null) {
 					event.drops.clear();
 					entity.dropItem(Item.getItemFromBlock(Blocks.tnt), 1);
+				}
+			}
+		}
+		//Drop removals
+		List<EntityItem> dropsCopy = new ArrayList<EntityItem>(event.drops);
+		for (EntityItem dropEntity : dropsCopy) {
+			ItemStack dropItem = dropEntity.getEntityItem();
+			if (event.source.getEntity() != null) {
+				Item drop = dropItem.getItem();
+				Entity source = event.source.getEntity();
+				if (source instanceof EntityWolf && entity instanceof EntitySheep) {
+					if (drop == Items.mutton || drop == Items.cooked_mutton)
+						event.drops.remove(dropEntity);
+				} else if (source instanceof EntityOcelot && entity instanceof EntityChicken) {
+					if (drop == Items.chicken || drop == Items.cooked_chicken)
+						event.drops.remove(dropEntity);
 				}
 			}
 		}
@@ -128,9 +132,9 @@ public class CppEventHandler {
 			World world = entity.worldObj;
 			Random random = world.rand;
 			if (((entity instanceof EntityCreeper && CppConfigHandler.creeperBurnInDaylight) || (entity instanceof EntityZombie && entity.isChild() && CppConfigHandler.babyZombieBurnInDaylight)) && world.isDaytime()) {
-				float f = entity.getBrightness(1.0F);
+				float f = entity.getBrightness(1);
 				BlockPos blockpos = new BlockPos(entity.posX, Math.round(entity.posY), entity.posZ);
-				if (f > 0.5F && random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && world.canSeeSky(blockpos)) {
+				if (f > 0.5 && random.nextFloat() * 30 < (f - 0.4) * 2 && world.canSeeSky(blockpos)) {
 					boolean flag = true;
 					ItemStack itemstack = entity.getEquipmentInSlot(4);
 					if (itemstack != null) {
@@ -143,8 +147,8 @@ public class CppEventHandler {
 						}
 						flag = false;
 					}
-
-					if (flag) entity.setFire(8);
+					if (flag)
+						entity.setFire(8);
 				}
 			}
 		}
@@ -157,7 +161,8 @@ public class CppEventHandler {
 	 */
 	@SubscribeEvent
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
-		if (event.modID.equals(CppReferences.MOD_ID)) CppConfigHandler.syncConfig();
+		if (event.modID.equals(CppReferences.MOD_ID))
+			CppConfigHandler.syncConfig();
 	}
 
 	/**
@@ -172,9 +177,8 @@ public class CppEventHandler {
 			ItemStack heldItem = player.getHeldItem();
 			World world = player.worldObj;
 			Entity target = event.target;
-			//Shearable Name Tags
 			if (heldItem.getItem() instanceof ItemShears && target instanceof EntityLivingBase && target.hasCustomName() && !world.isRemote) {
-				target.playSound("mob.sheep.shear", 1.0F, 1.0F);
+				target.playSound("mob.sheep.shear", 1, 1);
 				ItemStack nameTag = new ItemStack(Items.name_tag).setStackDisplayName(target.getCustomNameTag());
 				target.entityDropItem(nameTag, 0);
 				target.setCustomNameTag("");
@@ -191,16 +195,16 @@ public class CppEventHandler {
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event) {
 		World world = event.world;
-		List list = world.getEntities(EntityItem.class, Predicates.alwaysTrue());
-		@SuppressWarnings("unchecked") EntityItem[] items = CppUtils.getArray(list, EntityItem.class);
-		for (EntityItem entityItem : items) {
+		@SuppressWarnings("unchecked") List<EntityItem> entityItemList = world.getEntities(EntityItem.class, Predicates.notNull());
+		for (EntityItem entityItem : CppUtils.getArray(entityItemList, EntityItem.class)) {
 			ItemStack itemstack = entityItem.getEntityItem();
 			if (itemstack.getItem() instanceof ItemSeeds) {
 				BlockPos entityPos = new BlockPos(entityItem).down();
 				BlockPos lastTickEntityPos = new BlockPos(entityItem.lastTickPosX, entityItem.lastTickPosY, entityItem.lastTickPosZ).down();
 				DataWatcher dataWatcher = entityItem.getDataWatcher();
 				dataWatcher.updateObject(30, dataWatcher.getWatchableObjectInt(30) + 1);
-				if (entityPos.compareTo(lastTickEntityPos) != 0) dataWatcher.updateObject(30, 0);
+				if (entityPos.compareTo(lastTickEntityPos) != 0)
+					dataWatcher.updateObject(30, 0);
 				if (dataWatcher.getWatchableObjectInt(30) >= entityItem.getDataWatcher().getWatchableObjectInt(31))
 					itemstack.onItemUse(CppUtils.getFakePlayer(world), world, entityPos, EnumFacing.UP, 0, 0, 0);
 			}
@@ -208,7 +212,7 @@ public class CppEventHandler {
 	}
 
 	/**
-	 * Sets the planting delay for seeds in farmland.
+	 * Adds some properties to item entities.
 	 *
 	 * @param event The EntityConstructing (event)
 	 */
@@ -217,8 +221,8 @@ public class CppEventHandler {
 		if (event.entity instanceof EntityItem) {
 			Entity entity = event.entity;
 			DataWatcher dataWatcher = entity.getDataWatcher();
-			dataWatcher.addObject(30, 0);
-			dataWatcher.addObject(31, entity.worldObj.rand.nextInt(51) + 50);
+			dataWatcher.addObject(30, 0); //the number of ticks this entity has been above the same BlockPos
+			dataWatcher.addObject(31, entity.worldObj.rand.nextInt(51) + 50); //the number of ticks necessary to be above the same BlockPos
 		}
 	}
 }

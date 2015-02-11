@@ -8,7 +8,6 @@ import com.anon10w1z.craftPP.handlers.CppFuelHandler;
 import com.anon10w1z.craftPP.proxies.CppCommonProxy;
 import com.anon10w1z.craftPP.recipes.CppRecipeReplacer;
 import com.anon10w1z.craftPP.recipes.CppRecipes;
-import com.google.common.collect.Lists;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
@@ -23,7 +22,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * The main mod file of Craft++
@@ -34,13 +33,13 @@ import java.util.ArrayList;
 @Mod(modid = CppReferences.MOD_ID, name = CppReferences.NAME, version = CppReferences.VERSION, guiFactory = CppReferences.PACKAGE_LOCATION + "." + "gui.CppGuiFactory")
 public final class CraftPlusPlus {
 	/**
-	 * The proxy of CraftPlusPlus
+	 * The proxy of Craft++
 	 */
-	@SidedProxy(modId = CppReferences.MOD_ID, clientSide = CppReferences.PACKAGE_LOCATION + "." + "proxies.CppClientProxy", serverSide = CppReferences.PACKAGE_LOCATION + "." + "proxies.CppCommonProxy")
-	private static CppCommonProxy proxy = new CppCommonProxy();
+	@SidedProxy(modId = CppReferences.MOD_ID, clientSide = CppReferences.PACKAGE_LOCATION + "." + "proxies" + ".CppClientProxy", serverSide = CppReferences.PACKAGE_LOCATION + "." + "proxies.CppCommonProxy")
+	private static CppCommonProxy proxy;
 
 	/**
-	 * The mod instance of CraftPlusPlus
+	 * The mod instance of Craft++
 	 */
 	@Instance(CppReferences.MOD_ID)
 	private static CraftPlusPlus instance;
@@ -48,7 +47,7 @@ public final class CraftPlusPlus {
 	/**
 	 * The logger for Craft++
 	 */
-	private Logger logger = LogManager.getLogger("Craft++");
+	private Logger logger = LogManager.getLogger(CppReferences.MOD_ID);
 
 	/**
 	 * Logs a message with Craft++'s logger with the INFO level.
@@ -57,15 +56,6 @@ public final class CraftPlusPlus {
 	 */
 	public static void logInfo(String message) {
 		instance.logger.info(message);
-	}
-
-	/**
-	 * Logs a message with Craft++'s logger with the ERROR level.
-	 *
-	 * @param message The string to be logged
-	 */
-	public static void logError(String message) {
-		instance.logger.error(message);
 	}
 
 	/**
@@ -78,7 +68,6 @@ public final class CraftPlusPlus {
 	 * @param event The FMLPreInitializationEvent
 	 */
 	@EventHandler
-	@SuppressWarnings("unchecked")
 	public void onPreInit(FMLPreInitializationEvent event) {
 		logInfo("Hard-coding the mcmod.info");
 		ModMetadata modMetadata = event.getModMetadata();
@@ -86,10 +75,9 @@ public final class CraftPlusPlus {
 		modMetadata.name = CppReferences.NAME;
 		modMetadata.version = CppReferences.VERSION;
 		modMetadata.description = "A simple vanilla-enhancing mod.";
-		ArrayList<String> authorList = Lists.newArrayList();
-		authorList.add("Anon10W1z");
-		modMetadata.authorList = authorList;
-		logInfo("Initializing the Version Checker Support");
+		modMetadata.authorList = Arrays.asList("Anon10W1z");
+		modMetadata.url = "http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2342595";
+		logInfo("Enabling the Version Checker Support");
 		FMLInterModComms.sendRuntimeMessage(CppReferences.MOD_ID, "VersionChecker", "addVersionCheck", "https://dl.dropboxusercontent.com/u/76347756/VersionCheck.json");
 		logInfo("Initializing the config handler");
 		CppConfigHandler.init(event);
@@ -118,6 +106,7 @@ public final class CraftPlusPlus {
 		CppEventHandler eventHandler = new CppEventHandler();
 		MinecraftForge.EVENT_BUS.register(eventHandler);
 		FMLCommonHandler.instance().bus().register(eventHandler);
+		logInfo("Registering the fuel handler");
 		GameRegistry.registerFuelHandler(new CppFuelHandler());
 		logInfo("Registering the crafting/furnace recipes");
 		CppRecipes.registerRecipes();
