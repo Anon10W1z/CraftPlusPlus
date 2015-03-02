@@ -1,13 +1,15 @@
 package com.anon10w1z.craftPP.main;
 
 import com.google.common.collect.Iterables;
+import net.minecraft.block.Block;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
-import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 
 /**
@@ -16,19 +18,24 @@ import java.lang.reflect.Field;
 @SuppressWarnings("unchecked")
 public class CppUtils {
 	/**
-	 * The way Minecraft Forge handles this is odd. <br>
-	 * Getting a fake player for the first time returns a new fake player. <br>
+	 * Prevents CppUtils from being instantiated
+	 */
+	private CppUtils() {
+
+	}
+
+	/**
+	 * Gets a fake player. <br>
+	 * Getting a fake player for the first time returns a new fake player in the specified world. <br>
 	 * Subsequent calls to get a new fake player will return the first fake player created.
 	 *
-	 * @param world The world to store this fake player in
+	 * @param world The (semi-optional) world to store this fake player in
 	 * @return A fake player
 	 */
 	public static FakePlayer getFakePlayer(World world) {
-		try {
-			return new WeakReference<FakePlayer>(FakePlayerFactory.getMinecraft(null)).get();
-		} catch (Exception ignored) {
-			return !world.isRemote ? new WeakReference<FakePlayer>(FakePlayerFactory.getMinecraft((WorldServer) world)).get() : null;
-		}
+		if (world instanceof WorldServer)
+			return FakePlayerFactory.getMinecraft((WorldServer) world);
+		return null;
 	}
 
 	/**
@@ -44,11 +51,25 @@ public class CppUtils {
 	}
 
 	/**
+	 * @return An array containing all blocks registered with the game
+	 */
+	public static Block[] getBlockArray() {
+		return getArray(Block.blockRegistry, Block.class);
+	}
+
+	/**
+	 * @return An array containing all recipes registered with the game
+	 */
+	public static IRecipe[] getRecipeArray() {
+		return getArray(CraftingManager.getInstance().getRecipeList(), IRecipe.class);
+	}
+
+	/**
 	 * Finds an object by the specified name(s) in the specified instance
 	 *
 	 * @param instance    The instance to find the object in
 	 * @param objectNames A list of all possible names for the object
-	 * @param <T>         The data type of the object
+	 * @param <T>         The data type of the object to return
 	 * @return An object of the specified type with the first possible of the passed names
 	 */
 	public static <T> T findObject(Object instance, String... objectNames) {
@@ -56,7 +77,6 @@ public class CppUtils {
 			Field field = ReflectionHelper.findField(instance.getClass(), objectNames);
 			return (T) field.get(instance);
 		} catch (Exception e) {
-			e.printStackTrace();
 			return null;
 		}
 	}

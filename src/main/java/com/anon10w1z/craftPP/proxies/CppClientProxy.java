@@ -8,11 +8,10 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 
 /**
- * The client-side proxy for Craft++. Contains all of the rendering code.
+ * The client-side proxy for Craft++
  *
  * @author Anon10W1z
  */
-@SuppressWarnings("unused")
 public class CppClientProxy extends CppCommonProxy {
 	@Override
 	public void registerBlockInventoryRenderers() {
@@ -24,8 +23,8 @@ public class CppClientProxy extends CppCommonProxy {
 	/**
 	 * Registers a renderer for a block in the inventory
 	 *
-	 * @param block      - The block
-	 * @param namePrefix - The name prefix of the block
+	 * @param block      The block
+	 * @param namePrefix The name prefix of the block
 	 */
 	private void registerBlockInventoryRenderer(Block block, String namePrefix) {
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(block), 0, new ModelResourceLocation(CppReferences.MOD_ID + ":" + namePrefix + "_block", "inventory"));

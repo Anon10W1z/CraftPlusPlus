@@ -7,6 +7,9 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+/**
+ * The recipe registration class for Craft++
+ */
 public class CppRecipes {
 	/**
 	 * Registers the recipes for Craft++

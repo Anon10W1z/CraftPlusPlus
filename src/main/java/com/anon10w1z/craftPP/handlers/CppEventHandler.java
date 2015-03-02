@@ -5,6 +5,9 @@ import com.anon10w1z.craftPP.main.CppUtils;
 import com.google.common.base.Predicates;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.DataWatcher;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -21,22 +24,29 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
-import net.minecraftforge.event.entity.EntityEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * The event handler for Craft++
@@ -44,7 +54,7 @@ import java.util.Random;
 @SuppressWarnings("unused")
 public class CppEventHandler {
 	/**
-	 * Affects living entity drops.
+	 * Affects living entity drops
 	 *
 	 * @param event The LivingDropsEvent
 	 */
@@ -52,9 +62,9 @@ public class CppEventHandler {
 	public void onLivingDrops(LivingDropsEvent event) {
 		Entity entity = event.entity;
 		World world = entity.worldObj;
-		//New Drops
+		// New Drops
 		if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doMobLoot")) {
-			//Living entities drop their name tags
+			// Living entities drop their name tags
 			String entityNameTag = entity.getCustomNameTag();
 			if (!entityNameTag.equals("")) {
 				ItemStack nameTag = new ItemStack(Items.name_tag);
@@ -62,10 +72,10 @@ public class CppEventHandler {
 				entity.entityDropItem(nameTag, 0);
 				entity.setCustomNameTag("");
 			}
-			//Bats drop leather
+			// Bats drop leather
 			if (entity instanceof EntityBat && CppConfigHandler.enableBatLeatherDrop)
 				entity.dropItem(Items.leather, 1);
-				//Enderman drop the block they are carrying
+				// Enderman drop the block they are carrying
 			else if (entity instanceof EntityEnderman && CppConfigHandler.enableEndermanBlockDrop) {
 				EntityEnderman enderman = (EntityEnderman) entity;
 				IBlockState heldBlockState = enderman.func_175489_ck();
@@ -74,7 +84,7 @@ public class CppEventHandler {
 				enderman.entityDropItem(new ItemStack(heldBlock, 1, blockMeta), 0);
 				enderman.func_175490_a(Blocks.air.getDefaultState());
 			}
-			//Creepers can rarely drop a TNT
+			// Creepers can rarely drop a TNT
 			else if (entity instanceof EntityCreeper) {
 				if (world.rand.nextInt(10) == 0 && CppConfigHandler.creeperDropTnt && event.source.damageType != null) {
 					event.drops.clear();
@@ -82,7 +92,7 @@ public class CppEventHandler {
 				}
 			}
 		}
-		//Drop removals
+		// Drop removals
 		List<EntityItem> dropsCopy = new ArrayList<EntityItem>(event.drops);
 		for (EntityItem dropEntity : dropsCopy) {
 			ItemStack dropItem = dropEntity.getEntityItem();
@@ -101,7 +111,7 @@ public class CppEventHandler {
 	}
 
 	/**
-	 * Gives functionality for the creative mode ender pearl throwing.
+	 * Gives functionality for the creative mode ender pearl throwing
 	 *
 	 * @param event The PlayerInteractEvent
 	 */
@@ -121,7 +131,7 @@ public class CppEventHandler {
 	}
 
 	/**
-	 * Makes creepers and baby zombies burn in daylight.
+	 * Makes creepers and baby zombies burn in daylight
 	 *
 	 * @param event The LivingUpdateEvent
 	 */
@@ -135,7 +145,7 @@ public class CppEventHandler {
 				float f = entity.getBrightness(1);
 				BlockPos blockpos = new BlockPos(entity.posX, Math.round(entity.posY), entity.posZ);
 				if (f > 0.5 && random.nextFloat() * 30 < (f - 0.4) * 2 && world.canSeeSky(blockpos)) {
-					boolean flag = true;
+					boolean doSetFire = true;
 					ItemStack itemstack = entity.getEquipmentInSlot(4);
 					if (itemstack != null) {
 						if (itemstack.isItemStackDamageable()) {
@@ -145,9 +155,9 @@ public class CppEventHandler {
 								entity.setCurrentItemOrArmor(4, null);
 							}
 						}
-						flag = false;
+						doSetFire = false;
 					}
-					if (flag)
+					if (doSetFire)
 						entity.setFire(8);
 				}
 			}
@@ -155,7 +165,7 @@ public class CppEventHandler {
 	}
 
 	/**
-	 * Syncs the config file if it changes.
+	 * Syncs the config file if it changes
 	 *
 	 * @param event The OnConfigChangedEvent
 	 */
@@ -166,7 +176,7 @@ public class CppEventHandler {
 	}
 
 	/**
-	 * Allows a player to shear name tags off living entities.
+	 * Allows a player to shear name tags off living entities
 	 *
 	 * @param event The EntityInteractEvent
 	 */
@@ -188,41 +198,115 @@ public class CppEventHandler {
 	}
 
 	/**
-	 * Allows thrown seeds to plant themselves in farmland.
+	 * Allows thrown seeds to plant themselves in farmland
 	 *
 	 * @param event The WorldTickEvent
 	 */
 	@SubscribeEvent
+	@SuppressWarnings("unchecked")
 	public void onWorldTick(TickEvent.WorldTickEvent event) {
 		World world = event.world;
-		@SuppressWarnings("unchecked") List<EntityItem> entityItemList = world.getEntities(EntityItem.class, Predicates.notNull());
-		for (EntityItem entityItem : CppUtils.getArray(entityItemList, EntityItem.class)) {
-			ItemStack itemstack = entityItem.getEntityItem();
-			if (itemstack.getItem() instanceof ItemSeeds) {
-				BlockPos entityPos = new BlockPos(entityItem).down();
-				BlockPos lastTickEntityPos = new BlockPos(entityItem.lastTickPosX, entityItem.lastTickPosY, entityItem.lastTickPosZ).down();
-				DataWatcher dataWatcher = entityItem.getDataWatcher();
-				dataWatcher.updateObject(30, dataWatcher.getWatchableObjectInt(30) + 1);
-				if (entityPos.compareTo(lastTickEntityPos) != 0)
-					dataWatcher.updateObject(30, 0);
-				if (dataWatcher.getWatchableObjectInt(30) >= entityItem.getDataWatcher().getWatchableObjectInt(31))
-					itemstack.onItemUse(CppUtils.getFakePlayer(world), world, entityPos, EnumFacing.UP, 0, 0, 0);
+		List<EntityItem> entityItemList = world.getEntities(EntityItem.class, Predicates.alwaysTrue());
+		if (CppConfigHandler.enableAutoSeedPlanting)
+			for (EntityItem entityItem : entityItemList) {
+				ItemStack itemstack = entityItem.getEntityItem();
+				if (itemstack.getItem() instanceof ItemSeeds) {
+					BlockPos entityPos = new BlockPos(entityItem).down();
+					BlockPos lastTickEntityPos = new BlockPos(entityItem.lastTickPosX, entityItem.lastTickPosY, entityItem.lastTickPosZ).down();
+					DataWatcher dataWatcher = entityItem.getDataWatcher();
+					Map map = CppUtils.findObject(entityItem.getDataWatcher(), "watchedObjects", "field_75695_b");
+					if (!map.containsKey(30))
+						dataWatcher.addObject(30, 0);
+					if (!map.containsKey(31))
+						dataWatcher.addObject(31, world.rand.nextInt(51) + 50);
+
+					dataWatcher.updateObject(30, dataWatcher.getWatchableObjectInt(30) + 1);
+					if (entityPos.compareTo(lastTickEntityPos) != 0)
+						dataWatcher.updateObject(30, 0);
+					if (dataWatcher.getWatchableObjectInt(30) >= entityItem.getDataWatcher().getWatchableObjectInt(31))
+						itemstack.onItemUse(CppUtils.getFakePlayer(world), world, entityPos, EnumFacing.UP, 0, 0, 0);
+				}
+			}
+	}
+
+	/**
+	 * Adds tooltips for monster spawners
+	 *
+	 * @param event The ItemTooltipEvent
+	 */
+	@SubscribeEvent
+	public void onItemTooltip(ItemTooltipEvent event) {
+		ItemStack stack = event.itemStack;
+		Block block = Block.getBlockFromItem(stack.getItem());
+		if (block != null && block == Blocks.mob_spawner) {
+			NBTTagCompound stackTagCompound = stack.getTagCompound();
+			NBTTagCompound blockEntityTagCompound = stackTagCompound.getCompoundTag("BlockEntityTag");
+			String string = blockEntityTagCompound.getString("EntityId");
+			event.toolTip.add(EnumChatFormatting.BLUE + StatCollector.translateToLocal("entity." + string + ".name")); //uses localized entity name
+		}
+	}
+
+	/**
+	 * Enables mob spawners to drop themselves when harvested with silk touch
+	 *
+	 * @param event The (block) BreakEvent
+	 */
+	@SubscribeEvent
+	public void onBlockBreak(BlockEvent.BreakEvent event) {
+		EntityPlayer player = event.getPlayer();
+		if (!player.capabilities.isCreativeMode && event.state.getBlock() == Blocks.mob_spawner && EnchantmentHelper.getSilkTouchModifier(player)) {
+			World world = event.world;
+			BlockPos blockPos = event.pos;
+			TileEntity tileEntity = world.getTileEntity(blockPos);
+			if (tileEntity instanceof TileEntityMobSpawner) {
+				TileEntityMobSpawner spawnerTileEntity = (TileEntityMobSpawner) tileEntity;
+				ItemStack spawner = new ItemStack(Blocks.mob_spawner);
+				NBTTagCompound stackTagCompound = new NBTTagCompound();
+				NBTTagCompound spawnerTagCompound = new NBTTagCompound();
+				spawnerTileEntity.writeToNBT(spawnerTagCompound);
+				stackTagCompound.setTag("BlockEntityTag", spawnerTagCompound);
+				spawner.setTagCompound(stackTagCompound);
+				EntityItem spawnerEntityItem = new EntityItem(world, blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5, spawner);
+				spawnerEntityItem.setDefaultPickupDelay();
+				world.spawnEntityInWorld(spawnerEntityItem);
+				event.setExpToDrop(0); //prevents infinite XP loophole
 			}
 		}
 	}
 
 	/**
-	 * Adds some properties to item entities.
+	 * Draws potion effect icons in the top-left corner
 	 *
-	 * @param event The EntityConstructing (event)
+	 * @param event The Post (RenderGameOverLayEvent)
 	 */
 	@SubscribeEvent
-	public void onEntityConstructing(EntityEvent.EntityConstructing event) {
-		if (event.entity instanceof EntityItem) {
-			Entity entity = event.entity;
-			DataWatcher dataWatcher = entity.getDataWatcher();
-			dataWatcher.addObject(30, 0); //the number of ticks this entity has been above the same BlockPos
-			dataWatcher.addObject(31, entity.worldObj.rand.nextInt(51) + 50); //the number of ticks necessary to be above the same BlockPos
+	@SideOnly(Side.CLIENT)
+	public void onRenderGameOverlay(RenderGameOverlayEvent.Post event) {
+		if (event.type == RenderGameOverlayEvent.ElementType.EXPERIENCE && CppConfigHandler.enablePotionGui) {
+			Minecraft minecraft = Minecraft.getMinecraft();
+			int xPos = 2;
+			int yPos = 2;
+			Collection potionEffects = minecraft.thePlayer.getActivePotionEffects();
+			if (!potionEffects.isEmpty()) {
+				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+				GL11.glDisable(GL11.GL_LIGHTING);
+				minecraft.renderEngine.bindTexture(new ResourceLocation("textures/gui/container/inventory.png"));
+				//some constants for drawing textures
+				final int BUFF_ICON_SIZE = 18;
+				final int BUFF_ICON_SPACING = BUFF_ICON_SIZE + 2;
+				final int BUFF_ICON_BASE_U_OFFSET = 0;
+				final int BUFF_ICON_BASE_V_OFFSET = 198;
+				final int BUFF_ICONS_PER_ROW = 8;
+				for (Object potionEffectObject : potionEffects) {
+					PotionEffect potionEffect = (PotionEffect) potionEffectObject;
+					Potion potion = Potion.potionTypes[potionEffect.getPotionID()];
+					if (potion.hasStatusIcon()) {
+						int iconIndex = potion.getStatusIconIndex();
+						new Gui().drawTexturedModalRect(xPos, yPos, BUFF_ICON_BASE_U_OFFSET + iconIndex % BUFF_ICONS_PER_ROW * BUFF_ICON_SIZE, BUFF_ICON_BASE_V_OFFSET + iconIndex / BUFF_ICONS_PER_ROW * BUFF_ICON_SIZE, BUFF_ICON_SIZE, BUFF_ICON_SIZE);
+					}
+					xPos += BUFF_ICON_SPACING;
+				}
+			}
 		}
 	}
 }

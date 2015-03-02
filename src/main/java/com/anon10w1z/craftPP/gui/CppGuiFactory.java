@@ -6,11 +6,13 @@ import net.minecraftforge.fml.client.IModGuiFactory;
 
 import java.util.Set;
 
-@SuppressWarnings("unused")
+/**
+ * The GUI factory for Craft++
+ */
 public class CppGuiFactory implements IModGuiFactory {
 	@Override
 	public void initialize(Minecraft minecraftInstance) {
-		//do nothing
+		// do nothing
 	}
 
 	@Override

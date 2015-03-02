@@ -1,15 +1,14 @@
 {
-	"versionList": [
-		{
-			"mcVersion":"Minecraft 1.8",
-			"modVersion":"2.1",
-			"changeLog": [
-                "A new bugfix update! Woo-hoo!",
-                "Version 2.1 fixes several bugs and adds in Roman numerals up to 128!."
-			],
-			"updateURL":"https://dl.dropboxusercontent.com/u/76347756/craft%2B%2B-2.1.jar",
-			"isDirectLink":"true",
-			"newFileName":""
-		}
-	]
+  "versionList": [
+    {
+      "mcVersion": "Minecraft 1.8",
+      "modVersion": "2.2",
+      "changeLog": [
+        "Version 2.2 adds in bugfixes, as well as a potion effect display in the upper-left corner."
+      ],
+      "updateURL": "https://dl.dropboxusercontent.com/u/76347756/craft%2B%2B-2.2.jar",
+      "isDirectLink": "true",
+      "newFileName": ""
+    }
+  ]
 }

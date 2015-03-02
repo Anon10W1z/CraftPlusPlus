@@ -6,6 +6,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+/**
+ * Contains, initializes, and registers all of Craft++'s blocks
+ */
 public class CppBlocks {
 	//Storage Blocks
 	public static Block flint_block;

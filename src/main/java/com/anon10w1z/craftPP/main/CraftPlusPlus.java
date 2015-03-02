@@ -19,7 +19,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
@@ -29,14 +28,13 @@ import java.util.Arrays;
  *
  * @author Anon10W1z
  */
-@SuppressWarnings("unused")
-@Mod(modid = CppReferences.MOD_ID, name = CppReferences.NAME, version = CppReferences.VERSION, guiFactory = CppReferences.PACKAGE_LOCATION + "." + "gui.CppGuiFactory")
+@Mod(modid = CppReferences.MOD_ID, name = CppReferences.NAME, version = CppReferences.VERSION, guiFactory = CppReferences.PACKAGE_LOCATION + "." + "gui.CppGuiFactory", dependencies = "after:*")
 public final class CraftPlusPlus {
 	/**
 	 * The proxy of Craft++
 	 */
 	@SidedProxy(modId = CppReferences.MOD_ID, clientSide = CppReferences.PACKAGE_LOCATION + "." + "proxies" + ".CppClientProxy", serverSide = CppReferences.PACKAGE_LOCATION + "." + "proxies.CppCommonProxy")
-	private static CppCommonProxy proxy;
+	public static CppCommonProxy proxy;
 
 	/**
 	 * The mod instance of Craft++
@@ -47,10 +45,10 @@ public final class CraftPlusPlus {
 	/**
 	 * The logger for Craft++
 	 */
-	private Logger logger = LogManager.getLogger(CppReferences.MOD_ID);
+	private Logger logger;
 
 	/**
-	 * Logs a message with Craft++'s logger with the INFO level.
+	 * Logs a message with Craft++'s logger with the INFO level
 	 *
 	 * @param message The string to be logged
 	 */
@@ -60,6 +58,7 @@ public final class CraftPlusPlus {
 
 	/**
 	 * Performs the following actions: <br>
+	 * - Initializes the logger <br>
 	 * - Hard-codes the mcmod.info <br>
 	 * - Initializes the config handler <br>
 	 * - Enables the Version Checker support <br>
@@ -69,18 +68,20 @@ public final class CraftPlusPlus {
 	 */
 	@EventHandler
 	public void onPreInit(FMLPreInitializationEvent event) {
+		this.logger = event.getModLog();
+		logInfo("Initialized the logger");
 		logInfo("Hard-coding the mcmod.info");
 		ModMetadata modMetadata = event.getModMetadata();
 		modMetadata.modId = CppReferences.MOD_ID;
 		modMetadata.name = CppReferences.NAME;
 		modMetadata.version = CppReferences.VERSION;
-		modMetadata.description = "A simple vanilla-enhancing mod.";
+		modMetadata.description = "A simple vanilla-enhancing mod";
 		modMetadata.authorList = Arrays.asList("Anon10W1z");
-		modMetadata.url = "http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2342595";
+		modMetadata.url = "http://goo.gl/RpVUdZ";
 		logInfo("Enabling the Version Checker Support");
 		FMLInterModComms.sendRuntimeMessage(CppReferences.MOD_ID, "VersionChecker", "addVersionCheck", "https://dl.dropboxusercontent.com/u/76347756/VersionCheck.json");
 		logInfo("Initializing the config handler");
-		CppConfigHandler.init(event);
+		CppConfigHandler.init(event.getSuggestedConfigurationFile());
 		logInfo("Registering the blocks");
 		CppBlocks.registerBlocks();
 		logInfo("Pre-initialization completed successfully");
@@ -99,6 +100,7 @@ public final class CraftPlusPlus {
 	 * @param event The FMLInitializationEvent
 	 */
 	@EventHandler
+	@SuppressWarnings("unused")
 	public void onInit(FMLInitializationEvent event) {
 		logInfo("Registering the block inventory renderers");
 		proxy.registerBlockInventoryRenderers();

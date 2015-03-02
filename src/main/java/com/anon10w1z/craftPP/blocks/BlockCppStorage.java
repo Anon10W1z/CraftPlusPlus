@@ -4,6 +4,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 
+/**
+ * A base storage block class for Craft++'s storage blocks
+ */
 public class BlockCppStorage extends Block {
 	protected BlockCppStorage(Material material, String namePrefix) {
 		super(material);
