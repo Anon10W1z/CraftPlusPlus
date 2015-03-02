@@ -19,7 +19,6 @@ public class CppDispenserBehaviors {
 	 */
 	@SuppressWarnings("unchecked")
 	public static void registerDispenserBehaviors() {
-		//Iterating Items
 		for (Item item : CppUtils.getArray(Item.itemRegistry, Item.class)) {
 			//Falling Blocks
 			if (item instanceof ItemBlock) {

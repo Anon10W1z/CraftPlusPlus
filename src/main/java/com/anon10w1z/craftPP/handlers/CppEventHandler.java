@@ -51,7 +51,7 @@ import java.util.*;
 /**
  * The event handler for Craft++
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "unchecked"})
 public class CppEventHandler {
 	/**
 	 * Affects living entity drops
@@ -203,7 +203,6 @@ public class CppEventHandler {
 	 * @param event The WorldTickEvent
 	 */
 	@SubscribeEvent
-	@SuppressWarnings("unchecked")
 	public void onWorldTick(TickEvent.WorldTickEvent event) {
 		World world = event.world;
 		List<EntityItem> entityItemList = world.getEntities(EntityItem.class, Predicates.alwaysTrue());
@@ -258,7 +257,7 @@ public class CppEventHandler {
 			World world = event.world;
 			BlockPos blockPos = event.pos;
 			TileEntity tileEntity = world.getTileEntity(blockPos);
-			if (tileEntity instanceof TileEntityMobSpawner) {
+			if (tileEntity instanceof TileEntityMobSpawner) { //just to be safe
 				TileEntityMobSpawner spawnerTileEntity = (TileEntityMobSpawner) tileEntity;
 				ItemStack spawner = new ItemStack(Blocks.mob_spawner);
 				NBTTagCompound stackTagCompound = new NBTTagCompound();
@@ -279,32 +278,30 @@ public class CppEventHandler {
 	 *
 	 * @param event The Post (RenderGameOverLayEvent)
 	 */
-	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
 	public void onRenderGameOverlay(RenderGameOverlayEvent.Post event) {
-		if (event.type == RenderGameOverlayEvent.ElementType.EXPERIENCE && CppConfigHandler.enablePotionGui) {
+		if (event.type == RenderGameOverlayEvent.ElementType.CROSSHAIRS && CppConfigHandler.enablePotionGui) {
 			Minecraft minecraft = Minecraft.getMinecraft();
 			int xPos = 2;
 			int yPos = 2;
-			Collection potionEffects = minecraft.thePlayer.getActivePotionEffects();
-			if (!potionEffects.isEmpty()) {
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-				GL11.glDisable(GL11.GL_LIGHTING);
-				minecraft.renderEngine.bindTexture(new ResourceLocation("textures/gui/container/inventory.png"));
-				//some constants for drawing textures
-				final int BUFF_ICON_SIZE = 18;
-				final int BUFF_ICON_SPACING = BUFF_ICON_SIZE + 2;
-				final int BUFF_ICON_BASE_U_OFFSET = 0;
-				final int BUFF_ICON_BASE_V_OFFSET = 198;
-				final int BUFF_ICONS_PER_ROW = 8;
-				for (Object potionEffectObject : potionEffects) {
-					PotionEffect potionEffect = (PotionEffect) potionEffectObject;
-					Potion potion = Potion.potionTypes[potionEffect.getPotionID()];
-					if (potion.hasStatusIcon()) {
-						int iconIndex = potion.getStatusIconIndex();
-						new Gui().drawTexturedModalRect(xPos, yPos, BUFF_ICON_BASE_U_OFFSET + iconIndex % BUFF_ICONS_PER_ROW * BUFF_ICON_SIZE, BUFF_ICON_BASE_V_OFFSET + iconIndex / BUFF_ICONS_PER_ROW * BUFF_ICON_SIZE, BUFF_ICON_SIZE, BUFF_ICON_SIZE);
-					}
-					xPos += BUFF_ICON_SPACING;
+
+			GL11.glColor4f(1, 1, 1, 1);
+			GL11.glDisable(GL11.GL_LIGHTING);
+			minecraft.renderEngine.bindTexture(new ResourceLocation("textures/gui/container/inventory.png"));
+			//some constants for drawing textures
+			final int POTION_ICON_SIZE = 18;
+			final int POTION_ICON_SPACING = POTION_ICON_SIZE + 2;
+			final int POTION_ICON_BASE_X_OFFSET = 0;
+			final int POTION_ICON_BASE_Y_OFFSET = 198;
+			final int POTION_ICONS_PER_ROW = 8;
+			Collection<PotionEffect> potionEffects = minecraft.thePlayer.getActivePotionEffects();
+			for (PotionEffect potionEffect : potionEffects) {
+				Potion potion = Potion.potionTypes[potionEffect.getPotionID()];
+				if (potion.hasStatusIcon()) {
+					int iconIndex = potion.getStatusIconIndex();
+					new Gui().drawTexturedModalRect(xPos, yPos, POTION_ICON_BASE_X_OFFSET + iconIndex % POTION_ICONS_PER_ROW * POTION_ICON_SIZE, POTION_ICON_BASE_Y_OFFSET + iconIndex / POTION_ICONS_PER_ROW * POTION_ICON_SIZE, POTION_ICON_SIZE, POTION_ICON_SIZE);
+					xPos += POTION_ICON_SPACING;
 				}
 			}
 		}
