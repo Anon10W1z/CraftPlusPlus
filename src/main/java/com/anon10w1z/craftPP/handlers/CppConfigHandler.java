@@ -20,7 +20,6 @@ public class CppConfigHandler {
 	public static boolean enableEndermanBlockDrop;
 	public static boolean enableBatLeatherDrop;
 	public static boolean enableAutoSeedPlanting;
-	public static boolean enablePotionGui;
 	//Miscellaneous: Requires Restart
 	public static boolean commandBlockInRedstoneTab;
 	public static boolean enableFlintAndSteelDispenserBehavior;
@@ -58,7 +57,6 @@ public class CppConfigHandler {
 		enableEndermanBlockDrop = config.get(miscCategory, "Enable endermen dropping held block", true, "Do enderman drop the block they are holding?").getBoolean();
 		enableBatLeatherDrop = config.get(miscCategory, "Leather dropped by bats", true, "Do bats drop leather?").getBoolean();
 		enableAutoSeedPlanting = config.get(miscCategory, "Enable automatic seed planting", true, "Do dropped seeds have the ability to plant themselves in farmland?").getBoolean();
-		enablePotionGui = config.get(miscCategory, "Enable potion GUI", true, "Are potion effect icons displayed in the upper-left corner?").getBoolean();
 		config.setCategoryComment(miscCategory, "Miscellaneous settings");
 		//Requires Restart
 		commandBlockInRedstoneTab = config.get(miscRequiresRestartCategory, "Command Blocks in creative menu", true, "Can command blocks be obtained in the redstone creative tab?").getBoolean();

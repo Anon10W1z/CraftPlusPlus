@@ -34,8 +34,8 @@ public class CppClientProxy extends CppCommonProxy {
 	@Override
 	@SuppressWarnings("unchecked")
 	public void displayPotionEffects() {
-		int xPos = 0;
-		int yPos = 0;
+		int xPos = 2;
+		int yPos = 2;
 		GL11.glColor4f(1, 1, 1, 1);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		Minecraft minecraft = Minecraft.getMinecraft();

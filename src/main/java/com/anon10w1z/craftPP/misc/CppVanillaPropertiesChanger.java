@@ -1,6 +1,7 @@
-package com.anon10w1z.craftPP.main;
+package com.anon10w1z.craftPP.misc;
 
 import com.anon10w1z.craftPP.handlers.CppConfigHandler;
+import com.anon10w1z.craftPP.main.CppUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.Block.SoundType;
 import net.minecraft.block.BlockFire;
@@ -48,28 +49,27 @@ public class CppVanillaPropertiesChanger {
 			Blocks.command_block.setCreativeTab(CreativeTabs.tabRedstone);
 		Blocks.dragon_egg.setCreativeTab(CreativeTabs.tabDecorations);
 		Item fakeSpawner = new Item() {
-
-			{
-				this.setHasSubtypes(true);
-				this.setCreativeTab(CreativeTabs.tabMisc);
-			}
-
+			@Override
 			@SuppressWarnings("unchecked")
 			public void getSubItems(Item item, CreativeTabs creativeTab, List subItemsList) {
 				for (Object entityNameObject : EntityList.getEntityNameList()) { //iterate over entity names
 					Class entityClass = (Class) EntityList.stringToClassMapping.get(entityNameObject);
 					if (entityClass != null && EntityLivingBase.class.isAssignableFrom(entityClass) && entityClass != EntityArmorStand.class) {//make sure spawners in the creative menu can only spawn living entities, and no armor stands
-						ItemStack spawner = new ItemStack(Blocks.mob_spawner);
-						NBTTagCompound nbtTagCompound = new NBTTagCompound();
+						ItemStack spawnerStack = new ItemStack(Blocks.mob_spawner);
+						NBTTagCompound stackTagCompound = new NBTTagCompound();
 						NBTTagCompound blockEntityTag = new NBTTagCompound();
 						blockEntityTag.setString("EntityId", (String) entityNameObject);
-						nbtTagCompound.setTag("BlockEntityTag", blockEntityTag);
-						spawner.setTagCompound(nbtTagCompound);
-						subItemsList.add(spawner);
+						stackTagCompound.setTag("BlockEntityTag", blockEntityTag);
+						spawnerStack.setTagCompound(stackTagCompound);
+						subItemsList.add(spawnerStack);
 					}
 				}
 			}
 
+			{
+				this.setHasSubtypes(true);
+				this.setCreativeTab(CreativeTabs.tabMisc);
+			}
 		}; //unusual way to get mob spawners in creative mode menu
 		GameRegistry.registerItem(fakeSpawner, "fake_spawner");
 		//Modifying block names

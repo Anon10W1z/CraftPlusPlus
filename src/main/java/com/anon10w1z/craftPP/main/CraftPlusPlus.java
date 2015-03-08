@@ -5,6 +5,8 @@ import com.anon10w1z.craftPP.dispenser.CppDispenserBehaviors;
 import com.anon10w1z.craftPP.handlers.CppConfigHandler;
 import com.anon10w1z.craftPP.handlers.CppEventHandler;
 import com.anon10w1z.craftPP.handlers.CppFuelHandler;
+import com.anon10w1z.craftPP.misc.CppKeyBindings;
+import com.anon10w1z.craftPP.misc.CppVanillaPropertiesChanger;
 import com.anon10w1z.craftPP.proxies.CppCommonProxy;
 import com.anon10w1z.craftPP.recipes.CppRecipeReplacer;
 import com.anon10w1z.craftPP.recipes.CppRecipes;
@@ -28,12 +30,12 @@ import java.util.Arrays;
  *
  * @author Anon10W1z
  */
-@Mod(modid = CppReferences.MOD_ID, name = CppReferences.NAME, version = CppReferences.VERSION, guiFactory = CppReferences.PACKAGE_LOCATION + "." + "gui.CppGuiFactory", dependencies = "after:*")
+@Mod(modid = CppReferences.MOD_ID, name = CppReferences.NAME, version = CppReferences.VERSION, guiFactory = CppReferences.PACKAGE_LOCATION + ".gui.CppGuiFactory", dependencies = "after:*")
 public final class CraftPlusPlus {
 	/**
 	 * The proxy of Craft++
 	 */
-	@SidedProxy(modId = CppReferences.MOD_ID, clientSide = CppReferences.PACKAGE_LOCATION + "." + "proxies" + ".CppClientProxy", serverSide = CppReferences.PACKAGE_LOCATION + "." + "proxies.CppCommonProxy")
+	@SidedProxy(modId = CppReferences.MOD_ID, clientSide = CppReferences.PACKAGE_LOCATION + ".proxies.CppClientProxy", serverSide = CppReferences.PACKAGE_LOCATION + ".proxies.CppCommonProxy")
 	public static CppCommonProxy proxy;
 
 	/**
@@ -91,6 +93,7 @@ public final class CraftPlusPlus {
 	 * Performs the following actions: <br>
 	 * - Registers the block inventory renderers <br>
 	 * - Registers the event handler <br>
+	 * - Registers the key bindings <br>
 	 * - Registers the fuel handler <br>
 	 * - Registers the crafting recipes <br>
 	 * - Registers the dispenser behaviors <br>
@@ -108,6 +111,8 @@ public final class CraftPlusPlus {
 		CppEventHandler eventHandler = new CppEventHandler();
 		MinecraftForge.EVENT_BUS.register(eventHandler);
 		FMLCommonHandler.instance().bus().register(eventHandler);
+		logInfo("Registering the key bindings");
+		CppKeyBindings.registerKeyBindings();
 		logInfo("Registering the fuel handler");
 		GameRegistry.registerFuelHandler(new CppFuelHandler());
 		logInfo("Registering the crafting/furnace recipes");

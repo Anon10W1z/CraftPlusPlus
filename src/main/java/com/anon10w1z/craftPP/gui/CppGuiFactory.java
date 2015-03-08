@@ -12,7 +12,7 @@ import java.util.Set;
 public class CppGuiFactory implements IModGuiFactory {
 	@Override
 	public void initialize(Minecraft minecraftInstance) {
-		// do nothing
+		//do nothing
 	}
 
 	@Override

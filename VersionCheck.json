@@ -2,11 +2,11 @@
   "versionList": [
     {
       "mcVersion": "Minecraft 1.8",
-      "modVersion": "2.2",
+      "modVersion": "2.2.1",
       "changeLog": [
-        "Version 2.2 adds in bugfixes, as well as a potion effect display in the upper-left corner."
+        "Version 2.2.1 brings along some refactored and cleaned up code, as well as a key binding for the potion effect display."
       ],
-      "updateURL": "https://dl.dropboxusercontent.com/u/76347756/craft%2B%2B-2.2.jar",
+      "updateURL": "https://dl.dropboxusercontent.com/u/76347756/craft%2B%2B-2.2.1.jar",
       "isDirectLink": "true",
       "newFileName": ""
     }

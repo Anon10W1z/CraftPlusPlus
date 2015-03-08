@@ -6,6 +6,8 @@ tile.buttonStone.name=Stone Button
 tile.buttonWood.name=Wooden Button
 tile.sand.name=Sand/Red Sand
 
+craft++.potionGui=Potion GUI
+
 enchantment.level.11=XI
 enchantment.level.12=XII
 enchantment.level.13=XIII

@@ -3,9 +3,10 @@ package com.anon10w1z.craftPP.handlers;
 import com.anon10w1z.craftPP.main.CppReferences;
 import com.anon10w1z.craftPP.main.CppUtils;
 import com.anon10w1z.craftPP.main.CraftPlusPlus;
-import com.google.common.base.Predicates;
+import com.anon10w1z.craftPP.misc.CppKeyBindings;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.command.IEntitySelector;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.DataWatcher;
 import net.minecraft.entity.Entity;
@@ -25,7 +26,6 @@ import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatList;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
@@ -34,27 +34,29 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import static net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
+
 /**
  * The event handler for Craft++
  */
 @SuppressWarnings({"unused", "unchecked"})
 public class CppEventHandler {
+	private static boolean enablePotionEffectGui = true;
+
 	/**
 	 * Affects living entity drops
 	 *
@@ -120,9 +122,9 @@ public class CppEventHandler {
 	@SubscribeEvent
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		EntityPlayer player = event.entityPlayer;
-		World world = event.world;
 		if (player.getHeldItem() != null && event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR) {
 			Item heldItem = player.getHeldItem().getItem();
+			World world = event.world;
 			if (heldItem == Items.ender_pearl && !world.isRemote && player.capabilities.isCreativeMode) {
 				world.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (world.rand.nextFloat() * 0.4F + 0.8F));
 				EntityEnderPearl enderpearl = new EntityEnderPearl(world, player);
@@ -138,7 +140,7 @@ public class CppEventHandler {
 	 * @param event The LivingUpdateEvent
 	 */
 	@SubscribeEvent
-	public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
+	public void onLivingUpdate(LivingUpdateEvent event) {
 		EntityLivingBase entity = event.entityLiving;
 		if (!entity.worldObj.isRemote) {
 			World world = entity.worldObj;
@@ -150,6 +152,7 @@ public class CppEventHandler {
 					boolean doSetFire = true;
 					ItemStack itemstack = entity.getEquipmentInSlot(4);
 					if (itemstack != null) {
+						doSetFire = false;
 						if (itemstack.isItemStackDamageable()) {
 							itemstack.setItemDamage(itemstack.getItemDamage() + random.nextInt(2));
 							if (itemstack.getItemDamage() >= itemstack.getMaxDamage()) {
@@ -157,7 +160,6 @@ public class CppEventHandler {
 								entity.setCurrentItemOrArmor(4, null);
 							}
 						}
-						doSetFire = false;
 					}
 					if (doSetFire)
 						entity.setFire(8);
@@ -172,7 +174,7 @@ public class CppEventHandler {
 	 * @param event The OnConfigChangedEvent
 	 */
 	@SubscribeEvent
-	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
+	public void onConfigChanged(OnConfigChangedEvent event) {
 		if (event.modID.equals(CppReferences.MOD_ID))
 			CppConfigHandler.syncConfig();
 	}
@@ -205,10 +207,10 @@ public class CppEventHandler {
 	 * @param event The WorldTickEvent
 	 */
 	@SubscribeEvent
-	public void onWorldTick(TickEvent.WorldTickEvent event) {
-		World world = event.world;
-		List<EntityItem> entityItemList = world.getEntities(EntityItem.class, Predicates.alwaysTrue());
-		if (CppConfigHandler.enableAutoSeedPlanting)
+	public void onWorldTick(WorldTickEvent event) {
+		if (CppConfigHandler.enableAutoSeedPlanting) {
+			World world = event.world;
+			List<EntityItem> entityItemList = world.getEntities(EntityItem.class, IEntitySelector.selectAnything);
 			for (EntityItem entityItem : entityItemList) {
 				ItemStack itemstack = entityItem.getEntityItem();
 				if (itemstack.getItem() instanceof ItemSeeds) {
@@ -220,7 +222,6 @@ public class CppEventHandler {
 						dataWatcher.addObject(31, world.rand.nextInt(51) + 50);
 
 					dataWatcher.updateObject(30, dataWatcher.getWatchableObjectInt(30) + 1);
-
 					BlockPos entityPosDown = new BlockPos(entityItem).down();
 					BlockPos lastTickEntityPosDown = new BlockPos(entityItem.lastTickPosX, entityItem.lastTickPosY, entityItem.lastTickPosZ).down();
 					if (entityPosDown.compareTo(lastTickEntityPosDown) != 0)
@@ -229,6 +230,7 @@ public class CppEventHandler {
 						itemstack.onItemUse(CppUtils.getFakePlayer(world), world, entityPosDown, EnumFacing.UP, 0, 0, 0);
 				}
 			}
+		}
 	}
 
 	/**
@@ -258,40 +260,43 @@ public class CppEventHandler {
 	/**
 	 * Enables mob spawners to drop themselves when harvested with silk touch
 	 *
-	 * @param event The (block) BreakEvent
+	 * @param event The (BlockEvent) BreakEvent
 	 */
 	@SubscribeEvent
-	public void onBlockBreak(BlockEvent.BreakEvent event) {
+	public void onBlockBreak(BreakEvent event) {
 		EntityPlayer player = event.getPlayer();
 		if (!player.capabilities.isCreativeMode && event.state.getBlock() == Blocks.mob_spawner && EnchantmentHelper.getSilkTouchModifier(player) && player.canHarvestBlock(Blocks.mob_spawner)) {
 			World world = event.world;
 			BlockPos blockPos = event.pos;
-			TileEntity tileEntity = world.getTileEntity(blockPos);
-			if (tileEntity instanceof TileEntityMobSpawner) { //just to be safe
-				TileEntityMobSpawner spawnerTileEntity = (TileEntityMobSpawner) tileEntity;
-				ItemStack spawner = new ItemStack(Blocks.mob_spawner);
-				NBTTagCompound stackTagCompound = new NBTTagCompound(); //tag for stack
-				NBTTagCompound spawnerTagCompound = new NBTTagCompound(); //tag for spawner (contained within tag for stack)
-				spawnerTileEntity.writeToNBT(spawnerTagCompound);
-				stackTagCompound.setTag("BlockEntityTag", spawnerTagCompound);
-				spawner.setTagCompound(stackTagCompound);
-				EntityItem spawnerEntityItem = new EntityItem(world, blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5, spawner);
-				spawnerEntityItem.setDefaultPickupDelay();
-				world.spawnEntityInWorld(spawnerEntityItem);
-				event.setExpToDrop(0); //prevents infinite XP loophole
-			}
+			TileEntityMobSpawner spawnerTileEntity = (TileEntityMobSpawner) world.getTileEntity(blockPos);
+			NBTTagCompound spawnerTagCompound = new NBTTagCompound(); //tag for spawner (contained within tag for stack)
+			spawnerTileEntity.getSpawnerBaseLogic().writeToNBT(spawnerTagCompound);
+			NBTTagCompound stackTagCompound = new NBTTagCompound(); //tag for stack
+			stackTagCompound.setTag("BlockEntityTag", spawnerTagCompound);
+			ItemStack spawnerStack = new ItemStack(Blocks.mob_spawner);
+			spawnerStack.setTagCompound(stackTagCompound);
+			EntityItem spawnerEntityItem = new EntityItem(world, blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5, spawnerStack);
+			spawnerEntityItem.setDefaultPickupDelay();
+			world.spawnEntityInWorld(spawnerEntityItem);
+			event.setExpToDrop(0); //prevents infinite XP loophole
+		}
+	}
+
+	@SubscribeEvent
+	public void onKeyInput(KeyInputEvent event) {
+		if (CppKeyBindings.potionKey.isPressed()) {
+			enablePotionEffectGui = !enablePotionEffectGui;
 		}
 	}
 
 	/**
 	 * Draws potion effect icons in the top-left corner
 	 *
-	 * @param event The Post (RenderGameOverLayEvent)
+	 * @param event The (Post) RenderGameOverlayEvent
 	 */
-	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onRenderGameOverlay(RenderGameOverlayEvent.Post event) {
-		if (CppConfigHandler.enablePotionGui && event.type == RenderGameOverlayEvent.ElementType.CROSSHAIRS)
+		if (event.type == RenderGameOverlayEvent.ElementType.CROSSHAIRS && enablePotionEffectGui)
 			CraftPlusPlus.proxy.displayPotionEffects();
 	}
 }
