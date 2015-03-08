@@ -2,11 +2,10 @@ package com.anon10w1z.craftPP.handlers;
 
 import com.anon10w1z.craftPP.main.CppReferences;
 import com.anon10w1z.craftPP.main.CppUtils;
+import com.anon10w1z.craftPP.main.CraftPlusPlus;
 import com.google.common.base.Predicates;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.DataWatcher;
 import net.minecraft.entity.Entity;
@@ -25,12 +24,13 @@ import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
-import net.minecraft.util.*;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -44,9 +44,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * The event handler for Craft++
@@ -210,20 +212,21 @@ public class CppEventHandler {
 			for (EntityItem entityItem : entityItemList) {
 				ItemStack itemstack = entityItem.getEntityItem();
 				if (itemstack.getItem() instanceof ItemSeeds) {
-					BlockPos entityPos = new BlockPos(entityItem).down();
-					BlockPos lastTickEntityPos = new BlockPos(entityItem.lastTickPosX, entityItem.lastTickPosY, entityItem.lastTickPosZ).down();
 					DataWatcher dataWatcher = entityItem.getDataWatcher();
-					Map map = CppUtils.findObject(entityItem.getDataWatcher(), "watchedObjects", "field_75695_b");
+					Map map = CppUtils.findObject(dataWatcher, "watchedObjects", "field_75695_b");
 					if (!map.containsKey(30))
 						dataWatcher.addObject(30, 0);
 					if (!map.containsKey(31))
 						dataWatcher.addObject(31, world.rand.nextInt(51) + 50);
 
 					dataWatcher.updateObject(30, dataWatcher.getWatchableObjectInt(30) + 1);
-					if (entityPos.compareTo(lastTickEntityPos) != 0)
+
+					BlockPos entityPosDown = new BlockPos(entityItem).down();
+					BlockPos lastTickEntityPosDown = new BlockPos(entityItem.lastTickPosX, entityItem.lastTickPosY, entityItem.lastTickPosZ).down();
+					if (entityPosDown.compareTo(lastTickEntityPosDown) != 0)
 						dataWatcher.updateObject(30, 0);
 					if (dataWatcher.getWatchableObjectInt(30) >= entityItem.getDataWatcher().getWatchableObjectInt(31))
-						itemstack.onItemUse(CppUtils.getFakePlayer(world), world, entityPos, EnumFacing.UP, 0, 0, 0);
+						itemstack.onItemUse(CppUtils.getFakePlayer(world), world, entityPosDown, EnumFacing.UP, 0, 0, 0);
 				}
 			}
 	}
@@ -240,8 +243,15 @@ public class CppEventHandler {
 		if (block != null && block == Blocks.mob_spawner) {
 			NBTTagCompound stackTagCompound = stack.getTagCompound();
 			NBTTagCompound blockEntityTagCompound = stackTagCompound.getCompoundTag("BlockEntityTag");
-			String string = blockEntityTagCompound.getString("EntityId");
-			event.toolTip.add(EnumChatFormatting.BLUE + StatCollector.translateToLocal("entity." + string + ".name")); //uses localized entity name
+			String entityName = blockEntityTagCompound.getString("EntityId");
+			if (!entityName.equals("")) {
+				String unlocalizedEntityName = "entity." + entityName + ".name";
+				String localizedEntityName = StatCollector.translateToLocal(unlocalizedEntityName);
+				if (localizedEntityName.equals(unlocalizedEntityName))
+					event.toolTip.add(EnumChatFormatting.BLUE + entityName);
+				else
+					event.toolTip.add(EnumChatFormatting.BLUE + localizedEntityName);
+			}
 		}
 	}
 
@@ -253,15 +263,15 @@ public class CppEventHandler {
 	@SubscribeEvent
 	public void onBlockBreak(BlockEvent.BreakEvent event) {
 		EntityPlayer player = event.getPlayer();
-		if (!player.capabilities.isCreativeMode && event.state.getBlock() == Blocks.mob_spawner && EnchantmentHelper.getSilkTouchModifier(player)) {
+		if (!player.capabilities.isCreativeMode && event.state.getBlock() == Blocks.mob_spawner && EnchantmentHelper.getSilkTouchModifier(player) && player.canHarvestBlock(Blocks.mob_spawner)) {
 			World world = event.world;
 			BlockPos blockPos = event.pos;
 			TileEntity tileEntity = world.getTileEntity(blockPos);
 			if (tileEntity instanceof TileEntityMobSpawner) { //just to be safe
 				TileEntityMobSpawner spawnerTileEntity = (TileEntityMobSpawner) tileEntity;
 				ItemStack spawner = new ItemStack(Blocks.mob_spawner);
-				NBTTagCompound stackTagCompound = new NBTTagCompound();
-				NBTTagCompound spawnerTagCompound = new NBTTagCompound();
+				NBTTagCompound stackTagCompound = new NBTTagCompound(); //tag for stack
+				NBTTagCompound spawnerTagCompound = new NBTTagCompound(); //tag for spawner (contained within tag for stack)
 				spawnerTileEntity.writeToNBT(spawnerTagCompound);
 				stackTagCompound.setTag("BlockEntityTag", spawnerTagCompound);
 				spawner.setTagCompound(stackTagCompound);
@@ -281,29 +291,7 @@ public class CppEventHandler {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onRenderGameOverlay(RenderGameOverlayEvent.Post event) {
-		if (event.type == RenderGameOverlayEvent.ElementType.CROSSHAIRS && CppConfigHandler.enablePotionGui) {
-			Minecraft minecraft = Minecraft.getMinecraft();
-			int xPos = 2;
-			int yPos = 2;
-
-			GL11.glColor4f(1, 1, 1, 1);
-			GL11.glDisable(GL11.GL_LIGHTING);
-			minecraft.renderEngine.bindTexture(new ResourceLocation("textures/gui/container/inventory.png"));
-			//some constants for drawing textures
-			final int POTION_ICON_SIZE = 18;
-			final int POTION_ICON_SPACING = POTION_ICON_SIZE + 2;
-			final int POTION_ICON_BASE_X_OFFSET = 0;
-			final int POTION_ICON_BASE_Y_OFFSET = 198;
-			final int POTION_ICONS_PER_ROW = 8;
-			Collection<PotionEffect> potionEffects = minecraft.thePlayer.getActivePotionEffects();
-			for (PotionEffect potionEffect : potionEffects) {
-				Potion potion = Potion.potionTypes[potionEffect.getPotionID()];
-				if (potion.hasStatusIcon()) {
-					int iconIndex = potion.getStatusIconIndex();
-					new Gui().drawTexturedModalRect(xPos, yPos, POTION_ICON_BASE_X_OFFSET + iconIndex % POTION_ICONS_PER_ROW * POTION_ICON_SIZE, POTION_ICON_BASE_Y_OFFSET + iconIndex / POTION_ICONS_PER_ROW * POTION_ICON_SIZE, POTION_ICON_SIZE, POTION_ICON_SIZE);
-					xPos += POTION_ICON_SPACING;
-				}
-			}
-		}
+		if (CppConfigHandler.enablePotionGui && event.type == RenderGameOverlayEvent.ElementType.CROSSHAIRS)
+			CraftPlusPlus.proxy.displayPotionEffects();
 	}
 }

@@ -44,35 +44,37 @@ public class CppRecipeReplacer {
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.stone_hoe), "SS", " T", " T", 'S', "stone", 'T', "stickWood"));
 		}
 		//Stairs
-		CraftPlusPlus.logInfo("Replacing stairs recipes");
-		boolean doStairsFieldsExist = true;
-		for (Block block : CppUtils.getBlockArray())
-			if (block instanceof BlockStairs && CppConfigHandler.useBetterStairsRecipes) {
-				BlockStairs stairs = (BlockStairs) block;
-				Block modelBlock = CppUtils.findObject(stairs, "modelBlock", "field_150149_b");
-				IBlockState modelState = CppUtils.findObject(stairs, "modelState", "field_150151_M");
-				if (modelBlock == null || modelState == null) {
-					CraftPlusPlus.logInfo("Reverting to backup stairs recipe replacing");
-					doStairsFieldsExist = false;
-					break;
+		if (CppConfigHandler.useBetterStairsRecipes) {
+			CraftPlusPlus.logInfo("Replacing stairs recipes");
+			boolean doStairsFieldsExist = true;
+			for (Block block : CppUtils.getBlockArray())
+				if (block instanceof BlockStairs) {
+					BlockStairs stairs = (BlockStairs) block;
+					Block modelBlock = CppUtils.findObject(stairs, "modelBlock", "field_150149_b");
+					IBlockState modelState = CppUtils.findObject(stairs, "modelState", "field_150151_M");
+					if (modelBlock == null || modelState == null) {
+						doStairsFieldsExist = false;
+						break;
+					}
+					replaceStairsRecipe(stairs, new ItemStack(modelBlock, 1, modelBlock.getMetaFromState(modelState)));
 				}
-				replaceStairsRecipe(stairs, new ItemStack(modelBlock, 1, modelBlock.getMetaFromState(modelState)));
-			}
-		if (!doStairsFieldsExist) { //backup
-			replaceStairsRecipe(Blocks.oak_stairs, new ItemStack(Blocks.planks));
-			replaceStairsRecipe(Blocks.spruce_stairs, new ItemStack(Blocks.planks, 1, 1));
-			replaceStairsRecipe(Blocks.birch_stairs, new ItemStack(Blocks.planks, 1, 2));
-			replaceStairsRecipe(Blocks.jungle_stairs, new ItemStack(Blocks.planks, 1, 3));
-			replaceStairsRecipe(Blocks.acacia_stairs, new ItemStack(Blocks.planks, 1, 4));
-			replaceStairsRecipe(Blocks.dark_oak_stairs, new ItemStack(Blocks.planks, 1, 5));
+			if (!doStairsFieldsExist) { //backup
+				CraftPlusPlus.logInfo("Reverting to backup stairs recipe replacing");
+				replaceStairsRecipe(Blocks.oak_stairs, new ItemStack(Blocks.planks));
+				replaceStairsRecipe(Blocks.spruce_stairs, new ItemStack(Blocks.planks, 1, 1));
+				replaceStairsRecipe(Blocks.birch_stairs, new ItemStack(Blocks.planks, 1, 2));
+				replaceStairsRecipe(Blocks.jungle_stairs, new ItemStack(Blocks.planks, 1, 3));
+				replaceStairsRecipe(Blocks.acacia_stairs, new ItemStack(Blocks.planks, 1, 4));
+				replaceStairsRecipe(Blocks.dark_oak_stairs, new ItemStack(Blocks.planks, 1, 5));
 
-			replaceStairsRecipe(Blocks.stone_stairs, new ItemStack(Blocks.cobblestone));
-			replaceStairsRecipe(Blocks.brick_stairs, new ItemStack(Blocks.brick_block));
-			replaceStairsRecipe(Blocks.stone_brick_stairs, new ItemStack(Blocks.stonebrick));
-			replaceStairsRecipe(Blocks.nether_brick_stairs, new ItemStack(Blocks.nether_brick));
-			replaceStairsRecipe(Blocks.sandstone_stairs, new ItemStack(Blocks.sandstone));
-			replaceStairsRecipe(Blocks.red_sandstone_stairs, new ItemStack(Blocks.red_sandstone));
-			replaceStairsRecipe(Blocks.quartz_stairs, new ItemStack(Blocks.quartz_block));
+				replaceStairsRecipe(Blocks.stone_stairs, new ItemStack(Blocks.cobblestone));
+				replaceStairsRecipe(Blocks.brick_stairs, new ItemStack(Blocks.brick_block));
+				replaceStairsRecipe(Blocks.stone_brick_stairs, new ItemStack(Blocks.stonebrick));
+				replaceStairsRecipe(Blocks.nether_brick_stairs, new ItemStack(Blocks.nether_brick));
+				replaceStairsRecipe(Blocks.sandstone_stairs, new ItemStack(Blocks.sandstone));
+				replaceStairsRecipe(Blocks.red_sandstone_stairs, new ItemStack(Blocks.red_sandstone));
+				replaceStairsRecipe(Blocks.quartz_stairs, new ItemStack(Blocks.quartz_block));
+			}
 		}
 		//Buttons
 		CraftPlusPlus.logInfo("Replacing vanilla button recipes");

@@ -48,28 +48,27 @@ public class CppVanillaPropertiesChanger {
 			Blocks.command_block.setCreativeTab(CreativeTabs.tabRedstone);
 		Blocks.dragon_egg.setCreativeTab(CreativeTabs.tabDecorations);
 		Item fakeSpawner = new Item() {
-			private ItemStack getSpawnerFromEntityName(String entityName) {
-				ItemStack spawner = new ItemStack(Blocks.mob_spawner);
-				NBTTagCompound nbtTagCompound = new NBTTagCompound();
-				NBTTagCompound blockEntityTag = new NBTTagCompound();
-				blockEntityTag.setString("EntityId", entityName);
-				nbtTagCompound.setTag("BlockEntityTag", blockEntityTag);
-				spawner.setTagCompound(nbtTagCompound);
-				return spawner;
-			}			{
+
+			{
 				this.setHasSubtypes(true);
 				this.setCreativeTab(CreativeTabs.tabMisc);
 			}
 
 			@SuppressWarnings("unchecked")
 			public void getSubItems(Item item, CreativeTabs creativeTab, List subItemsList) {
-				for (Object entityName : EntityList.getEntityNameList()) { //iterate over entity names
-					Class entityClass = (Class) EntityList.stringToClassMapping.get(entityName);
-					if (entityClass != null && EntityLivingBase.class.isAssignableFrom(entityClass) && entityClass != EntityArmorStand.class) //make sure spawners in the creative menu can only spawn living entities, and no armor stands
-						subItemsList.add(this.getSpawnerFromEntityName((String) entityName));
+				for (Object entityNameObject : EntityList.getEntityNameList()) { //iterate over entity names
+					Class entityClass = (Class) EntityList.stringToClassMapping.get(entityNameObject);
+					if (entityClass != null && EntityLivingBase.class.isAssignableFrom(entityClass) && entityClass != EntityArmorStand.class) {//make sure spawners in the creative menu can only spawn living entities, and no armor stands
+						ItemStack spawner = new ItemStack(Blocks.mob_spawner);
+						NBTTagCompound nbtTagCompound = new NBTTagCompound();
+						NBTTagCompound blockEntityTag = new NBTTagCompound();
+						blockEntityTag.setString("EntityId", (String) entityNameObject);
+						nbtTagCompound.setTag("BlockEntityTag", blockEntityTag);
+						spawner.setTagCompound(nbtTagCompound);
+						subItemsList.add(spawner);
+					}
 				}
 			}
-
 
 		}; //unusual way to get mob spawners in creative mode menu
 		GameRegistry.registerItem(fakeSpawner, "fake_spawner");
