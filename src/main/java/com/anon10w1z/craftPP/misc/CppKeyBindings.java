@@ -1,6 +1,7 @@
 package com.anon10w1z.craftPP.misc;
 
 import com.anon10w1z.craftPP.main.CppReferences;
+import com.anon10w1z.craftPP.main.CraftPlusPlus;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -20,8 +21,9 @@ public class CppKeyBindings {
 	 */
 	public static void registerKeyBindings() {
 		if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
-			potionKey = new KeyBinding(CppReferences.MOD_ID + ".potionGui", Keyboard.KEY_P, "key.categories.ui");
+			potionKey = new KeyBinding(CppReferences.MOD_ID + ".potionDisplay", Keyboard.KEY_P, "key.categories.ui");
 			ClientRegistry.registerKeyBinding(potionKey);
-		}
+		} else
+			CraftPlusPlus.logInfo("Did not register key bindings; we are on the server side!");
 	}
 }

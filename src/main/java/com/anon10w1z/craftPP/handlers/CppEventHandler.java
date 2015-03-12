@@ -10,11 +10,13 @@ import net.minecraft.command.IEntitySelector;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.DataWatcher;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityEnderPearl;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityEnderman;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,6 +35,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
@@ -40,7 +43,6 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 
 import java.util.ArrayList;
@@ -54,8 +56,16 @@ import static net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigCha
  * The event handler for Craft++
  */
 @SuppressWarnings({"unused", "unchecked"})
-public class CppEventHandler {
-	private static boolean enablePotionEffectGui = true;
+public final class CppEventHandler {
+	/**
+	 * The singleton instance of CppEventHandler
+	 */
+	public static final CppEventHandler instance = new CppEventHandler();
+
+	/**
+	 * Whether or not to enable the potion effect display
+	 */
+	private static boolean displayPotionEffects = true;
 
 	/**
 	 * Affects living entity drops
@@ -244,15 +254,21 @@ public class CppEventHandler {
 		Block block = Block.getBlockFromItem(stack.getItem());
 		if (block != null && block == Blocks.mob_spawner) {
 			NBTTagCompound stackTagCompound = stack.getTagCompound();
-			NBTTagCompound blockEntityTagCompound = stackTagCompound.getCompoundTag("BlockEntityTag");
-			String entityName = blockEntityTagCompound.getString("EntityId");
-			if (!entityName.equals("")) {
-				String unlocalizedEntityName = "entity." + entityName + ".name";
-				String localizedEntityName = StatCollector.translateToLocal(unlocalizedEntityName);
-				if (localizedEntityName.equals(unlocalizedEntityName))
-					event.toolTip.add(EnumChatFormatting.BLUE + entityName);
-				else
-					event.toolTip.add(EnumChatFormatting.BLUE + localizedEntityName);
+			if (stackTagCompound != null) {
+				NBTTagCompound blockEntityTagCompound = stackTagCompound.getCompoundTag("BlockEntityTag");
+				if (blockEntityTagCompound != null) {
+					String entityName = blockEntityTagCompound.getString("EntityId");
+					Class entityClass = (Class) EntityList.stringToClassMapping.get(entityName);
+					if (entityClass != null) {
+						EnumChatFormatting color = EntityMob.class.isAssignableFrom(entityClass) ? EnumChatFormatting.RED : EnumChatFormatting.BLUE;
+						String unlocalizedEntityName = "entity." + entityName + ".name";
+						String localizedEntityName = StatCollector.translateToLocal(unlocalizedEntityName);
+						if (localizedEntityName.equals(unlocalizedEntityName))
+							event.toolTip.add(color + entityName);
+						else
+							event.toolTip.add(color + localizedEntityName);
+					}
+				}
 			}
 		}
 	}
@@ -282,13 +298,6 @@ public class CppEventHandler {
 		}
 	}
 
-	@SubscribeEvent
-	public void onKeyInput(KeyInputEvent event) {
-		if (CppKeyBindings.potionKey.isPressed()) {
-			enablePotionEffectGui = !enablePotionEffectGui;
-		}
-	}
-
 	/**
 	 * Draws potion effect icons in the top-left corner
 	 *
@@ -296,7 +305,11 @@ public class CppEventHandler {
 	 */
 	@SubscribeEvent
 	public void onRenderGameOverlay(RenderGameOverlayEvent.Post event) {
-		if (event.type == RenderGameOverlayEvent.ElementType.CROSSHAIRS && enablePotionEffectGui)
-			CraftPlusPlus.proxy.displayPotionEffects();
+		if (event.type == ElementType.CROSSHAIRS) {
+			if (CppKeyBindings.potionKey.isPressed())
+				displayPotionEffects = !displayPotionEffects; //toggle the potion effect display
+			if (displayPotionEffects)
+				CraftPlusPlus.proxy.displayPotionEffects();
+		}
 	}
 }

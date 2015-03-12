@@ -2,11 +2,11 @@
   "versionList": [
     {
       "mcVersion": "Minecraft 1.8",
-      "modVersion": "2.2.1",
+      "modVersion": "2.2.2",
       "changeLog": [
-        "Version 2.2.1 brings along some refactored and cleaned up code, as well as a key binding for the potion effect display."
+        "Version 2.2.2 fixes compatibility with NEI and TMI."
       ],
-      "updateURL": "https://dl.dropboxusercontent.com/u/76347756/craft%2B%2B-2.2.1.jar",
+      "updateURL": "https://dl.dropboxusercontent.com/u/76347756/craft%2B%2B-2.2.2.jar",
       "isDirectLink": "true",
       "newFileName": ""
     }

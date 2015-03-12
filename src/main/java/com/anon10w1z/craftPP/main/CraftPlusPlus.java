@@ -108,9 +108,8 @@ public final class CraftPlusPlus {
 		logInfo("Registering the block inventory renderers");
 		proxy.registerBlockInventoryRenderers();
 		logInfo("Registering the event handler");
-		CppEventHandler eventHandler = new CppEventHandler();
-		MinecraftForge.EVENT_BUS.register(eventHandler);
-		FMLCommonHandler.instance().bus().register(eventHandler);
+		MinecraftForge.EVENT_BUS.register(CppEventHandler.instance);
+		FMLCommonHandler.instance().bus().register(CppEventHandler.instance);
 		logInfo("Registering the key bindings");
 		CppKeyBindings.registerKeyBindings();
 		logInfo("Registering the fuel handler");
