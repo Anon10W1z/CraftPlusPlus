@@ -5,7 +5,6 @@ import com.anon10w1z.craftPP.dispenser.CppDispenserBehaviors;
 import com.anon10w1z.craftPP.handlers.CppConfigHandler;
 import com.anon10w1z.craftPP.handlers.CppEventHandler;
 import com.anon10w1z.craftPP.handlers.CppFuelHandler;
-import com.anon10w1z.craftPP.misc.CppKeyBindings;
 import com.anon10w1z.craftPP.misc.CppVanillaPropertiesChanger;
 import com.anon10w1z.craftPP.proxies.CppCommonProxy;
 import com.anon10w1z.craftPP.recipes.CppRecipeReplacer;
@@ -111,7 +110,7 @@ public final class CraftPlusPlus {
 		MinecraftForge.EVENT_BUS.register(CppEventHandler.instance);
 		FMLCommonHandler.instance().bus().register(CppEventHandler.instance);
 		logInfo("Registering the key bindings");
-		CppKeyBindings.registerKeyBindings();
+		proxy.registerKeyBindings();
 		logInfo("Registering the fuel handler");
 		GameRegistry.registerFuelHandler(new CppFuelHandler());
 		logInfo("Registering the crafting/furnace recipes");

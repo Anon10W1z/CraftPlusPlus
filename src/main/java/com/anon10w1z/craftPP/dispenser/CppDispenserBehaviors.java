@@ -1,7 +1,6 @@
 package com.anon10w1z.craftPP.dispenser;
 
 import com.anon10w1z.craftPP.handlers.CppConfigHandler;
-import com.anon10w1z.craftPP.main.CppUtils;
 import com.anon10w1z.craftPP.main.CraftPlusPlus;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDispenser;
@@ -19,7 +18,8 @@ public class CppDispenserBehaviors {
 	 */
 	@SuppressWarnings("unchecked")
 	public static void registerDispenserBehaviors() {
-		for (Item item : CppUtils.getArray(Item.itemRegistry, Item.class)) {
+		Iterable<Item> items = Item.itemRegistry;
+		for (Item item : items) {
 			//Falling Blocks
 			if (item instanceof ItemBlock) {
 				Block block = ((ItemBlock) item).block;

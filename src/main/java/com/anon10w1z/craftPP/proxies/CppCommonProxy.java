@@ -1,17 +1,34 @@
 package com.anon10w1z.craftPP.proxies;
 
+/**
+ * The common (dual-side) proxy for Craft++
+ */
 public class CppCommonProxy {
 	/**
 	 * Registers the block inventory renderers for Craft++'s blocks
 	 */
 	public void registerBlockInventoryRenderers() {
-		//only used in CppClientProxy
+
 	}
 
 	/**
 	 * Draws potion effect icons in the top-left corner
 	 */
 	public void displayPotionEffects() {
-		//only used in CppClientProxy
+
+	}
+
+	/**
+	 * Registers the key bindings
+	 */
+	public void registerKeyBindings() {
+
+	}
+
+	/**
+	 * @return Whether or not the potion overlay toggle key is pressed
+	 */
+	public boolean isPotionKeyPressed() {
+		return false;
 	}
 }

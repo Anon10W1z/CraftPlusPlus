@@ -6,23 +6,24 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.Item;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Collection;
 
 /**
  * The client-side proxy for Craft++
- *
- * @author Anon10W1z
  */
 public class CppClientProxy extends CppCommonProxy {
-	//used to not create a new instance every frame
-	private static final Gui GUI_INSTANCE = new Gui();
-	private static final ResourceLocation INVENTORY_RESOURCE_LOCATION = new ResourceLocation("textures/gui/container/inventory.png");
+	private static final Gui GUI_INSTANCE = new Gui(); //used to draw potion icons
+	private static final ResourceLocation INVENTORY_RESOURCE_LOCATION = new ResourceLocation("textures/gui/container/inventory.png"); //location of potion icons texture file
+	private static KeyBinding potionKey; //the key binding for toggling the potion overlay
 
 	@Override
 	public void registerBlockInventoryRenderers() {
@@ -40,7 +41,7 @@ public class CppClientProxy extends CppCommonProxy {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		Minecraft minecraft = Minecraft.getMinecraft();
 		minecraft.renderEngine.bindTexture(INVENTORY_RESOURCE_LOCATION);
-		//some constants for drawing textures
+		//some constants for drawing textures; all constants refer to inventory.png
 		final int POTION_ICON_SIZE = 18;
 		final int POTION_ICON_SPACING = POTION_ICON_SIZE + 2;
 		final int POTION_ICON_BASE_X_OFFSET = 0;
@@ -55,6 +56,17 @@ public class CppClientProxy extends CppCommonProxy {
 				xPos += POTION_ICON_SPACING;
 			}
 		}
+	}
+
+	@Override
+	public void registerKeyBindings() {
+		potionKey = new KeyBinding(CppReferences.MOD_ID + ".potionDisplay", Keyboard.KEY_P, "key.categories.ui");
+		ClientRegistry.registerKeyBinding(potionKey);
+	}
+
+	@Override
+	public boolean isPotionKeyPressed() {
+		return potionKey.isPressed();
 	}
 
 	/**

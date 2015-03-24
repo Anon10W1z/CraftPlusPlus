@@ -17,16 +17,17 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Used to remove certain recipes from the game, and replace them with new ones
  */
+@SuppressWarnings("unchecked")
 public class CppRecipeReplacer {
 	/**
 	 * Actually does all of the recipe replacing
 	 */
-	@SuppressWarnings("unchecked")
 	public static void replaceRecipes() {
 		//Stone Tools
 		CraftPlusPlus.logInfo("Replacing stone tool recipes");
@@ -47,7 +48,8 @@ public class CppRecipeReplacer {
 		if (CppConfigHandler.useBetterStairsRecipes) {
 			CraftPlusPlus.logInfo("Replacing stairs recipes");
 			boolean doStairsFieldsExist = true;
-			for (Block block : CppUtils.getBlockArray())
+			Iterable<Block> blocks = Block.blockRegistry;
+			for (Block block : blocks)
 				if (block instanceof BlockStairs) {
 					BlockStairs stairs = (BlockStairs) block;
 					Block modelBlock = CppUtils.findObject(stairs, "modelBlock", "field_150149_b");
@@ -93,10 +95,10 @@ public class CppRecipeReplacer {
 	 *
 	 * @param result The ItemStack which is outputted from the workbench
 	 */
-	@SuppressWarnings("unchecked")
 	private static void removeRecipes(ItemStack result) {
-		List recipeList = CraftingManager.getInstance().getRecipeList();
-		for (IRecipe recipe : CppUtils.getRecipeArray())
+		List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
+		List<IRecipe> recipeListCopy = new ArrayList<IRecipe>(recipeList);
+		for (IRecipe recipe : recipeListCopy)
 			if (ItemStack.areItemStacksEqual(result, recipe.getRecipeOutput()))
 				recipeList.remove(recipe);
 	}
@@ -106,10 +108,10 @@ public class CppRecipeReplacer {
 	 *
 	 * @param recipeClass The class of the IRecipe to remove from the game
 	 */
-	@SuppressWarnings("unchecked")
 	private static void removeRecipe(Class<? extends IRecipe> recipeClass) {
-		List recipeList = CraftingManager.getInstance().getRecipeList();
-		for (IRecipe recipe : CppUtils.getRecipeArray())
+		List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
+		List<IRecipe> recipeListCopy = new ArrayList<IRecipe>(recipeList);
+		for (IRecipe recipe : recipeListCopy)
 			if (recipe.getClass() == recipeClass)
 				recipeList.remove(recipe);
 	}

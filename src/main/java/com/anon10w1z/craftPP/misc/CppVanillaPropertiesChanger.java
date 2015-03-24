@@ -1,7 +1,6 @@
 package com.anon10w1z.craftPP.misc;
 
 import com.anon10w1z.craftPP.handlers.CppConfigHandler;
-import com.anon10w1z.craftPP.main.CppUtils;
 import com.anon10w1z.craftPP.main.CraftPlusPlus;
 import net.minecraft.block.Block;
 import net.minecraft.block.Block.SoundType;
@@ -20,7 +19,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.WeightedRandomFishable;
 import net.minecraftforge.common.FishingHooks;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.List;
 
@@ -34,9 +35,12 @@ public class CppVanillaPropertiesChanger {
 	@SuppressWarnings("unchecked")
 	public static void init() {
 		//Modifying block step sounds
-		for (Block block : CppUtils.getBlockArray()) {
+		Iterable<Block> blocks = Block.blockRegistry;
+		for (Block block : blocks) {
+			//stems
 			if (block instanceof BlockStem || block instanceof BlockNetherWart)
 				block.setStepSound(Block.soundTypeGrass);
+			//fire
 			else if (block instanceof BlockFire) {
 				block.setStepSound(new SoundType(null, 1.5F, 0.65F) {
 					@Override
@@ -53,28 +57,42 @@ public class CppVanillaPropertiesChanger {
 		if (Loader.isModLoaded("NotEnoughItems") || Loader.isModLoaded("TooManyItems")) {
 			CraftPlusPlus.logInfo("Found NotEnoughItems/TooManyItems, setting creative tab of mob spawner directly");
 			Blocks.mob_spawner.setCreativeTab(CreativeTabs.tabMisc);
-		}
-		else {
+		} else {
 			CraftPlusPlus.logInfo("Did not find NotEnoughItems/TooManyItems, using fake spawner item");
-			Item fakeSpawner = new Item() {
+			CreativeTabs fakeMiscCreativeTab = new CreativeTabs(4, "misc") {
 				@Override
-				@SuppressWarnings("unchecked")
-				public void getSubItems(Item item, CreativeTabs creativeTab, List subItemsList) {
-					for (Object entityNameObject : EntityList.getEntityNameList()) { //iterate over entity names
-						Class entityClass = (Class) EntityList.stringToClassMapping.get(entityNameObject);
+				public Item getTabIconItem() {
+					return CreativeTabs.tabMisc.getTabIconItem();
+				}
+
+				@Override
+				@SideOnly(Side.CLIENT)
+				public void displayAllReleventItems(List list) {
+					super.displayAllReleventItems(list);
+					List<String> entityNameList = EntityList.getEntityNameList();
+					for (String entityName : entityNameList) { //iterate over entity names
+						Class entityClass = (Class) EntityList.stringToClassMapping.get(entityName);
 						if (entityClass != null && EntityLivingBase.class.isAssignableFrom(entityClass) && entityClass != EntityArmorStand.class) {//make sure spawners in the creative menu can only spawn living entities, and no armor stands
-							ItemStack spawnerStack = new ItemStack(Blocks.mob_spawner);
-							NBTTagCompound stackTagCompound = new NBTTagCompound();
 							NBTTagCompound blockEntityTag = new NBTTagCompound();
-							blockEntityTag.setString("EntityId", (String) entityNameObject);
+							NBTTagCompound stackTagCompound = new NBTTagCompound();
+							blockEntityTag.setString("EntityId", entityName);
 							stackTagCompound.setTag("BlockEntityTag", blockEntityTag);
+							ItemStack spawnerStack = new ItemStack(Blocks.mob_spawner);
 							spawnerStack.setTagCompound(stackTagCompound);
-							subItemsList.add(spawnerStack);
+							list.add(spawnerStack);
 						}
 					}
 				}
-			}.setHasSubtypes(true).setCreativeTab(CreativeTabs.tabMisc);
-			GameRegistry.registerItem(fakeSpawner, "fake_spawner");
+			};
+			Iterable<Item> items = Item.itemRegistry;
+			for (Item item : items)
+				if (item.getCreativeTab() == CreativeTabs.tabMisc)
+					item.setCreativeTab(fakeMiscCreativeTab);
+
+			blocks = Block.blockRegistry;
+			for (Block block : blocks)
+				if (block.getCreativeTabToDisplayOn() == CreativeTabs.tabMisc)
+					block.setCreativeTab(fakeMiscCreativeTab);
 		}
 		//Modifying block names
 		if (CppConfigHandler.renameButtons) {
