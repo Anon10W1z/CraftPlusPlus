@@ -17,22 +17,38 @@ public class CppExtendedEntityProperties implements IExtendedEntityProperties {
 	public final EntityItem entityItem;
 	public final World world;
 
-	public int minSteadyTicks = 0;
-	public int steadyTicks = 0;
+	public int minSteadyTicks;
+	public int steadyTicks;
 
 	public CppExtendedEntityProperties(EntityItem entityItem) {
 		this.entityItem = entityItem;
 		this.world = entityItem.worldObj;
 	}
 
+	/**
+	 * Registers the extended properties for the given item entity
+	 *
+	 * @param entityItem The item entity to register the properties for
+	 */
 	public static void registerExtendedProperties(EntityItem entityItem) {
 		entityItem.registerExtendedProperties(EXTENDED_PROPERTIES_NAME, new CppExtendedEntityProperties(entityItem));
 	}
 
+	/**
+	 * Returns the extended properties for the given item entity
+	 *
+	 * @param entityItem The item entity to obtain the properties from
+	 * @return The CppExtendedProperties of the given item entity
+	 */
 	public static CppExtendedEntityProperties getExtendedProperties(EntityItem entityItem) {
 		return (CppExtendedEntityProperties) entityItem.getExtendedProperties(EXTENDED_PROPERTIES_NAME);
 	}
 
+	/**
+	 * Saves the extended properties to NBT
+	 *
+	 * @param compound The NBT tag compound to write the properties to
+	 */
 	@Override
 	public void saveNBTData(NBTTagCompound compound) {
 		NBTTagCompound properties = new NBTTagCompound();
@@ -41,6 +57,11 @@ public class CppExtendedEntityProperties implements IExtendedEntityProperties {
 		compound.setTag(EXTENDED_PROPERTIES_NAME, properties);
 	}
 
+	/**
+	 * Loads the extended properties from NBT
+	 *
+	 * @param compound The NBT tag compound to read the properties from
+	 */
 	@Override
 	public void loadNBTData(NBTTagCompound compound) {
 		NBTTagCompound properties = (NBTTagCompound) compound.getTag(EXTENDED_PROPERTIES_NAME);
@@ -48,16 +69,23 @@ public class CppExtendedEntityProperties implements IExtendedEntityProperties {
 		this.steadyTicks = properties.getInteger("SteadyTicks");
 	}
 
+	/**
+	 * Initializes the extended properties of the specified entity
+	 *
+	 * @param entity The entity attached to the properties
+	 * @param world  The world the entity is in
+	 */
 	@Override
 	public void init(Entity entity, World world) {
-		//do nothing
+		this.minSteadyTicks = world.rand.nextInt(51) + 50;
+		this.steadyTicks = 0;
 	}
 
+	/**
+	 * Handles all automatic seed planting logic
+	 */
 	public void handlePlantingLogic() {
-		if (this.minSteadyTicks < 50)
-			this.minSteadyTicks = this.entityItem.worldObj.rand.nextInt(51) + 50;
 		++this.steadyTicks;
-
 		BlockPos entityPosDown = new BlockPos(this.entityItem).down();
 		BlockPos lastTickEntityPosDown = new BlockPos(this.entityItem.lastTickPosX, this.entityItem.lastTickPosY, this.entityItem.lastTickPosZ).down();
 		if (entityPosDown.compareTo(lastTickEntityPosDown) != 0)

@@ -41,7 +41,7 @@ public class CppClientProxy extends CppCommonProxy {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		Minecraft minecraft = Minecraft.getMinecraft();
 		minecraft.renderEngine.bindTexture(INVENTORY_RESOURCE_LOCATION);
-		//some constants for drawing textures; all constants refer to inventory.png
+		//some constants for drawing textures, which refer to inventory.png
 		final int POTION_ICON_SIZE = 18;
 		final int POTION_ICON_SPACING = POTION_ICON_SIZE + 2;
 		final int POTION_ICON_BASE_X_OFFSET = 0;

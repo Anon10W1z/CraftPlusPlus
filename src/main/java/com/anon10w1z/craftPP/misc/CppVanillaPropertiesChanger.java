@@ -21,7 +21,6 @@ import net.minecraftforge.common.FishingHooks;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class CppVanillaPropertiesChanger {
 			//stems
 			if (block instanceof BlockStem || block instanceof BlockNetherWart)
 				block.setStepSound(Block.soundTypeGrass);
-			//fire
+				//fire
 			else if (block instanceof BlockFire) {
 				block.setStepSound(new SoundType(null, 1.5F, 0.65F) {
 					@Override
