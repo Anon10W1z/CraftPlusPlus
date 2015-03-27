@@ -251,7 +251,7 @@ public final class CppEventHandler {
 					String entityName = blockEntityTagCompound.getString("EntityId");
 					Class entityClass = (Class) EntityList.stringToClassMapping.get(entityName);
 					if (entityClass != null) {
-						EnumChatFormatting color = (EntityMob.class.isAssignableFrom(entityClass) || IMob.class.isAssignableFrom(entityClass)) ? EnumChatFormatting.RED : EnumChatFormatting.BLUE;
+						EnumChatFormatting color = EntityMob.class.isAssignableFrom(entityClass) || IMob.class.isAssignableFrom(entityClass) ? EnumChatFormatting.RED : EnumChatFormatting.BLUE;
 						String unlocalizedEntityName = "entity." + entityName + ".name";
 						String localizedEntityName = StatCollector.translateToLocal(unlocalizedEntityName);
 						if (localizedEntityName.equals(unlocalizedEntityName))

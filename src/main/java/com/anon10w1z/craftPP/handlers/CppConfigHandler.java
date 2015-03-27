@@ -8,6 +8,9 @@ import java.io.File;
  * The config handler for Craft++
  */
 public class CppConfigHandler {
+	/**
+	 * The actual configuration containing the configuration file
+	 */
 	public static Configuration config;
 	//Creepers
 	public static boolean creeperBurnInDaylight;

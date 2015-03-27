@@ -57,9 +57,10 @@ public class CppVanillaPropertiesChanger {
 			CraftPlusPlus.logInfo("Found NotEnoughItems/TooManyItems, setting creative tab of mob spawner directly");
 			Blocks.mob_spawner.setCreativeTab(CreativeTabs.tabMisc);
 		} else {
-			CraftPlusPlus.logInfo("Did not find NotEnoughItems/TooManyItems, using fake spawner item");
+			CraftPlusPlus.logInfo("Did not find NotEnoughItems/TooManyItems, using replacement miscellaneous creative tab");
 			CreativeTabs fakeMiscCreativeTab = new CreativeTabs(4, "misc") {
 				@Override
+				@SideOnly(Side.CLIENT)
 				public Item getTabIconItem() {
 					return CreativeTabs.tabMisc.getTabIconItem();
 				}
@@ -67,7 +68,7 @@ public class CppVanillaPropertiesChanger {
 				@Override
 				@SideOnly(Side.CLIENT)
 				public void displayAllReleventItems(List list) {
-					super.displayAllReleventItems(list);
+					CreativeTabs.tabMisc.displayAllReleventItems(list);
 					List<String> entityNameList = EntityList.getEntityNameList();
 					for (String entityName : entityNameList) { //iterate over entity names
 						Class entityClass = (Class) EntityList.stringToClassMapping.get(entityName);
@@ -83,15 +84,6 @@ public class CppVanillaPropertiesChanger {
 					}
 				}
 			};
-			Iterable<Item> items = Item.itemRegistry;
-			for (Item item : items)
-				if (item.getCreativeTab() == CreativeTabs.tabMisc)
-					item.setCreativeTab(fakeMiscCreativeTab);
-
-			blocks = Block.blockRegistry;
-			for (Block block : blocks)
-				if (block.getCreativeTabToDisplayOn() == CreativeTabs.tabMisc)
-					block.setCreativeTab(fakeMiscCreativeTab);
 		}
 		//Modifying block names
 		if (CppConfigHandler.renameButtons) {

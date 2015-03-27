@@ -13,11 +13,29 @@ import net.minecraftforge.common.IExtendedEntityProperties;
  * Adds extended properties to item entities
  */
 public class CppExtendedEntityProperties implements IExtendedEntityProperties {
+	/**
+	 * The name of these extended properties
+	 */
 	public static final String EXTENDED_PROPERTIES_NAME = "CppExtendedEntityItem";
+
+	/**
+	 * The item entity these properties refer to
+	 */
 	public final EntityItem entityItem;
+
+	/**
+	 * The world these properties refer to
+	 */
 	public final World world;
 
+	/**
+	 * Number of ticks the item entity needs to be above the same block position
+	 */
 	public int minSteadyTicks;
+
+	/**
+	 * Number of ticks the item entity has been above the same block position
+	 */
 	public int steadyTicks;
 
 	public CppExtendedEntityProperties(EntityItem entityItem) {
@@ -70,7 +88,7 @@ public class CppExtendedEntityProperties implements IExtendedEntityProperties {
 	}
 
 	/**
-	 * Initializes the extended properties of the specified entity
+	 * Initializes the extended property variables of the specified entity
 	 *
 	 * @param entity The entity attached to the properties
 	 * @param world  The world the entity is in
