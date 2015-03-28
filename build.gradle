@@ -19,6 +19,7 @@ apply plugin: 'forge'
 
 version = "2.2.3-beta"
 group = "com.anon10w1z.craftPP" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+//noinspection GroovyUnusedAssignment
 archivesBaseName = "craft++"
 
 minecraft {
@@ -53,20 +54,14 @@ processResources
     }
 }
 
-task deobfJar(type: Jar) {
-    from sourceSets.main.output
-    classifier = 'deobf'
-}
-
 task sourceJar(type: Jar) {
     from sourceSets.main.allSource
     classifier = 'sources'
 }
 
-tasks.build.dependsOn('sourceJar', 'deobfJar')
+tasks.build.dependsOn('sourceJar')
 
 artifacts {
-    archives deobfJar
     archives sourceJar
 }
 
