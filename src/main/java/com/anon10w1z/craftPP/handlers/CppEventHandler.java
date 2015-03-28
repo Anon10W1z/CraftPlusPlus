@@ -1,6 +1,6 @@
 package com.anon10w1z.craftPP.handlers;
 
-import com.anon10w1z.craftPP.main.CppReferences;
+import com.anon10w1z.craftPP.main.CppModConstants;
 import com.anon10w1z.craftPP.main.CraftPlusPlus;
 import com.anon10w1z.craftPP.misc.CppExtendedEntityProperties;
 import net.minecraft.block.Block;
@@ -179,7 +179,7 @@ public final class CppEventHandler {
 	 */
 	@SubscribeEvent
 	public void onConfigChanged(OnConfigChangedEvent event) {
-		if (event.modID.equals(CppReferences.MOD_ID))
+		if (event.modID.equals(CppModConstants.MOD_ID))
 			CppConfigHandler.syncConfig();
 	}
 

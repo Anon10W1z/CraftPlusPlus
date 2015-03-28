@@ -13,10 +13,10 @@ import net.minecraft.world.World;
  */
 public class BehaviorDispenseBlockFalling extends BehaviorDefaultDispenseItem {
 	@Override
-	protected ItemStack dispenseStack(IBlockSource par1IBlockSource, ItemStack par2ItemStack) {
-		World world = par1IBlockSource.getWorld();
-		EnumFacing facing = BlockDispenser.getFacing(par1IBlockSource.getBlockMetadata());
-		par2ItemStack.onItemUse(CppUtils.getFakePlayer(world), world, par1IBlockSource.getBlockPos(), facing, 0, 0, 0);
-		return par2ItemStack;
+	protected ItemStack dispenseStack(IBlockSource blockSource, ItemStack itemstack) {
+		World world = blockSource.getWorld();
+		EnumFacing facing = BlockDispenser.getFacing(blockSource.getBlockMetadata());
+		itemstack.onItemUse(CppUtils.getFakePlayer(world), world, blockSource.getBlockPos(), facing, 0, 0, 0);
+		return itemstack;
 	}
 }

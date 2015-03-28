@@ -3,7 +3,7 @@ package com.anon10w1z.craftPP.main;
 /**
  * The reference class for Craft++
  */
-public final class CppReferences {
+public final class CppModConstants {
 	/**
 	 * Craft++'s mod ID
 	 */
@@ -22,9 +22,9 @@ public final class CppReferences {
 	public static final String PACKAGE_LOCATION = "com.anon10w1z.craftPP";
 
 	/**
-	 * Prevents CppReferences from being instantianted
+	 * Prevents CppModConstants from being instantianted
 	 */
-	private CppReferences() {
+	private CppModConstants() {
 
 	}
 }

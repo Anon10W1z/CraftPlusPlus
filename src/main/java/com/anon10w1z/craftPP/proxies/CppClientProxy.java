@@ -1,7 +1,7 @@
 package com.anon10w1z.craftPP.proxies;
 
 import com.anon10w1z.craftPP.blocks.CppBlocks;
-import com.anon10w1z.craftPP.main.CppReferences;
+import com.anon10w1z.craftPP.main.CppModConstants;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -26,13 +26,6 @@ public class CppClientProxy extends CppCommonProxy {
 	private static KeyBinding potionKey; //the key binding for toggling the potion overlay
 
 	@Override
-	public void registerBlockInventoryRenderers() {
-		registerBlockInventoryRenderer(CppBlocks.flint_block, "flint");
-		registerBlockInventoryRenderer(CppBlocks.sugar_block, "sugar");
-		registerBlockInventoryRenderer(CppBlocks.charcoal_block, "charcoal");
-	}
-
-	@Override
 	@SuppressWarnings("unchecked")
 	public void displayPotionEffects() {
 		int xPos = 2;
@@ -41,7 +34,7 @@ public class CppClientProxy extends CppCommonProxy {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		Minecraft minecraft = Minecraft.getMinecraft();
 		minecraft.renderEngine.bindTexture(INVENTORY_RESOURCE_LOCATION);
-		//some constants for drawing textures, which refer to inventory.png
+		//some constants for drawing textures, which all refer to inventory.png
 		final int POTION_ICON_SIZE = 18;
 		final int POTION_ICON_SPACING = POTION_ICON_SIZE + 2;
 		final int POTION_ICON_BASE_X_OFFSET = 0;
@@ -60,13 +53,21 @@ public class CppClientProxy extends CppCommonProxy {
 
 	@Override
 	public void registerKeyBindings() {
-		potionKey = new KeyBinding(CppReferences.MOD_ID + ".potionDisplay", Keyboard.KEY_P, "key.categories.ui");
+		potionKey = new KeyBinding(CppModConstants.MOD_ID + ".potionDisplay", Keyboard.KEY_P, "key.categories.ui");
 		ClientRegistry.registerKeyBinding(potionKey);
 	}
 
 	@Override
 	public boolean isPotionKeyPressed() {
 		return potionKey.isPressed();
+	}
+
+
+	@Override
+	public void registerBlockInventoryRenderers() {
+		registerBlockInventoryRenderer(CppBlocks.flint_block, "flint");
+		registerBlockInventoryRenderer(CppBlocks.sugar_block, "sugar");
+		registerBlockInventoryRenderer(CppBlocks.charcoal_block, "charcoal");
 	}
 
 	/**
@@ -76,6 +77,6 @@ public class CppClientProxy extends CppCommonProxy {
 	 * @param namePrefix The name prefix of the block
 	 */
 	private void registerBlockInventoryRenderer(Block block, String namePrefix) {
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(block), 0, new ModelResourceLocation(CppReferences.MOD_ID + ":" + namePrefix + "_block", "inventory"));
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(block), 0, new ModelResourceLocation(CppModConstants.MOD_ID + ":" + namePrefix + "_block", "inventory"));
 	}
 }

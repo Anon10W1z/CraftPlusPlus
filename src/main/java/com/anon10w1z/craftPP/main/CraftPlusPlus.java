@@ -29,18 +29,18 @@ import java.util.Arrays;
  *
  * @author Anon10W1z
  */
-@Mod(modid = CppReferences.MOD_ID, name = CppReferences.NAME, version = CppReferences.VERSION, guiFactory = CppReferences.PACKAGE_LOCATION + ".gui.CppGuiFactory", dependencies = "after:*")
+@Mod(modid = CppModConstants.MOD_ID, name = CppModConstants.NAME, version = CppModConstants.VERSION, guiFactory = CppModConstants.PACKAGE_LOCATION + ".gui.CppGuiFactory", dependencies = "after:*")
 public final class CraftPlusPlus {
 	/**
 	 * The proxy of Craft++
 	 */
-	@SidedProxy(modId = CppReferences.MOD_ID, clientSide = CppReferences.PACKAGE_LOCATION + ".proxies.CppClientProxy", serverSide = CppReferences.PACKAGE_LOCATION + ".proxies.CppCommonProxy")
+	@SidedProxy(modId = CppModConstants.MOD_ID, clientSide = CppModConstants.PACKAGE_LOCATION + ".proxies.CppClientProxy", serverSide = CppModConstants.PACKAGE_LOCATION + ".proxies.CppCommonProxy")
 	public static CppCommonProxy proxy;
 
 	/**
 	 * The mod instance of Craft++
 	 */
-	@Instance(CppReferences.MOD_ID)
+	@Instance(CppModConstants.MOD_ID)
 	private static CraftPlusPlus instance;
 
 	/**
@@ -73,14 +73,14 @@ public final class CraftPlusPlus {
 		logInfo("Initialized the logger");
 		logInfo("Hard-coding the mcmod.info");
 		ModMetadata modMetadata = event.getModMetadata();
-		modMetadata.modId = CppReferences.MOD_ID;
-		modMetadata.name = CppReferences.NAME;
-		modMetadata.version = CppReferences.VERSION;
+		modMetadata.modId = CppModConstants.MOD_ID;
+		modMetadata.name = CppModConstants.NAME;
+		modMetadata.version = CppModConstants.VERSION;
 		modMetadata.description = "A simple vanilla-enhancing mod";
 		modMetadata.authorList = Arrays.asList("Anon10W1z");
 		modMetadata.url = "http://goo.gl/RpVUdZ";
 		logInfo("Enabling the Version Checker Support");
-		FMLInterModComms.sendRuntimeMessage(CppReferences.MOD_ID, "VersionChecker", "addVersionCheck", "https://dl.dropboxusercontent.com/u/76347756/VersionCheck.json");
+		FMLInterModComms.sendRuntimeMessage(CppModConstants.MOD_ID, "VersionChecker", "addVersionCheck", "https://dl.dropboxusercontent.com/u/76347756/VersionCheck.json");
 		logInfo("Initializing the config handler");
 		CppConfigHandler.init(event.getSuggestedConfigurationFile());
 		logInfo("Registering the blocks");
