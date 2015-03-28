@@ -30,6 +30,7 @@ import java.util.Arrays;
  * @author Anon10W1z
  */
 @Mod(modid = CppModConstants.MOD_ID, name = CppModConstants.NAME, version = CppModConstants.VERSION, guiFactory = CppModConstants.PACKAGE_LOCATION + ".gui.CppGuiFactory", dependencies = "after:*")
+@SuppressWarnings("unused")
 public final class CraftPlusPlus {
 	/**
 	 * The proxy of Craft++
