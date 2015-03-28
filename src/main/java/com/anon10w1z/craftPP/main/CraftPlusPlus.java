@@ -70,6 +70,7 @@ public final class CraftPlusPlus {
 	 */
 	@EventHandler
 	public void onPreInit(FMLPreInitializationEvent event) {
+		instance = this;
 		this.logger = event.getModLog();
 		logInfo("Initialized the logger");
 		logInfo("Hard-coding the mcmod.info");
@@ -103,7 +104,6 @@ public final class CraftPlusPlus {
 	 * @param event The FMLInitializationEvent
 	 */
 	@EventHandler
-	@SuppressWarnings("unused")
 	public void onInit(FMLInitializationEvent event) {
 		logInfo("Registering the block inventory renderers");
 		proxy.registerBlockInventoryRenderers();

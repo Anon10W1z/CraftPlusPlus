@@ -31,7 +31,7 @@ public class CppVanillaPropertiesChanger {
 	/**
 	 * Initializes the vanilla properties changer
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "unused"})
 	public static void init() {
 		//Modifying block step sounds
 		Iterable<Block> blocks = Block.blockRegistry;

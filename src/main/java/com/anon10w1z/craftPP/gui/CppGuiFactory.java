@@ -9,6 +9,7 @@ import java.util.Set;
 /**
  * The GUI factory for Craft++
  */
+@SuppressWarnings("unused")
 public class CppGuiFactory implements IModGuiFactory {
 	@Override
 	public void initialize(Minecraft minecraftInstance) {

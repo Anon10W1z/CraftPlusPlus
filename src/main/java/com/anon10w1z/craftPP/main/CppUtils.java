@@ -11,7 +11,6 @@ import java.lang.reflect.Field;
 /**
  * Contains some utility functions used by Craft++
  */
-@SuppressWarnings("unchecked")
 public final class CppUtils {
 	/**
 	 * Prevents CppUtils from being instantiated
@@ -42,6 +41,7 @@ public final class CppUtils {
 	 * @param <T>         The data type of the object to return
 	 * @return An object of the specified type with the first possible of the passed names
 	 */
+	@SuppressWarnings("unchecked")
 	public static <T> T findObject(Object instance, String... objectNames) {
 		try {
 			Field field = ReflectionHelper.findField(instance.getClass(), objectNames);
