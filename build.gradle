@@ -17,7 +17,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "2.2.3-beta"
+version = "2.3"
 group = "com.anon10w1z.craftPP"
 //noinspection GroovyUnusedAssignment
 archivesBaseName = "craft++"
@@ -32,4 +32,4 @@ sourceSets {
     main {
         output.resourcesDir = output.classesDir
     }
-}
+} //for assets to work with IntelliJ

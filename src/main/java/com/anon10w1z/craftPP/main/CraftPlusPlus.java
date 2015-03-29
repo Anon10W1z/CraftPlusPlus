@@ -82,7 +82,7 @@ public final class CraftPlusPlus {
 		modMetadata.authorList = Collections.singletonList("Anon10W1z");
 		modMetadata.url = "http://goo.gl/RpVUdZ";
 		logInfo("Enabling the Version Checker Support");
-		FMLInterModComms.sendRuntimeMessage(CppModInfo.MOD_ID, "VersionChecker", "addVersionCheck", "https://dl.dropboxusercontent.com/u/76347756/VersionCheck.json");
+		FMLInterModComms.sendRuntimeMessage(CppModInfo.MOD_ID, "VersionChecker", "addVersionCheck", "https://raw.githubusercontent.com/Anon10W1z/CraftPlusPlus/gh-pages/VersionCheck.json");
 		logInfo("Initializing the config handler");
 		CppConfigHandler.init(event.getSuggestedConfigurationFile());
 		logInfo("Registering the blocks");

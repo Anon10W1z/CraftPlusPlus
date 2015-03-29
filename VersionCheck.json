@@ -2,11 +2,11 @@
   "versionList": [
     {
       "mcVersion": "Minecraft 1.8",
-      "modVersion": "2.2.2",
+      "modVersion": "2.3",
       "changeLog": [
-        "Version 2.2.2 fixes compatibility with NEI and TMI."
+        "Version 2.3 adds various tweaks and enhancements."
       ],
-      "updateURL": "https://dl.dropboxusercontent.com/u/76347756/craft%2B%2B-2.2.2.jar",
+      "updateURL": "https://drone.io/github.com/Anon10W1z/CraftPlusPlus/files/build/libs/craft++-2.3.jar",
       "isDirectLink": "true",
       "newFileName": ""
     }
