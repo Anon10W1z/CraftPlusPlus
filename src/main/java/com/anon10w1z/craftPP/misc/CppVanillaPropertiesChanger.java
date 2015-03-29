@@ -69,7 +69,6 @@ public class CppVanillaPropertiesChanger {
 				@SideOnly(Side.CLIENT)
 				public void displayAllReleventItems(List list) {
 					CreativeTabs.tabMisc.displayAllReleventItems(list); //add all items from the vanilla misc creative tab
-					List<String> entityNameList = EntityList.getEntityNameList();
 					List<Integer> spawnEggIds = Lists.newArrayList(); //a list containing all entity IDs in the misc creative tab
 					for (ItemStack itemstack : (List<ItemStack>) list)
 						if (itemstack.getItem() == Items.spawn_egg)
