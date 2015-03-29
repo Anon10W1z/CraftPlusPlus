@@ -22,26 +22,26 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * The main mod file of Craft++
  *
  * @author Anon10W1z
  */
-@Mod(modid = CppModConstants.MOD_ID, name = CppModConstants.NAME, version = CppModConstants.VERSION, guiFactory = CppModConstants.PACKAGE_LOCATION + ".gui.CppGuiFactory", dependencies = "after:*")
+@Mod(modid = CppModInfo.MOD_ID, name = CppModInfo.NAME, version = CppModInfo.VERSION, guiFactory = CppModInfo.PACKAGE_LOCATION + ".gui.CppGuiFactory", dependencies = "after:*")
 @SuppressWarnings("unused")
 public final class CraftPlusPlus {
 	/**
 	 * The proxy of Craft++
 	 */
-	@SidedProxy(modId = CppModConstants.MOD_ID, clientSide = CppModConstants.PACKAGE_LOCATION + ".proxies.CppClientProxy", serverSide = CppModConstants.PACKAGE_LOCATION + ".proxies.CppCommonProxy")
+	@SidedProxy(modId = CppModInfo.MOD_ID, clientSide = CppModInfo.PACKAGE_LOCATION + ".proxies.CppClientProxy", serverSide = CppModInfo.PACKAGE_LOCATION + ".proxies.CppCommonProxy")
 	public static CppCommonProxy proxy;
 
 	/**
 	 * The mod instance of Craft++
 	 */
-	@Instance(CppModConstants.MOD_ID)
+	@Instance(CppModInfo.MOD_ID)
 	private static CraftPlusPlus instance;
 
 	/**
@@ -75,14 +75,14 @@ public final class CraftPlusPlus {
 		logInfo("Initialized the logger");
 		logInfo("Hard-coding the mcmod.info");
 		ModMetadata modMetadata = event.getModMetadata();
-		modMetadata.modId = CppModConstants.MOD_ID;
-		modMetadata.name = CppModConstants.NAME;
-		modMetadata.version = CppModConstants.VERSION;
+		modMetadata.modId = CppModInfo.MOD_ID;
+		modMetadata.name = CppModInfo.NAME;
+		modMetadata.version = CppModInfo.VERSION;
 		modMetadata.description = "A simple vanilla-enhancing mod";
-		modMetadata.authorList = Arrays.asList("Anon10W1z");
+		modMetadata.authorList = Collections.singletonList("Anon10W1z");
 		modMetadata.url = "http://goo.gl/RpVUdZ";
 		logInfo("Enabling the Version Checker Support");
-		FMLInterModComms.sendRuntimeMessage(CppModConstants.MOD_ID, "VersionChecker", "addVersionCheck", "https://dl.dropboxusercontent.com/u/76347756/VersionCheck.json");
+		FMLInterModComms.sendRuntimeMessage(CppModInfo.MOD_ID, "VersionChecker", "addVersionCheck", "https://dl.dropboxusercontent.com/u/76347756/VersionCheck.json");
 		logInfo("Initializing the config handler");
 		CppConfigHandler.init(event.getSuggestedConfigurationFile());
 		logInfo("Registering the blocks");

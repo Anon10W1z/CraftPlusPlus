@@ -31,4 +31,11 @@ public class CppCommonProxy {
 	public boolean isPotionKeyPressed() {
 		return false;
 	}
+
+	/**
+	 * @return Whether or not any GUI is open in the current Minecraft window
+	 */
+	public boolean isGuiOpen() {
+		return false;
+	}
 }

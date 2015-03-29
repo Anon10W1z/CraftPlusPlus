@@ -3,7 +3,7 @@ package com.anon10w1z.craftPP.main;
 /**
  * The reference class for Craft++
  */
-public final class CppModConstants {
+public final class CppModInfo {
 	/**
 	 * Craft++'s mod ID
 	 */
@@ -24,7 +24,7 @@ public final class CppModConstants {
 	/**
 	 * Prevents CppModConstants from being instantianted
 	 */
-	private CppModConstants() {
+	private CppModInfo() {
 
 	}
 }

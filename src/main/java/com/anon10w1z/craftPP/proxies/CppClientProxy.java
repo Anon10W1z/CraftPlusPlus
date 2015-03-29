@@ -1,7 +1,7 @@
 package com.anon10w1z.craftPP.proxies;
 
 import com.anon10w1z.craftPP.blocks.CppBlocks;
-import com.anon10w1z.craftPP.main.CppModConstants;
+import com.anon10w1z.craftPP.main.CppModInfo;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -21,8 +21,9 @@ import java.util.Collection;
  * The client-side proxy for Craft++
  */
 public class CppClientProxy extends CppCommonProxy {
-	private static final Gui GUI_INSTANCE = new Gui(); //used to draw potion icons
-	private static final ResourceLocation INVENTORY_RESOURCE_LOCATION = new ResourceLocation("textures/gui/container/inventory.png"); //location of potion icons texture file
+	private static final Gui guiInstance = new Gui(); //used to draw potion icons
+	private static final ResourceLocation inventoryResourceLocation = new ResourceLocation("textures/gui/container/inventory.png"); //location of potion icons texture file
+	private static final Minecraft minecraft = Minecraft.getMinecraft(); //the Minecraft instance
 	private static KeyBinding potionKey; //the key binding for toggling the potion overlay
 
 	@Override
@@ -32,8 +33,7 @@ public class CppClientProxy extends CppCommonProxy {
 		int yPos = 2;
 		GL11.glColor4f(1, 1, 1, 1);
 		GL11.glDisable(GL11.GL_LIGHTING);
-		Minecraft minecraft = Minecraft.getMinecraft();
-		minecraft.renderEngine.bindTexture(INVENTORY_RESOURCE_LOCATION);
+		minecraft.renderEngine.bindTexture(inventoryResourceLocation);
 		//some constants for drawing textures, which all refer to inventory.png
 		final int POTION_ICON_SIZE = 18;
 		final int POTION_ICON_SPACING = POTION_ICON_SIZE + 2;
@@ -45,7 +45,7 @@ public class CppClientProxy extends CppCommonProxy {
 			Potion potion = Potion.potionTypes[potionEffect.getPotionID()];
 			if (potion.hasStatusIcon()) {
 				int iconIndex = potion.getStatusIconIndex();
-				GUI_INSTANCE.drawTexturedModalRect(xPos, yPos, POTION_ICON_BASE_X_OFFSET + iconIndex % POTION_ICONS_PER_ROW * POTION_ICON_SIZE, POTION_ICON_BASE_Y_OFFSET + iconIndex / POTION_ICONS_PER_ROW * POTION_ICON_SIZE, POTION_ICON_SIZE, POTION_ICON_SIZE);
+				guiInstance.drawTexturedModalRect(xPos, yPos, POTION_ICON_BASE_X_OFFSET + iconIndex % POTION_ICONS_PER_ROW * POTION_ICON_SIZE, POTION_ICON_BASE_Y_OFFSET + iconIndex / POTION_ICONS_PER_ROW * POTION_ICON_SIZE, POTION_ICON_SIZE, POTION_ICON_SIZE);
 				xPos += POTION_ICON_SPACING;
 			}
 		}
@@ -53,7 +53,7 @@ public class CppClientProxy extends CppCommonProxy {
 
 	@Override
 	public void registerKeyBindings() {
-		potionKey = new KeyBinding(CppModConstants.MOD_ID + ".potionDisplay", Keyboard.KEY_P, "key.categories.ui");
+		potionKey = new KeyBinding(CppModInfo.MOD_ID + ".potionDisplay", Keyboard.KEY_P, "key.categories.ui");
 		ClientRegistry.registerKeyBinding(potionKey);
 	}
 
@@ -62,6 +62,10 @@ public class CppClientProxy extends CppCommonProxy {
 		return potionKey.isPressed();
 	}
 
+	@Override
+	public boolean isGuiOpen() {
+		return minecraft.currentScreen != null;
+	}
 
 	@Override
 	public void registerBlockInventoryRenderers() {
@@ -77,6 +81,6 @@ public class CppClientProxy extends CppCommonProxy {
 	 * @param namePrefix The name prefix of the block
 	 */
 	private void registerBlockInventoryRenderer(Block block, String namePrefix) {
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(block), 0, new ModelResourceLocation(CppModConstants.MOD_ID + ":" + namePrefix + "_block", "inventory"));
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(block), 0, new ModelResourceLocation(CppModInfo.MOD_ID + ":" + namePrefix + "_block", "inventory"));
 	}
 }

@@ -1,6 +1,6 @@
 package com.anon10w1z.craftPP.handlers;
 
-import com.anon10w1z.craftPP.main.CppModConstants;
+import com.anon10w1z.craftPP.main.CppModInfo;
 import com.anon10w1z.craftPP.main.CraftPlusPlus;
 import com.anon10w1z.craftPP.misc.CppExtendedEntityProperties;
 import net.minecraft.block.Block;
@@ -179,7 +179,7 @@ public final class CppEventHandler {
 	 */
 	@SubscribeEvent
 	public void onConfigChanged(OnConfigChangedEvent event) {
-		if (event.modID.equals(CppModConstants.MOD_ID))
+		if (event.modID.equals(CppModInfo.MOD_ID))
 			CppConfigHandler.syncConfig();
 	}
 
@@ -299,7 +299,7 @@ public final class CppEventHandler {
 		if (event.type == ElementType.CROSSHAIRS) {
 			if (CraftPlusPlus.proxy.isPotionKeyPressed())
 				displayPotionEffects = !displayPotionEffects; //toggle the potion effect overlay
-			if (displayPotionEffects)
+			if (displayPotionEffects && !CraftPlusPlus.proxy.isGuiOpen())
 				CraftPlusPlus.proxy.displayPotionEffects();
 		}
 	}

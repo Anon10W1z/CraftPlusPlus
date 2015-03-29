@@ -2,6 +2,7 @@ package com.anon10w1z.craftPP.misc;
 
 import com.anon10w1z.craftPP.handlers.CppConfigHandler;
 import com.anon10w1z.craftPP.main.CraftPlusPlus;
+import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.block.Block.SoundType;
 import net.minecraft.block.BlockFire;
@@ -9,8 +10,6 @@ import net.minecraft.block.BlockNetherWart;
 import net.minecraft.block.BlockStem;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -22,6 +21,8 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -57,7 +58,6 @@ public class CppVanillaPropertiesChanger {
 			CraftPlusPlus.logInfo("Found NotEnoughItems/TooManyItems, setting creative tab of mob spawner directly");
 			Blocks.mob_spawner.setCreativeTab(CreativeTabs.tabMisc);
 		} else {
-			CraftPlusPlus.logInfo("Did not find NotEnoughItems/TooManyItems, using replacement miscellaneous creative tab");
 			CreativeTabs fakeMiscCreativeTab = new CreativeTabs(4, "misc") {
 				@Override
 				@SideOnly(Side.CLIENT)
@@ -68,22 +68,31 @@ public class CppVanillaPropertiesChanger {
 				@Override
 				@SideOnly(Side.CLIENT)
 				public void displayAllReleventItems(List list) {
-					CreativeTabs.tabMisc.displayAllReleventItems(list);
+					CreativeTabs.tabMisc.displayAllReleventItems(list); //add all items from the vanilla misc creative tab
 					List<String> entityNameList = EntityList.getEntityNameList();
-					for (String entityName : entityNameList) { //iterate over entity names
-						Class entityClass = (Class) EntityList.stringToClassMapping.get(entityName);
-						if (entityClass != null && EntityLivingBase.class.isAssignableFrom(entityClass) && entityClass != EntityArmorStand.class) {//make sure spawners in the creative menu can only spawn living entities, and no armor stands
-							NBTTagCompound blockEntityTag = new NBTTagCompound();
-							NBTTagCompound stackTagCompound = new NBTTagCompound();
-							blockEntityTag.setString("EntityId", entityName);
-							stackTagCompound.setTag("BlockEntityTag", blockEntityTag);
-							ItemStack spawnerStack = new ItemStack(Blocks.mob_spawner);
-							spawnerStack.setTagCompound(stackTagCompound);
-							list.add(spawnerStack);
-						}
+					List<Integer> spawnEggIds = Lists.newArrayList(); //a list containing all entity IDs in the misc creative tab
+					for (ItemStack itemstack : (List<ItemStack>) list)
+						if (itemstack.getItem() == Items.spawn_egg)
+							spawnEggIds.add(itemstack.getItemDamage()); //where getItemDamage returns the entity ID
+					for (int entityId : spawnEggIds) {
+						NBTTagCompound blockEntityTag = new NBTTagCompound();
+						NBTTagCompound stackTagCompound = new NBTTagCompound();
+						blockEntityTag.setString("EntityId", EntityList.getStringFromID(entityId));
+						stackTagCompound.setTag("BlockEntityTag", blockEntityTag);
+						ItemStack spawnerStack = new ItemStack(Blocks.mob_spawner);
+						spawnerStack.setTagCompound(stackTagCompound);
+						list.add(spawnerStack);
 					}
+					Collections.sort(list, new Comparator() {
+						@Override
+						public int compare(Object object1, Object object2) {
+							ItemStack itemstack1 = (ItemStack) object1;
+							ItemStack itemstack2 = (ItemStack) object2;
+							return Item.getIdFromItem(itemstack1.getItem()) - Item.getIdFromItem(itemstack2.getItem());
+						}
+					}); //sort the items, in ascending order of item IDs
 				}
-			};
+			}; //instantiating a creative tab automatically registers it
 		}
 		//Modifying block names
 		if (CppConfigHandler.renameButtons) {
