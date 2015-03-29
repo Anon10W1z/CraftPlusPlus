@@ -29,7 +29,6 @@ minecraft {
 }
 
 sourceSets {
-    ed
     main {
         output.resourcesDir = output.classesDir
     }
