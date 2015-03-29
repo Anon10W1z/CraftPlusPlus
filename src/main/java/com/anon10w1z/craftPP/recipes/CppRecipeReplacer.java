@@ -17,7 +17,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -97,7 +96,7 @@ public class CppRecipeReplacer {
 	 */
 	private static void removeRecipes(ItemStack result) {
 		List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
-		List<IRecipe> recipeListCopy = new ArrayList<>(recipeList);
+		List<IRecipe> recipeListCopy = CppUtils.copyList(recipeList);
 		for (IRecipe recipe : recipeListCopy)
 			if (ItemStack.areItemStacksEqual(result, recipe.getRecipeOutput()))
 				recipeList.remove(recipe);
@@ -110,7 +109,7 @@ public class CppRecipeReplacer {
 	 */
 	private static void removeRecipe(Class<? extends IRecipe> recipeClass) {
 		List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
-		List<IRecipe> recipeListCopy = new ArrayList<>(recipeList);
+		List<IRecipe> recipeListCopy = CppUtils.copyList(recipeList);
 		for (IRecipe recipe : recipeListCopy)
 			if (recipe.getClass() == recipeClass)
 				recipeList.remove(recipe);

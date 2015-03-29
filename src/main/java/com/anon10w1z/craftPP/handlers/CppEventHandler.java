@@ -1,6 +1,7 @@
 package com.anon10w1z.craftPP.handlers;
 
 import com.anon10w1z.craftPP.main.CppModInfo;
+import com.anon10w1z.craftPP.main.CppUtils;
 import com.anon10w1z.craftPP.main.CraftPlusPlus;
 import com.anon10w1z.craftPP.misc.CppExtendedEntityProperties;
 import net.minecraft.block.Block;
@@ -41,7 +42,6 @@ import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -101,7 +101,7 @@ public final class CppEventHandler {
 			}
 		}
 		//Drop removals
-		List<EntityItem> dropsCopy = new ArrayList<>(event.drops);
+		List<EntityItem> dropsCopy = CppUtils.copyList(event.drops);
 		for (EntityItem dropEntity : dropsCopy) {
 			ItemStack dropItem = dropEntity.getEntityItem();
 			if (event.source.getEntity() != null) {
