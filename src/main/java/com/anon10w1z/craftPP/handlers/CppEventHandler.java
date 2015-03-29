@@ -101,7 +101,7 @@ public final class CppEventHandler {
 			}
 		}
 		//Drop removals
-		List<EntityItem> dropsCopy = new ArrayList<EntityItem>(event.drops);
+		List<EntityItem> dropsCopy = new ArrayList<>(event.drops);
 		for (EntityItem dropEntity : dropsCopy) {
 			ItemStack dropItem = dropEntity.getEntityItem();
 			if (event.source.getEntity() != null) {
