@@ -1,4 +1,4 @@
-package com.anon10w1z.craftPP.proxies;
+package com.github.anon10w1z.craftPP.proxies;
 
 /**
  * The common (dual-side) proxy for Craft++

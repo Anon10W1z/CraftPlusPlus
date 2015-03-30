@@ -1,4 +1,4 @@
-package com.anon10w1z.craftPP.handlers;
+package com.github.anon10w1z.craftPP.handlers;
 
 import net.minecraftforge.common.config.Configuration;
 

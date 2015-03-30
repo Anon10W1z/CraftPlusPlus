@@ -18,7 +18,7 @@ buildscript {
 apply plugin: 'forge'
 
 version = "2.3"
-group = "com.anon10w1z.craftPP"
+group = "com.github.anon10w1z.craftPP"
 //noinspection GroovyUnusedAssignment
 archivesBaseName = "craft++"
 

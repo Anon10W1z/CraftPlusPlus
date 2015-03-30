@@ -1,6 +1,6 @@
-package com.anon10w1z.craftPP.handlers;
+package com.github.anon10w1z.craftPP.handlers;
 
-import com.anon10w1z.craftPP.blocks.CppBlocks;
+import com.github.anon10w1z.craftPP.blocks.CppBlocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.IFuelHandler;

@@ -1,4 +1,4 @@
-package com.anon10w1z.craftPP.blocks;
+package com.github.anon10w1z.craftPP.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;

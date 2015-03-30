@@ -1,7 +1,7 @@
-package com.anon10w1z.craftPP.misc;
+package com.github.anon10w1z.craftPP.misc;
 
-import com.anon10w1z.craftPP.handlers.CppConfigHandler;
-import com.anon10w1z.craftPP.main.CraftPlusPlus;
+import com.github.anon10w1z.craftPP.handlers.CppConfigHandler;
+import com.github.anon10w1z.craftPP.main.CraftPlusPlus;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.block.Block.SoundType;

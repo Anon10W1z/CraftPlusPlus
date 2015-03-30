@@ -1,9 +1,9 @@
-package com.anon10w1z.craftPP.handlers;
+package com.github.anon10w1z.craftPP.handlers;
 
-import com.anon10w1z.craftPP.main.CppModInfo;
-import com.anon10w1z.craftPP.main.CppUtils;
-import com.anon10w1z.craftPP.main.CraftPlusPlus;
-import com.anon10w1z.craftPP.misc.CppExtendedEntityProperties;
+import com.github.anon10w1z.craftPP.main.CppModInfo;
+import com.github.anon10w1z.craftPP.main.CppUtils;
+import com.github.anon10w1z.craftPP.main.CraftPlusPlus;
+import com.github.anon10w1z.craftPP.misc.CppExtendedEntityProperties;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.IEntitySelector;

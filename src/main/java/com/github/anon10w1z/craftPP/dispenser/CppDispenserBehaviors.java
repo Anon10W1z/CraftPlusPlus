@@ -1,7 +1,7 @@
-package com.anon10w1z.craftPP.dispenser;
+package com.github.anon10w1z.craftPP.dispenser;
 
-import com.anon10w1z.craftPP.handlers.CppConfigHandler;
-import com.anon10w1z.craftPP.main.CraftPlusPlus;
+import com.github.anon10w1z.craftPP.handlers.CppConfigHandler;
+import com.github.anon10w1z.craftPP.main.CraftPlusPlus;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.BlockFalling;

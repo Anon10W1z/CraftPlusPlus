@@ -1,6 +1,6 @@
-package com.anon10w1z.craftPP.misc;
+package com.github.anon10w1z.craftPP.misc;
 
-import com.anon10w1z.craftPP.main.CppUtils;
+import com.github.anon10w1z.craftPP.main.CppUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.nbt.NBTTagCompound;

@@ -1,14 +1,14 @@
-package com.anon10w1z.craftPP.main;
+package com.github.anon10w1z.craftPP.main;
 
-import com.anon10w1z.craftPP.blocks.CppBlocks;
-import com.anon10w1z.craftPP.dispenser.CppDispenserBehaviors;
-import com.anon10w1z.craftPP.handlers.CppConfigHandler;
-import com.anon10w1z.craftPP.handlers.CppEventHandler;
-import com.anon10w1z.craftPP.handlers.CppFuelHandler;
-import com.anon10w1z.craftPP.misc.CppVanillaPropertiesChanger;
-import com.anon10w1z.craftPP.proxies.CppCommonProxy;
-import com.anon10w1z.craftPP.recipes.CppRecipeReplacer;
-import com.anon10w1z.craftPP.recipes.CppRecipes;
+import com.github.anon10w1z.craftPP.blocks.CppBlocks;
+import com.github.anon10w1z.craftPP.dispenser.CppDispenserBehaviors;
+import com.github.anon10w1z.craftPP.handlers.CppConfigHandler;
+import com.github.anon10w1z.craftPP.handlers.CppEventHandler;
+import com.github.anon10w1z.craftPP.handlers.CppFuelHandler;
+import com.github.anon10w1z.craftPP.misc.CppVanillaPropertiesChanger;
+import com.github.anon10w1z.craftPP.proxies.CppCommonProxy;
+import com.github.anon10w1z.craftPP.recipes.CppRecipeReplacer;
+import com.github.anon10w1z.craftPP.recipes.CppRecipes;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;

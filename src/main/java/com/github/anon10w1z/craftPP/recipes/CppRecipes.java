@@ -1,6 +1,6 @@
-package com.anon10w1z.craftPP.recipes;
+package com.github.anon10w1z.craftPP.recipes;
 
-import com.anon10w1z.craftPP.blocks.CppBlocks;
+import com.github.anon10w1z.craftPP.blocks.CppBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;

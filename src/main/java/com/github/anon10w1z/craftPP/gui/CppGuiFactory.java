@@ -1,4 +1,4 @@
-package com.anon10w1z.craftPP.gui;
+package com.github.anon10w1z.craftPP.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;

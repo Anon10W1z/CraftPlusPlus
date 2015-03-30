@@ -1,7 +1,7 @@
-package com.anon10w1z.craftPP.gui;
+package com.github.anon10w1z.craftPP.gui;
 
-import com.anon10w1z.craftPP.handlers.CppConfigHandler;
-import com.anon10w1z.craftPP.main.CppModInfo;
+import com.github.anon10w1z.craftPP.handlers.CppConfigHandler;
+import com.github.anon10w1z.craftPP.main.CppModInfo;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;

@@ -1,6 +1,6 @@
-package com.anon10w1z.craftPP.dispenser;
+package com.github.anon10w1z.craftPP.dispenser;
 
-import com.anon10w1z.craftPP.main.CppUtils;
+import com.github.anon10w1z.craftPP.main.CppUtils;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.dispenser.IBlockSource;

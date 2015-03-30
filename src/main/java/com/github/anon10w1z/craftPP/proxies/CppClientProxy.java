@@ -1,7 +1,7 @@
-package com.anon10w1z.craftPP.proxies;
+package com.github.anon10w1z.craftPP.proxies;
 
-import com.anon10w1z.craftPP.blocks.CppBlocks;
-import com.anon10w1z.craftPP.main.CppModInfo;
+import com.github.anon10w1z.craftPP.blocks.CppBlocks;
+import com.github.anon10w1z.craftPP.main.CppModInfo;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;

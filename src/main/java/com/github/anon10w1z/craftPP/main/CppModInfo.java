@@ -1,4 +1,4 @@
-package com.anon10w1z.craftPP.main;
+package com.github.anon10w1z.craftPP.main;
 
 /**
  * The reference class for Craft++
@@ -19,7 +19,7 @@ public final class CppModInfo {
 	/**
 	 * Craft++'s package location
 	 */
-	public static final String PACKAGE_LOCATION = "com.anon10w1z.craftPP";
+	public static final String PACKAGE_LOCATION = "com.github.anon10w1z.craftPP";
 
 	/**
 	 * Prevents CppModConstants from being instantianted
