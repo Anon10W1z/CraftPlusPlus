@@ -44,16 +44,17 @@ public class CppExtendedEntityProperties implements IExtendedEntityProperties {
 	}
 
 	/**
-	 * Registers the extended properties for the given item entity
+	 * Registers the Craft++ extended properties for the given item entity
 	 *
 	 * @param entityItem The item entity to register the properties for
 	 */
-	public static void registerExtendedProperties(EntityItem entityItem) {
-		entityItem.registerExtendedProperties(EXTENDED_PROPERTIES_NAME, new CppExtendedEntityProperties(entityItem));
+	public static void registerExtendedProperties(Entity entityItem) {
+		if (entityItem instanceof EntityItem)
+			entityItem.registerExtendedProperties(EXTENDED_PROPERTIES_NAME, new CppExtendedEntityProperties((EntityItem) entityItem));
 	}
 
 	/**
-	 * Returns the extended properties for the given item entity
+	 * Returns the Craft++ extended properties for the given item entity
 	 *
 	 * @param entityItem The item entity to obtain the properties from
 	 * @return The CppExtendedProperties of the given item entity
@@ -82,7 +83,7 @@ public class CppExtendedEntityProperties implements IExtendedEntityProperties {
 	 */
 	@Override
 	public void loadNBTData(NBTTagCompound compound) {
-		NBTTagCompound properties = (NBTTagCompound) compound.getTag(EXTENDED_PROPERTIES_NAME);
+		NBTTagCompound properties = compound.getCompoundTag(EXTENDED_PROPERTIES_NAME);
 		this.minSteadyTicks = properties.getInteger("MinSteadyTicks");
 		this.steadyTicks = properties.getInteger("SteadyTicks");
 	}

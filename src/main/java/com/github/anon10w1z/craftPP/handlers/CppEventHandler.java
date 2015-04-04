@@ -63,6 +63,13 @@ public final class CppEventHandler {
 	private static boolean displayPotionEffects = true;
 
 	/**
+	 * Ensure CppEventHandler is a singleton
+	 */
+	private CppEventHandler() {
+
+	}
+
+	/**
 	 * Affects living entity drops
 	 *
 	 * @param event The LivingDropsEvent
@@ -101,7 +108,8 @@ public final class CppEventHandler {
 			}
 		}
 		//Drop removals
-		List<EntityItem> dropsCopy = CppUtils.copyList(event.drops);
+		List<EntityItem> drops = event.drops;
+		List<EntityItem> dropsCopy = CppUtils.copyList(drops);
 		for (EntityItem dropEntity : dropsCopy) {
 			ItemStack dropItem = dropEntity.getEntityItem();
 			if (event.source.getEntity() != null) {
@@ -109,10 +117,10 @@ public final class CppEventHandler {
 				Entity source = event.source.getEntity();
 				if (source instanceof EntityWolf && entity instanceof EntitySheep) {
 					if (drop == Items.mutton || drop == Items.cooked_mutton)
-						event.drops.remove(dropEntity);
+						drops.remove(dropEntity);
 				} else if (source instanceof EntityOcelot && entity instanceof EntityChicken) {
 					if (drop == Items.chicken || drop == Items.cooked_chicken)
-						event.drops.remove(dropEntity);
+						drops.remove(dropEntity);
 				}
 			}
 		}
@@ -206,14 +214,14 @@ public final class CppEventHandler {
 	}
 
 	/**
-	 * Initializes the extended item entity properties for Craft++
+	 * Registers the extended item entity properties for Craft++
 	 *
 	 * @param event The EntityConstructing (event)
 	 */
 	@SubscribeEvent
 	public void onEntityConstructing(EntityEvent.EntityConstructing event) {
 		if (event.entity instanceof EntityItem)
-			CppExtendedEntityProperties.registerExtendedProperties((EntityItem) event.entity);
+			CppExtendedEntityProperties.registerExtendedProperties(event.entity);
 	}
 
 	/**
@@ -267,7 +275,7 @@ public final class CppEventHandler {
 	/**
 	 * Enables mob spawners to drop themselves when harvested with silk touch
 	 *
-	 * @param event The (BlockEvent) BreakEvent
+	 * @param event The (Block) BreakEvent
 	 */
 	@SubscribeEvent
 	public void onBlockBreak(BreakEvent event) {

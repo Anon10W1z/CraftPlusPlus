@@ -21,18 +21,17 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 /**
  * The vanilla properties changer for Craft++
  */
+@SuppressWarnings("unused")
 public class CppVanillaPropertiesChanger {
 	/**
 	 * Initializes the vanilla properties changer
 	 */
-	@SuppressWarnings({"unchecked", "unused"})
+	@SuppressWarnings("unchecked")
 	public static void init() {
 		//Modifying block step sounds
 		Iterable<Block> blocks = Block.blockRegistry;
@@ -82,14 +81,7 @@ public class CppVanillaPropertiesChanger {
 						spawnerStack.setTagCompound(stackTagCompound);
 						list.add(spawnerStack);
 					}
-					Collections.sort(list, new Comparator() {
-						@Override
-						public int compare(Object object1, Object object2) {
-							ItemStack itemstack1 = (ItemStack) object1;
-							ItemStack itemstack2 = (ItemStack) object2;
-							return Item.getIdFromItem(itemstack1.getItem()) - Item.getIdFromItem(itemstack2.getItem());
-						}
-					}); //sort the items, in ascending order of item IDs
+
 				}
 			}; //instantiating a creative tab automatically registers it
 		}
@@ -100,5 +92,6 @@ public class CppVanillaPropertiesChanger {
 		}
 		//Adding fishables
 		FishingHooks.addJunk(new WeightedRandomFishable(new ItemStack(Items.paper), 10));
+
 	}
 }

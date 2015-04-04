@@ -6,13 +6,16 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
  * Contains some utility functions used by Craft++
  */
+@SuppressWarnings("unchecked")
 public final class CppUtils {
 	/**
 	 * Prevents CppUtils from being instantiated
@@ -38,17 +41,16 @@ public final class CppUtils {
 	/**
 	 * Finds an object by the specified name(s) in the specified object, and returns it
 	 *
-	 * @param object    The instance to find the object in
+	 * @param object      The object to find the object in
 	 * @param objectNames A list of all possible names for the object
 	 * @param <T>         The data type of the object to return
 	 * @return An object of the specified type with the first possible of the passed names
 	 */
-	@SuppressWarnings("unchecked")
 	public static <T> T findObject(Object object, String... objectNames) {
 		try {
 			Field field = ReflectionHelper.findField(object.getClass(), objectNames);
 			return (T) field.get(object);
-		} catch (Exception e) {
+		} catch (Exception exception) {
 			return null;
 		}
 	}
@@ -56,11 +58,16 @@ public final class CppUtils {
 	/**
 	 * Copies a list and returns the copy
 	 *
-	 * @param list The array list to copy
+	 * @param list The list to copy
 	 * @param <T>  The type of the list
 	 * @return A copy of the given list
 	 */
 	public static <T> List<T> copyList(List<T> list) {
-		return new ArrayList<T>(list);
+		try {
+			Constructor constructor = list.getClass().getConstructor(Collection.class);
+			return (List<T>) constructor.newInstance(list);
+		} catch (Exception exception) {
+			return new ArrayList<T>(list);
+		}
 	}
 }
