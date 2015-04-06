@@ -20,6 +20,7 @@ import java.util.Collection;
 /**
  * The client-side proxy for Craft++
  */
+@SuppressWarnings("unused")
 public class CppClientProxy extends CppCommonProxy {
 	private static final Gui guiInstance = new Gui(); //used to draw potion icons
 	private static final ResourceLocation inventoryResourceLocation = new ResourceLocation("textures/gui/container/inventory.png"); //location of potion icons texture file

@@ -1,5 +1,6 @@
 package com.github.anon10w1z.craftPP.handlers;
 
+import com.github.anon10w1z.craftPP.gui.CppGuiConfig;
 import com.github.anon10w1z.craftPP.main.CppModInfo;
 import com.github.anon10w1z.craftPP.main.CppUtils;
 import com.github.anon10w1z.craftPP.main.CraftPlusPlus;
@@ -29,6 +30,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.entity.EntityEvent;
@@ -39,6 +41,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
+import net.minecraftforge.fml.client.GuiIngameModOptions;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 
@@ -310,5 +313,16 @@ public final class CppEventHandler {
 			if (displayPotionEffects && !CraftPlusPlus.proxy.isGuiOpen())
 				CraftPlusPlus.proxy.displayPotionEffects();
 		}
+	}
+
+	/**
+	 * Changes the Mod Options GUI into Craft++'s config GUI
+	 *
+	 * @param event The GuiOpenEvent
+	 */
+	@SubscribeEvent
+	public void onGuiOpen(GuiOpenEvent event) {
+		if (event.gui instanceof GuiIngameModOptions)
+			event.gui = new CppGuiConfig(null);
 	}
 }
