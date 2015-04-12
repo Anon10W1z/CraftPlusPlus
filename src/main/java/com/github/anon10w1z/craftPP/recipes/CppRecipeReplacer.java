@@ -51,13 +51,16 @@ public class CppRecipeReplacer {
 			for (Block block : blocks)
 				if (block instanceof BlockStairs) {
 					BlockStairs stairs = (BlockStairs) block;
-					Block modelBlock = CppUtils.findObject(stairs, "modelBlock", "field_150149_b");
 					IBlockState modelState = CppUtils.findObject(stairs, "modelState", "field_150151_M");
-					if (modelBlock == null || modelState == null) {
+					if (modelState == null) {
 						doStairsFieldsExist = false;
 						break;
 					}
-					replaceStairsRecipe(stairs, new ItemStack(modelBlock, 1, modelBlock.getMetaFromState(modelState)));
+					Block modelBlock = modelState.getBlock();
+					int modelMetadata = OreDictionary.WILDCARD_VALUE;
+					if (modelBlock.getBlockState().getValidStates().size() > 1)
+						modelMetadata = modelBlock.getMetaFromState(modelState);
+					replaceStairsRecipe(stairs, new ItemStack(modelBlock, 1, modelMetadata));
 				}
 			if (!doStairsFieldsExist) { //backup
 				CraftPlusPlus.logInfo("Reverting to backup stairs recipe replacing");
@@ -70,11 +73,11 @@ public class CppRecipeReplacer {
 
 				replaceStairsRecipe(Blocks.stone_stairs, new ItemStack(Blocks.cobblestone));
 				replaceStairsRecipe(Blocks.brick_stairs, new ItemStack(Blocks.brick_block));
-				replaceStairsRecipe(Blocks.stone_brick_stairs, new ItemStack(Blocks.stonebrick));
+				replaceStairsRecipe(Blocks.stone_brick_stairs, new ItemStack(Blocks.stonebrick, 1, OreDictionary.WILDCARD_VALUE));
 				replaceStairsRecipe(Blocks.nether_brick_stairs, new ItemStack(Blocks.nether_brick));
-				replaceStairsRecipe(Blocks.sandstone_stairs, new ItemStack(Blocks.sandstone));
-				replaceStairsRecipe(Blocks.red_sandstone_stairs, new ItemStack(Blocks.red_sandstone));
-				replaceStairsRecipe(Blocks.quartz_stairs, new ItemStack(Blocks.quartz_block));
+				replaceStairsRecipe(Blocks.sandstone_stairs, new ItemStack(Blocks.sandstone, 1, OreDictionary.WILDCARD_VALUE));
+				replaceStairsRecipe(Blocks.red_sandstone_stairs, new ItemStack(Blocks.red_sandstone, 1, OreDictionary.WILDCARD_VALUE));
+				replaceStairsRecipe(Blocks.quartz_stairs, new ItemStack(Blocks.quartz_block, 1, OreDictionary.WILDCARD_VALUE));
 			}
 		}
 		//Buttons
