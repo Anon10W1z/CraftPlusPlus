@@ -1,0 +1,47 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+    }
+}
+
+apply plugin: 'forge'
+
+version = "2.3.1"
+group = "com.github.anon10w1z.craftPP"
+//noinspection GroovyUnusedAssignment
+archivesBaseName = "craft++"
+
+minecraft {
+    version = "1.8-11.14.1.1371"
+    runDir = "eclipse"
+    mappings = "snapshot_nodoc_20141130"
+}
+
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'deobf'
+}
+
+tasks.build.dependsOn('deobfJar')
+
+artifacts {
+    archives deobfJar
+}
+
+apply plugin: 'idea'
+idea {
+    module {
+        inheritOutputDirs = true
+    }
+} //for assets to work with IntelliJ

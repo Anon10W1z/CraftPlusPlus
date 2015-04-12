@@ -2,11 +2,11 @@
   "versionList": [
     {
       "mcVersion": "Minecraft 1.8",
-      "modVersion": "2.3",
+      "modVersion": "2.3.1",
       "changeLog": [
-        "Version 2.3 adds various tweaks and enhancements."
+        "Version 2.3.1 fixes some moderate bugs."
       ],
-      "updateURL": "https://drone.io/github.com/Anon10W1z/CraftPlusPlus/files/build/libs/craft++-2.3.jar",
+      "updateURL": "https://drone.io/github.com/Anon10W1z/CraftPlusPlus/files/build/libs/craft++-2.3.1.jar",
       "isDirectLink": "true",
       "newFileName": ""
     }
