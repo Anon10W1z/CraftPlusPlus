@@ -44,6 +44,8 @@ import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.fml.client.GuiIngameModOptions;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import java.util.Random;
@@ -316,11 +318,14 @@ public final class CppEventHandler {
 	}
 
 	/**
-	 * Changes the Mod Options GUI into Craft++'s config GUI
+	 * Changes the mod options GUI into Craft++'s config GUI. <br>
+	 * Unfortunately, this must use @SideOnly instead of proxies. <br>
+	 * Otherwise, the class GuiScreen will get loaded on the server-side, which crashes the game.
 	 *
 	 * @param event The GuiOpenEvent
 	 */
 	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
 	public void onGuiOpen(GuiOpenEvent event) {
 		if (event.gui instanceof GuiIngameModOptions)
 			event.gui = new CppGuiConfig(null);

@@ -28,6 +28,13 @@ public class CppClientProxy extends CppCommonProxy {
 	private static KeyBinding potionKey; //the key binding for toggling the potion overlay
 
 	@Override
+	public void registerBlockInventoryRenderers() {
+		registerBlockInventoryRenderer(CppBlocks.flint_block, "flint");
+		registerBlockInventoryRenderer(CppBlocks.sugar_block, "sugar");
+		registerBlockInventoryRenderer(CppBlocks.charcoal_block, "charcoal");
+	}
+
+	@Override
 	@SuppressWarnings("unchecked")
 	public void displayPotionEffects() {
 		int xPos = 2;
@@ -66,13 +73,6 @@ public class CppClientProxy extends CppCommonProxy {
 	@Override
 	public boolean isGuiOpen() {
 		return minecraft.currentScreen != null;
-	}
-
-	@Override
-	public void registerBlockInventoryRenderers() {
-		registerBlockInventoryRenderer(CppBlocks.flint_block, "flint");
-		registerBlockInventoryRenderer(CppBlocks.sugar_block, "sugar");
-		registerBlockInventoryRenderer(CppBlocks.charcoal_block, "charcoal");
 	}
 
 	/**

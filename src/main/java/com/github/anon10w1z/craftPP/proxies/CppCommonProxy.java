@@ -19,7 +19,7 @@ public class CppCommonProxy {
 	}
 
 	/**
-	 * Registers the key bindings
+	 * Registers the key bindings for Craft++
 	 */
 	public void registerKeyBindings() {
 
