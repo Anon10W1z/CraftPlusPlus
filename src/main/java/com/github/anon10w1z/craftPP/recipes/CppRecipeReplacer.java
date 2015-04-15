@@ -37,11 +37,12 @@ public class CppRecipeReplacer {
 			removeRecipes(new ItemStack(Items.stone_axe));
 			removeRecipes(new ItemStack(Items.stone_hoe));
 			OreDictionary.registerOre("stone", new ItemStack(Blocks.stone, 1, OreDictionary.WILDCARD_VALUE));
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.stone_sword), "S", "S", "T", 'S', "stone", 'T', "stickWood"));
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.stone_shovel), "S", "T", "T", 'S', "stone", 'T', "stickWood"));
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.stone_pickaxe), "SSS", " T ", " T ", 'S', "stone", 'T', "stickWood"));
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.stone_axe), "SS", "ST", " T", 'S', "stone", 'T', "stickWood"));
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.stone_hoe), "SS", " T", " T", 'S', "stone", 'T', "stickWood"));
+
+			GameRegistry.addRecipe(new ItemStack(Items.stone_sword), "S", "S", "T", 'S', Blocks.stone, 'T', Items.stick);
+			GameRegistry.addRecipe(new ItemStack(Items.stone_shovel), "S", "T", "T", 'S', Blocks.stone, 'T', Items.stick);
+			GameRegistry.addRecipe(new ItemStack(Items.stone_pickaxe), "SSS", " T ", " T ", 'S', Blocks.stone, 'T', Items.stick);
+			GameRegistry.addRecipe(new ItemStack(Items.stone_axe), "SS", "ST", " T", 'S', Blocks.stone, 'T', Items.stick);
+			GameRegistry.addRecipe(new ItemStack(Items.stone_hoe), "SS", " T", " T", 'S', Blocks.stone, 'T', Items.stick);
 		}
 		//Stairs
 		if (CppConfigHandler.useBetterStairsRecipes) {

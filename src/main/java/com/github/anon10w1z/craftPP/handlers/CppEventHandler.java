@@ -13,6 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityEnderPearl;
+import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.*;
@@ -30,6 +31,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.ChunkProviderGenerate;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
@@ -41,12 +43,14 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
+import net.minecraftforge.event.world.BlockEvent.PlaceEvent;
 import net.minecraftforge.fml.client.GuiIngameModOptions;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -56,23 +60,16 @@ import static net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigCha
  * The event handler for Craft++
  */
 @SuppressWarnings({"unused", "unchecked"})
-public final class CppEventHandler {
+public enum CppEventHandler {
 	/**
 	 * The singleton instance of CppEventHandler
 	 */
-	public static final CppEventHandler instance = new CppEventHandler();
+	INSTANCE;
 
 	/**
 	 * Whether or not to enable the potion effect overlay
 	 */
 	private static boolean displayPotionEffects = true;
-
-	/**
-	 * Ensure CppEventHandler is a singleton
-	 */
-	private CppEventHandler() {
-
-	}
 
 	/**
 	 * Affects living entity drops
@@ -264,7 +261,7 @@ public final class CppEventHandler {
 					String entityName = blockEntityTagCompound.getString("EntityId");
 					Class entityClass = (Class) EntityList.stringToClassMapping.get(entityName);
 					if (entityClass != null) {
-						EnumChatFormatting color = EntityMob.class.isAssignableFrom(entityClass) || IMob.class.isAssignableFrom(entityClass) ? EnumChatFormatting.RED : EnumChatFormatting.BLUE;
+						EnumChatFormatting color = IMob.class.isAssignableFrom(entityClass) ? EnumChatFormatting.RED : EnumChatFormatting.BLUE;
 						String unlocalizedEntityName = "entity." + entityName + ".name";
 						String localizedEntityName = StatCollector.translateToLocal(unlocalizedEntityName);
 						if (localizedEntityName.equals(unlocalizedEntityName))

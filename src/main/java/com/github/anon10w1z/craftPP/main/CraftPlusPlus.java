@@ -5,6 +5,7 @@ import com.github.anon10w1z.craftPP.dispenser.CppDispenserBehaviors;
 import com.github.anon10w1z.craftPP.handlers.CppConfigHandler;
 import com.github.anon10w1z.craftPP.handlers.CppEventHandler;
 import com.github.anon10w1z.craftPP.handlers.CppFuelHandler;
+import com.github.anon10w1z.craftPP.misc.CppOreDictionaryEnhancer;
 import com.github.anon10w1z.craftPP.misc.CppVanillaPropertiesChanger;
 import com.github.anon10w1z.craftPP.proxies.CppCommonProxy;
 import com.github.anon10w1z.craftPP.recipes.CppRecipeReplacer;
@@ -20,6 +21,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Collections;
@@ -99,7 +101,8 @@ public final class CraftPlusPlus {
 	 * - Registers the crafting recipes <br>
 	 * - Registers the dispenser behaviors <br>
 	 * - Initializes the vanilla properties changer <br>
-	 * - Initializes the recipe remover
+	 * - Initializes the recipe remover <br>
+	 * - Initializes the ore dictionary enhancer
 	 *
 	 * @param event The FMLInitializationEvent
 	 */
@@ -108,8 +111,8 @@ public final class CraftPlusPlus {
 		logInfo("Registering the block inventory renderers");
 		proxy.registerBlockInventoryRenderers();
 		logInfo("Registering the event handler");
-		MinecraftForge.EVENT_BUS.register(CppEventHandler.instance);
-		FMLCommonHandler.instance().bus().register(CppEventHandler.instance);
+		MinecraftForge.EVENT_BUS.register(CppEventHandler.INSTANCE);
+		FMLCommonHandler.instance().bus().register(CppEventHandler.INSTANCE);
 		logInfo("Registering the key bindings");
 		proxy.registerKeyBindings();
 		logInfo("Registering the fuel handler");
@@ -122,6 +125,8 @@ public final class CraftPlusPlus {
 		CppVanillaPropertiesChanger.init();
 		logInfo("Initializing the crafting recipe remover");
 		CppRecipeReplacer.replaceRecipes();
+		logInfo("Initializing the ore dictionary enhancer");
+		CppOreDictionaryEnhancer.init();
 		logInfo("Initialization completed successfully");
 	}
 }

@@ -92,6 +92,5 @@ public class CppVanillaPropertiesChanger {
 		}
 		//Adding fishables
 		FishingHooks.addJunk(new WeightedRandomFishable(new ItemStack(Items.paper), 10));
-
 	}
 }
