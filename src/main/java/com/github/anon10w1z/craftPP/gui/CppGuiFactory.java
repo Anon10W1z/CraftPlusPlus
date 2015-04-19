@@ -18,7 +18,7 @@ public class CppGuiFactory implements IModGuiFactory {
 
 	@Override
 	public Class<? extends GuiScreen> mainConfigGuiClass() {
-		return CppGuiConfig.class;
+		return GuiCppConfig.class;
 	}
 
 	@Override

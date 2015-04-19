@@ -12,6 +12,9 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemFlintAndSteel;
 import net.minecraft.util.StatCollector;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class CppDispenserBehaviors {
 	/**
 	 * Registers the dispenser behaviors for Craft++
@@ -23,8 +26,8 @@ public class CppDispenserBehaviors {
 			//Falling Blocks
 			if (item instanceof ItemBlock) {
 				Block block = ((ItemBlock) item).block;
-				Material blockMaterial = block.getMaterial();
-				if (block instanceof BlockFalling && (blockMaterial == Material.sand || blockMaterial == Material.snow || blockMaterial == Material.craftedSnow || blockMaterial == Material.clay))
+				List<Material> fallingMaterials = Arrays.asList(Material.sand, Material.clay, Material.snow, Material.craftedSnow);
+				if (block instanceof BlockFalling && fallingMaterials.contains(block.getMaterial()))
 					registerDispenserBehavior(item, new BehaviorDispenseBlockFalling());
 			}
 			//Flint And Steel (default behavior)

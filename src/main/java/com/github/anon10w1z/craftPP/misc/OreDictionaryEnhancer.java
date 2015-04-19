@@ -7,7 +7,7 @@ import net.minecraftforge.oredict.OreDictionary;
 /**
  * Enhances the vanilla ore dictionary system
  */
-public class CppOreDictionaryEnhancer {
+public class OreDictionaryEnhancer {
 	/**
 	 * Initializes the ore dictionary enhancer
 	 */

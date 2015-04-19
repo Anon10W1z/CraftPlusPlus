@@ -1,6 +1,7 @@
 package com.github.anon10w1z.craftPP.proxies;
 
 import com.github.anon10w1z.craftPP.blocks.CppBlocks;
+import com.github.anon10w1z.craftPP.gui.GuiCppConfig;
 import com.github.anon10w1z.craftPP.main.CppModInfo;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -11,6 +12,8 @@ import net.minecraft.item.Item;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.fml.client.GuiIngameModOptions;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -73,6 +76,12 @@ public class CppClientProxy extends CppCommonProxy {
 	@Override
 	public boolean isGuiOpen() {
 		return minecraft.currentScreen != null;
+	}
+
+	@Override
+	public void handleGuiOpen(GuiOpenEvent event) {
+		if (event.gui instanceof GuiIngameModOptions)
+			event.gui = new GuiCppConfig();
 	}
 
 	/**

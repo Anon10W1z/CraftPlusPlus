@@ -14,7 +14,6 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.RecipeRepairItem;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import java.util.List;
@@ -29,14 +28,12 @@ public class CppRecipeReplacer {
 	 */
 	public static void replaceRecipes() {
 		//Stone Tools
-		CraftPlusPlus.logInfo("Replacing stone tool recipes");
 		if (CppConfigHandler.useBetterStoneToolRecipes) {
 			removeRecipes(new ItemStack(Items.stone_sword));
 			removeRecipes(new ItemStack(Items.stone_shovel));
 			removeRecipes(new ItemStack(Items.stone_pickaxe));
 			removeRecipes(new ItemStack(Items.stone_axe));
 			removeRecipes(new ItemStack(Items.stone_hoe));
-			OreDictionary.registerOre("stone", new ItemStack(Blocks.stone, 1, OreDictionary.WILDCARD_VALUE));
 
 			GameRegistry.addRecipe(new ItemStack(Items.stone_sword), "S", "S", "T", 'S', Blocks.stone, 'T', Items.stick);
 			GameRegistry.addRecipe(new ItemStack(Items.stone_shovel), "S", "T", "T", 'S', Blocks.stone, 'T', Items.stick);
@@ -46,7 +43,6 @@ public class CppRecipeReplacer {
 		}
 		//Stairs
 		if (CppConfigHandler.useBetterStairsRecipes) {
-			CraftPlusPlus.logInfo("Replacing stairs recipes");
 			boolean doStairsFieldsExist = true;
 			Iterable<Block> blocks = Block.blockRegistry;
 			for (Block block : blocks)
@@ -82,13 +78,11 @@ public class CppRecipeReplacer {
 			}
 		}
 		//Buttons
-		CraftPlusPlus.logInfo("Replacing vanilla button recipes");
 		removeRecipes(new ItemStack(Blocks.wooden_button));
 		removeRecipes(new ItemStack(Blocks.stone_button));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Blocks.wooden_button, 4), "plankWood"));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Blocks.stone_button, 4), "stone"));
 		//Repairing Items
-		CraftPlusPlus.logInfo("Removing tool repair recipes");
 		removeRecipe(RecipeRepairItem.class);
 	}
 

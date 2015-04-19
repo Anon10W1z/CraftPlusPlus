@@ -10,8 +10,12 @@ import net.minecraftforge.fml.client.config.GuiConfig;
 /**
  * The config GUI for Craft++
  */
-public class CppGuiConfig extends GuiConfig {
-	public CppGuiConfig(GuiScreen parent) {
+public class GuiCppConfig extends GuiConfig {
+	public GuiCppConfig() {
+		this(null);
+	}
+
+	public GuiCppConfig(GuiScreen parent) {
 		super(parent, new ConfigElement(CppConfigHandler.config.getCategory(Configuration.CATEGORY_GENERAL)).getChildElements(), CppModInfo.MOD_ID, false, false, GuiConfig.getAbridgedConfigPath(CppConfigHandler.config.toString()));
 	}
 }

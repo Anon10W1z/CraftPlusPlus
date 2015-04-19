@@ -36,7 +36,7 @@ public class CppExtendedEntityProperties implements IExtendedEntityProperties {
 	/**
 	 * Number of ticks the item entity has been above the same block position
 	 */
-	public int steadyTicks;
+	public int steadyTicks = 0;
 
 	public CppExtendedEntityProperties(EntityItem entityItem) {
 		this.entityItem = entityItem;
@@ -97,7 +97,6 @@ public class CppExtendedEntityProperties implements IExtendedEntityProperties {
 	@Override
 	public void init(Entity entity, World world) {
 		this.minSteadyTicks = world.rand.nextInt(100) + 100;
-		this.steadyTicks = 0;
 	}
 
 	/**

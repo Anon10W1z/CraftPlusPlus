@@ -5,8 +5,8 @@ import com.github.anon10w1z.craftPP.dispenser.CppDispenserBehaviors;
 import com.github.anon10w1z.craftPP.handlers.CppConfigHandler;
 import com.github.anon10w1z.craftPP.handlers.CppEventHandler;
 import com.github.anon10w1z.craftPP.handlers.CppFuelHandler;
-import com.github.anon10w1z.craftPP.misc.CppOreDictionaryEnhancer;
 import com.github.anon10w1z.craftPP.misc.CppVanillaPropertiesChanger;
+import com.github.anon10w1z.craftPP.misc.OreDictionaryEnhancer;
 import com.github.anon10w1z.craftPP.proxies.CppCommonProxy;
 import com.github.anon10w1z.craftPP.recipes.CppRecipeReplacer;
 import com.github.anon10w1z.craftPP.recipes.CppRecipes;
@@ -21,7 +21,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Collections;
@@ -44,7 +43,7 @@ public final class CraftPlusPlus {
 	 * The mod instance of Craft++
 	 */
 	@Instance(CppModInfo.MOD_ID)
-	private static CraftPlusPlus instance;
+	public static CraftPlusPlus instance;
 
 	/**
 	 * The logger for Craft++
@@ -72,7 +71,6 @@ public final class CraftPlusPlus {
 	 */
 	@EventHandler
 	public void onPreInit(FMLPreInitializationEvent event) {
-		instance = this;
 		this.logger = event.getModLog();
 		logInfo("Initialized the logger");
 		logInfo("Hard-coding the mcmod.info");
@@ -82,7 +80,7 @@ public final class CraftPlusPlus {
 		modMetadata.version = CppModInfo.VERSION;
 		modMetadata.description = "A simple vanilla-enhancing mod";
 		modMetadata.authorList = Collections.singletonList("Anon10W1z");
-		modMetadata.url = "http://goo.gl/RpVUdZ";
+		modMetadata.url = "http://goo.gl/fiVx7H";
 		logInfo("Enabling the Version Checker Support");
 		FMLInterModComms.sendRuntimeMessage(CppModInfo.MOD_ID, "VersionChecker", "addVersionCheck", "https://raw.githubusercontent.com/Anon10W1z/CraftPlusPlus/gh-pages/VersionCheck.json");
 		logInfo("Initializing the config handler");
@@ -111,8 +109,8 @@ public final class CraftPlusPlus {
 		logInfo("Registering the block inventory renderers");
 		proxy.registerBlockInventoryRenderers();
 		logInfo("Registering the event handler");
-		MinecraftForge.EVENT_BUS.register(CppEventHandler.INSTANCE);
-		FMLCommonHandler.instance().bus().register(CppEventHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(CppEventHandler.instance);
+		FMLCommonHandler.instance().bus().register(CppEventHandler.instance);
 		logInfo("Registering the key bindings");
 		proxy.registerKeyBindings();
 		logInfo("Registering the fuel handler");
@@ -126,7 +124,7 @@ public final class CraftPlusPlus {
 		logInfo("Initializing the crafting recipe remover");
 		CppRecipeReplacer.replaceRecipes();
 		logInfo("Initializing the ore dictionary enhancer");
-		CppOreDictionaryEnhancer.init();
+		OreDictionaryEnhancer.init();
 		logInfo("Initialization completed successfully");
 	}
 }

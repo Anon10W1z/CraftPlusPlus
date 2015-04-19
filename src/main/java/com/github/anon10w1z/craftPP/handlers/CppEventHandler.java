@@ -1,6 +1,5 @@
 package com.github.anon10w1z.craftPP.handlers;
 
-import com.github.anon10w1z.craftPP.gui.CppGuiConfig;
 import com.github.anon10w1z.craftPP.main.CppModInfo;
 import com.github.anon10w1z.craftPP.main.CppUtils;
 import com.github.anon10w1z.craftPP.main.CraftPlusPlus;
@@ -13,9 +12,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityEnderPearl;
-import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.monster.*;
+import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.monster.EntityEnderman;
+import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -31,7 +32,6 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.ChunkProviderGenerate;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
@@ -43,14 +43,11 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
-import net.minecraftforge.event.world.BlockEvent.PlaceEvent;
-import net.minecraftforge.fml.client.GuiIngameModOptions;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -60,11 +57,8 @@ import static net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigCha
  * The event handler for Craft++
  */
 @SuppressWarnings({"unused", "unchecked"})
-public enum CppEventHandler {
-	/**
-	 * The singleton instance of CppEventHandler
-	 */
-	INSTANCE;
+public final class CppEventHandler {
+	public static CppEventHandler instance = new CppEventHandler();
 
 	/**
 	 * Whether or not to enable the potion effect overlay
@@ -222,8 +216,7 @@ public enum CppEventHandler {
 	 */
 	@SubscribeEvent
 	public void onEntityConstructing(EntityEvent.EntityConstructing event) {
-		if (event.entity instanceof EntityItem)
-			CppExtendedEntityProperties.registerExtendedProperties(event.entity);
+		CppExtendedEntityProperties.registerExtendedProperties(event.entity); //verified to be item entity at registration time
 	}
 
 	/**
@@ -316,7 +309,7 @@ public enum CppEventHandler {
 
 	/**
 	 * Changes the mod options GUI into Craft++'s config GUI. <br>
-	 * Unfortunately, this must use @SideOnly instead of proxies. <br>
+	 * Unfortunately, this must use @SideOnly as well as proxies. <br>
 	 * Otherwise, the class GuiScreen will get loaded on the server-side, which crashes the game.
 	 *
 	 * @param event The GuiOpenEvent
@@ -324,7 +317,6 @@ public enum CppEventHandler {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onGuiOpen(GuiOpenEvent event) {
-		if (event.gui instanceof GuiIngameModOptions)
-			event.gui = new CppGuiConfig(null);
+		CraftPlusPlus.proxy.handleGuiOpen(event);
 	}
 }
