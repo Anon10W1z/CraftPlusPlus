@@ -13,6 +13,8 @@ public class OreDictionaryEnhancer {
 	 */
 	public static void init() {
 		OreDictionary.registerOre("stone", new ItemStack(Blocks.stone, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("button", Blocks.stone_button);
+		OreDictionary.registerOre("button", Blocks.wooden_button);
 		OreDictionary.initVanillaEntries();
 	}
 }

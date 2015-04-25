@@ -20,7 +20,7 @@ apply plugin: 'forge'
 version = "2.3.1"
 def ENV = System.getenv()
 if (ENV.DRONE_BUILD_NUMBER)
-    version += "-build-" + ENV.DRONE_BUILD_NUMBER
+    version += "-build" + ENV.DRONE_BUILD_NUMBER
 group = "io.github.anon10w1z.craftPP"
 //noinspection GroovyUnusedAssignment
 archivesBaseName = "craft++"
