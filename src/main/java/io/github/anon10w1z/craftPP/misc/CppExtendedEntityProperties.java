@@ -3,6 +3,9 @@ package io.github.anon10w1z.craftPP.misc;
 import io.github.anon10w1z.craftPP.main.CppUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemSeedFood;
+import net.minecraft.item.ItemSeeds;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -103,12 +106,15 @@ public class CppExtendedEntityProperties implements IExtendedEntityProperties {
 	 * Handles all automatic seed planting logic
 	 */
 	public void handlePlantingLogic() {
-		++this.steadyTicks;
-		BlockPos entityPosDown = new BlockPos(this.entityItem).down();
-		BlockPos lastTickEntityPosDown = new BlockPos(this.entityItem.lastTickPosX, this.entityItem.lastTickPosY, this.entityItem.lastTickPosZ).down();
-		if (entityPosDown.compareTo(lastTickEntityPosDown) != 0)
-			this.steadyTicks = 0;
-		if (this.steadyTicks >= this.minSteadyTicks)
-			this.entityItem.getEntityItem().onItemUse(CppUtils.getFakePlayer(this.world), this.world, entityPosDown, EnumFacing.UP, 0, 0, 0);
+		Item item = this.entityItem.getEntityItem().getItem();
+		if (item instanceof ItemSeeds || item instanceof ItemSeedFood) {
+			++this.steadyTicks;
+			BlockPos entityPosDown = new BlockPos(this.entityItem).down();
+			BlockPos lastTickEntityPosDown = new BlockPos(this.entityItem.lastTickPosX, this.entityItem.lastTickPosY, this.entityItem.lastTickPosZ).down();
+			if (entityPosDown.compareTo(lastTickEntityPosDown) != 0)
+				this.steadyTicks = 0;
+			if (this.steadyTicks >= this.minSteadyTicks)
+				this.entityItem.getEntityItem().onItemUse(CppUtils.getFakePlayer(this.world), this.world, entityPosDown, EnumFacing.UP, 0, 0, 0);
+		}
 	}
 }

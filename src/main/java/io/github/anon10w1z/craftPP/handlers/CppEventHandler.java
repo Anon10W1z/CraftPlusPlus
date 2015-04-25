@@ -22,7 +22,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -227,11 +226,8 @@ public final class CppEventHandler {
 		if (CppConfigHandler.enableAutoSeedPlanting) {
 			World world = event.world;
 			List<EntityItem> entityItemList = world.getEntities(EntityItem.class, IEntitySelector.selectAnything);
-			for (EntityItem entityItem : entityItemList) {
-				ItemStack itemstack = entityItem.getEntityItem();
-				if (itemstack != null && itemstack.getItem() instanceof ItemSeeds)
-					CppExtendedEntityProperties.getExtendedProperties(entityItem).handlePlantingLogic();
-			}
+			for (EntityItem entityItem : entityItemList)
+				CppExtendedEntityProperties.getExtendedProperties(entityItem).handlePlantingLogic();
 		}
 	}
 
