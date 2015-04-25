@@ -308,7 +308,7 @@ public final class CppEventHandler {
 	/**
 	 * Changes the mod options GUI into Craft++'s config GUI
 	 *
-	 * @param event The event to pass to the client proxy (check if GuiOpenEvent there)
+	 * @param event The event to pass to the client proxy (check if it is a GuiOpenEvent there)
 	 */
 	@SubscribeEvent
 	public void onEvent(Event event) {

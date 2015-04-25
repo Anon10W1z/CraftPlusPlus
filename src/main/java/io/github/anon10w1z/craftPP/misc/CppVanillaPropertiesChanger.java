@@ -1,27 +1,18 @@
 package io.github.anon10w1z.craftPP.misc;
 
-import com.google.common.collect.Lists;
 import io.github.anon10w1z.craftPP.handlers.CppConfigHandler;
-import io.github.anon10w1z.craftPP.main.CraftPlusPlus;
 import net.minecraft.block.Block;
 import net.minecraft.block.Block.SoundType;
 import net.minecraft.block.BlockFire;
 import net.minecraft.block.BlockNetherWart;
 import net.minecraft.block.BlockStem;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.WeightedRandomFishable;
 import net.minecraftforge.common.FishingHooks;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.List;
 
 /**
  * The vanilla properties changer for Craft++
@@ -53,38 +44,8 @@ public class CppVanillaPropertiesChanger {
 		if (CppConfigHandler.commandBlockInRedstoneTab)
 			Blocks.command_block.setCreativeTab(CreativeTabs.tabRedstone);
 		Blocks.dragon_egg.setCreativeTab(CreativeTabs.tabDecorations);
-		if (Loader.isModLoaded("NotEnoughItems") || Loader.isModLoaded("TooManyItems")) {
-			CraftPlusPlus.logInfo("Found NotEnoughItems/TooManyItems, setting creative tab of mob spawner directly");
+		if (Loader.isModLoaded("NotEnoughItems") || Loader.isModLoaded("TooManyItems"))
 			Blocks.mob_spawner.setCreativeTab(CreativeTabs.tabMisc);
-		} else {
-			CreativeTabs fakeMiscCreativeTab = new CreativeTabs(4, "misc") {
-				@Override
-				@SideOnly(Side.CLIENT)
-				public Item getTabIconItem() {
-					return CreativeTabs.tabMisc.getTabIconItem();
-				}
-
-				@Override
-				@SideOnly(Side.CLIENT)
-				public void displayAllReleventItems(List list) {
-					CreativeTabs.tabMisc.displayAllReleventItems(list); //add all items from the vanilla misc creative tab
-					List<Integer> spawnEggIds = Lists.newArrayList(); //a list containing all entity IDs in the misc creative tab
-					for (ItemStack itemstack : (List<ItemStack>) list)
-						if (itemstack.getItem() == Items.spawn_egg)
-							spawnEggIds.add(itemstack.getItemDamage()); //where getItemDamage returns the entity ID
-					for (int entityId : spawnEggIds) {
-						NBTTagCompound blockEntityTag = new NBTTagCompound();
-						NBTTagCompound stackTagCompound = new NBTTagCompound();
-						blockEntityTag.setString("EntityId", EntityList.getStringFromID(entityId));
-						stackTagCompound.setTag("BlockEntityTag", blockEntityTag);
-						ItemStack spawnerStack = new ItemStack(Blocks.mob_spawner);
-						spawnerStack.setTagCompound(stackTagCompound);
-						list.add(spawnerStack);
-					}
-
-				}
-			}; //instantiating a creative tab automatically registers it
-		}
 		//Modifying block names
 		if (CppConfigHandler.renameButtons) {
 			Blocks.stone_button.setUnlocalizedName("buttonStone");

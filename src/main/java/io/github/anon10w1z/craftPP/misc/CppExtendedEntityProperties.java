@@ -96,7 +96,7 @@ public class CppExtendedEntityProperties implements IExtendedEntityProperties {
 	 */
 	@Override
 	public void init(Entity entity, World world) {
-		this.minSteadyTicks = world.rand.nextInt(100) + 100;
+		this.minSteadyTicks = world.rand.nextInt(75) + 75;
 	}
 
 	/**

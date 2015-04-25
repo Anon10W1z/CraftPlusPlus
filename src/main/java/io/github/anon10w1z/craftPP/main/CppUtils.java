@@ -41,15 +41,15 @@ public final class CppUtils {
 	/**
 	 * Finds an object by the specified name(s) in the specified object, and returns it
 	 *
-	 * @param object      The object to find the object in
-	 * @param objectNames A list of all possible names for the object
-	 * @param <T>         The data type of the object to return
+	 * @param fieldContainer The object to find the object in
+	 * @param fieldNames     A list of all possible names for the object
+	 * @param <T>            The data type of the object to return
 	 * @return An object of the specified type with the first possible of the passed names
 	 */
-	public static <T> T findObject(Object object, String... objectNames) {
+	public static <T> T findObject(Object fieldContainer, String... fieldNames) {
 		try {
-			Field field = ReflectionHelper.findField(object.getClass(), objectNames);
-			return (T) field.get(object);
+			Field field = ReflectionHelper.findField(fieldContainer.getClass(), fieldNames);
+			return (T) field.get(fieldContainer);
 		} catch (Exception exception) {
 			return null;
 		}
