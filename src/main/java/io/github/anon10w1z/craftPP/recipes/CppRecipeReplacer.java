@@ -8,6 +8,7 @@ import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
@@ -55,8 +56,11 @@ public class CppRecipeReplacer {
 					}
 					Block modelBlock = modelState.getBlock();
 					int modelMetadata = OreDictionary.WILDCARD_VALUE;
-					if (modelBlock.getBlockState().getValidStates().size() > 1)
-						modelMetadata = modelBlock.getMetaFromState(modelState);
+					for (ItemStack itemstack : OreDictionary.getOres("plankWood"))
+						if (itemstack.getItem() == Item.getItemFromBlock(modelBlock)) {
+							modelMetadata = modelBlock.getMetaFromState(modelState);
+							break;
+						}
 					replaceStairsRecipe(stairs, new ItemStack(modelBlock, 1, modelMetadata));
 				}
 			if (!doStairsFieldsExist) { //backup
