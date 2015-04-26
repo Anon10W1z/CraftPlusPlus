@@ -27,10 +27,8 @@ public class CppVanillaPropertiesChanger {
 		//Modifying block step sounds
 		Iterable<Block> blocks = Block.blockRegistry;
 		for (Block block : blocks) {
-			//stems
 			if (block instanceof BlockStem || block instanceof BlockNetherWart)
 				block.setStepSound(Block.soundTypeGrass);
-				//fire
 			else if (block instanceof BlockFire) {
 				block.setStepSound(new SoundType(null, 1.5F, 0.65F) {
 					@Override
