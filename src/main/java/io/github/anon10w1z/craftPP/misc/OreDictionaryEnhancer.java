@@ -11,7 +11,6 @@ public class OreDictionaryEnhancer {
 	/**
 	 * Initializes the ore dictionary enhancer
 	 */
-	@SuppressWarnings("unchecked")
 	public static void init() {
 		OreDictionary.registerOre("stone", new ItemStack(Blocks.stone, 1, OreDictionary.WILDCARD_VALUE));
 		OreDictionary.registerOre("button", Blocks.stone_button);

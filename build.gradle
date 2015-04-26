@@ -19,7 +19,7 @@ apply plugin: 'forge'
 
 version = "2.3.3"
 def ENV = System.getenv()
-def lastBuildLastVersion = 50 //the last build number before this current version
+int lastBuildLastVersion = 50 //the last build number before this current version
 if (ENV.DRONE_BUILD_NUMBER)
     version += "-build" + (ENV.DRONE_BUILD_NUMBER - lastBuildLastVersion)
 group = "io.github.anon10w1z.craftPP"
