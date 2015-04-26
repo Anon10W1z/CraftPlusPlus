@@ -18,7 +18,6 @@ buildscript {
 apply plugin: 'forge'
 
 version = "2.3.2"
-def toReplaceVersion = version;
 def ENV = System.getenv()
 if (ENV.DRONE_BUILD_NUMBER)
     version += "-build" + ENV.DRONE_BUILD_NUMBER
@@ -26,13 +25,13 @@ group = "io.github.anon10w1z.craftPP"
 //noinspection GroovyUnusedAssignment
 archivesBaseName = "craft++"
 
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
 minecraft {
     version = "1.8-11.14.1.1371"
     runDir = "eclipse"
     mappings = "snapshot_nodoc_20141130"
-
-    replaceIn "main/CppModInfo"
-    replace "@VERSION@", toReplaceVersion
 }
 
 task deobfJar(type: Jar) {
