@@ -67,7 +67,7 @@ public final class CppUtils {
 			Constructor constructor = list.getClass().getConstructor(Collection.class);
 			return (List<T>) constructor.newInstance(list);
 		} catch (Exception exception) {
-			return new ArrayList<T>(list);
+			return new ArrayList<>(list);
 		}
 	}
 }
