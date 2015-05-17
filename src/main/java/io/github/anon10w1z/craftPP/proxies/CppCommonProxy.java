@@ -43,6 +43,7 @@ public class CppCommonProxy {
 
 	/**
 	 * Handles the opening of any GUI
+	 * @param event The event to be handled
 	 */
 	public void handleGuiOpen(Event event) {
 
