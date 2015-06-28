@@ -1,9 +1,11 @@
 package io.github.anon10w1z.craftPP.handlers;
 
+import io.github.anon10w1z.craftPP.enchantments.CppEnchantmentBase;
+import io.github.anon10w1z.craftPP.enchantments.CppTickingEnchantment;
 import io.github.anon10w1z.craftPP.main.CppModInfo;
-import io.github.anon10w1z.craftPP.main.CppUtils;
 import io.github.anon10w1z.craftPP.main.CraftPlusPlus;
 import io.github.anon10w1z.craftPP.misc.CppExtendedEntityProperties;
+import io.github.anon10w1z.craftPP.misc.CppUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.IEntitySelector;
@@ -41,6 +43,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
+import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
@@ -82,10 +85,10 @@ public final class CppEventHandler {
 				entity.setCustomNameTag("");
 			}
 			//Bats drop leather
-			if (entity instanceof EntityBat && CppConfigHandler.enableBatLeatherDrop)
+			if (entity instanceof EntityBat && CppConfigHandler.batLeatherDropChance > Math.random())
 				entity.dropItem(Items.leather, 1);
 				//Enderman drop the block they are carrying
-			else if (entity instanceof EntityEnderman && CppConfigHandler.enableEndermanBlockDrop) {
+			else if (entity instanceof EntityEnderman && CppConfigHandler.endermanBlockDropChance > Math.random()) {
 				EntityEnderman enderman = (EntityEnderman) entity;
 				IBlockState heldBlockState = enderman.func_175489_ck();
 				Block heldBlock = heldBlockState.getBlock();
@@ -94,7 +97,7 @@ public final class CppEventHandler {
 			}
 			//Creepers can rarely drop a TNT
 			else if (entity instanceof EntityCreeper) {
-				if (world.rand.nextInt(10) == 0 && CppConfigHandler.creeperDropTnt && event.source.damageType != null) {
+				if (event.source.damageType != null && CppConfigHandler.creeperDropTntChance > Math.random()) {
 					event.drops.clear();
 					entity.dropItem(Item.getItemFromBlock(Blocks.tnt), 1);
 				}
@@ -169,6 +172,10 @@ public final class CppEventHandler {
 					if (doSetFire)
 						entity.setFire(8);
 				}
+			}
+			if (entity instanceof EntityPlayer) {
+				EntityPlayer player = (EntityPlayer) entity;
+				CppEnchantmentBase.cppEnchantments.stream().filter(cppEnchantment -> cppEnchantment instanceof CppTickingEnchantment).forEach(cppEnchantment -> cppEnchantment.performAction(player, event));
 			}
 		}
 	}
@@ -262,7 +269,8 @@ public final class CppEventHandler {
 	}
 
 	/**
-	 * Enables mob spawners to drop themselves when harvested with silk touch
+	 * Enables mob spawners to drop themselves when harvested with silk touch. <br>
+	 * Also enables the Blazing enchantment.
 	 *
 	 * @param event The (Block) BreakEvent
 	 */
@@ -284,6 +292,12 @@ public final class CppEventHandler {
 			world.spawnEntityInWorld(spawnerEntityItem);
 			event.setExpToDrop(0); //prevents infinite XP loophole
 		}
+	}
+
+	@SubscribeEvent
+	public void onHarvestDrops(HarvestDropsEvent event) {
+		if (!event.world.isRemote)
+			CppEnchantmentBase.getByName("blazing").get().performAction(event.harvester, event);
 	}
 
 	/**

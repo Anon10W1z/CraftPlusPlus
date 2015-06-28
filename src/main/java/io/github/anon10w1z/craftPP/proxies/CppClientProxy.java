@@ -90,7 +90,6 @@ public class CppClientProxy extends CppCommonProxy {
 
 	/**
 	 * Registers a renderer for a block in the inventory
-	 *
 	 * @param block      The block
 	 * @param namePrefix The name prefix of the block
 	 */

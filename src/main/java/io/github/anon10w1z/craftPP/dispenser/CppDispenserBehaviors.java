@@ -38,7 +38,6 @@ public class CppDispenserBehaviors {
 
 	/**
 	 * Registers a dispenser behavior for an item with the game
-	 *
 	 * @param item              The item dispensed by the dispenser
 	 * @param dispenserBehavior The dispenser behavior carried out for the item
 	 */

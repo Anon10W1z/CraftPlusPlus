@@ -25,7 +25,6 @@ public class CppRecipes {
 
 	/**
 	 * Registers storage block recipes for the specified input and output
-	 *
 	 * @param input  The ingredient ItemStack of the recipe
 	 * @param output The output (storage block) of the recipe
 	 */

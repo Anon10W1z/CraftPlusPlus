@@ -1,4 +1,4 @@
-package io.github.anon10w1z.craftPP.main;
+package io.github.anon10w1z.craftPP.misc;
 
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -28,7 +28,6 @@ public final class CppUtils {
 	 * Gets a fake player and returns it. <br>
 	 * Calling this method for the first time returns a new fake player in the specified world. <br>
 	 * Subsequent calls to this method will return the first fake player created.
-	 *
 	 * @param world The (semi-optional) world to store this fake player in
 	 * @return A fake player
 	 */
@@ -40,7 +39,6 @@ public final class CppUtils {
 
 	/**
 	 * Finds an object by the specified name(s) in the specified object, and returns it
-	 *
 	 * @param fieldContainer The object to find the object in
 	 * @param fieldNames     A list of all possible names for the object
 	 * @param <T>            The data type of the object to return
@@ -57,7 +55,6 @@ public final class CppUtils {
 
 	/**
 	 * Copies a list and returns the copy
-	 *
 	 * @param list The list to copy
 	 * @param <T>  The type of the list
 	 * @return A copy of the given list

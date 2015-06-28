@@ -1,8 +1,8 @@
 package io.github.anon10w1z.craftPP.recipes;
 
 import io.github.anon10w1z.craftPP.handlers.CppConfigHandler;
-import io.github.anon10w1z.craftPP.main.CppUtils;
 import io.github.anon10w1z.craftPP.main.CraftPlusPlus;
+import io.github.anon10w1z.craftPP.misc.CppUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
@@ -93,7 +93,6 @@ public class CppRecipeReplacer {
 	/**
 	 * Removes a recipe/recipes from the game. <br>
 	 * All recipes for the resulting ItemStack are removed from the game.
-	 *
 	 * @param result The ItemStack which is outputted from the workbench
 	 */
 	private static void removeRecipes(ItemStack result) {
@@ -106,7 +105,6 @@ public class CppRecipeReplacer {
 
 	/**
 	 * Removes the specified IRecipe (class) from the game
-	 *
 	 * @param recipeClass The class of the IRecipe to remove from the game
 	 */
 	private static void removeRecipe(Class<? extends IRecipe> recipeClass) {
@@ -119,7 +117,6 @@ public class CppRecipeReplacer {
 
 	/**
 	 * Replaces the recipe for stairs with the better one
-	 *
 	 * @param stairs   The stairs
 	 * @param material The material used to craft the stairs
 	 */
