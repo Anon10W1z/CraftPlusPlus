@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 /**
  * Gives the wearer jump boost
  */
-@TickingEnchantment
+@PlayerTickingEnchantment
 public class EnchantmentHops extends CppEnchantmentBase {
 	public EnchantmentHops() {
 		super("hops", 2, EnumEnchantmentType.ARMOR_FEET);

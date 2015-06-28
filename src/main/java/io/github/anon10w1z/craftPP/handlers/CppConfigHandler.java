@@ -1,9 +1,12 @@
 package io.github.anon10w1z.craftPP.handlers;
 
+import com.google.common.collect.Maps;
+import io.github.anon10w1z.craftPP.enchantments.CppEnchantments;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.config.GuiConfigEntries.NumberSliderEntry;
 
 import java.io.File;
+import java.util.Map;
 
 /**
  * The config handler for Craft++
@@ -20,10 +23,11 @@ public class CppConfigHandler {
 	//Recipes
 	public static boolean useBetterStoneToolRecipes;
 	public static boolean useBetterStairsRecipes;
+	//Enchantments
+	public static Map<String, Boolean> enchantmentNameToEnable = Maps.newHashMap();
 	//Miscellaneous
 	public static boolean creeperBurnInDaylight;
 	public static boolean babyZombieBurnInDaylight;
-
 	public static boolean enableAutoSeedPlanting;
 	//Miscellaneous: Requires Restart
 	public static boolean commandBlockInRedstoneTab;
@@ -56,6 +60,12 @@ public class CppConfigHandler {
 		useBetterStairsRecipes = config.get(recipesCategory, "Better stairs recipe enabled", true, "Is the better stairs recipe enabled?").getBoolean();
 		config.setCategoryComment(recipesCategory, "Enable/disable certain recipes");
 		config.setCategoryRequiresMcRestart(recipesCategory, true);
+
+		String enchantmentsCategory = Configuration.CATEGORY_GENERAL + Configuration.CATEGORY_SPLITTER + "Enchantments";
+		for (String enchantmentName : CppEnchantments.enchantmentNames)
+			enchantmentNameToEnable.put(enchantmentName, config.get(enchantmentsCategory, "Enable " + enchantmentName, true, "Is the " + enchantmentName + " enchantment enabled?").getBoolean());
+		config.setCategoryComment(enchantmentsCategory, "Enable/disable Craft++'s enchantments");
+		config.setCategoryRequiresMcRestart(enchantmentsCategory, true);
 
 		String miscCategory = Configuration.CATEGORY_GENERAL + Configuration.CATEGORY_SPLITTER + "Miscellaneous";
 		creeperBurnInDaylight = config.get(miscCategory, "Creepers burn in daylight", true, "Do creepers burn in daylight?").getBoolean();

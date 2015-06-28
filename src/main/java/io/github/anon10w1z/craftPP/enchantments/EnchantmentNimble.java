@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 /**
  * Gives the wearer speed
  */
-@TickingEnchantment
+@PlayerTickingEnchantment
 public class EnchantmentNimble extends CppEnchantmentBase {
 	public EnchantmentNimble() {
 		super("nimble", 2, EnumEnchantmentType.ARMOR_FEET);

@@ -1,7 +1,7 @@
 package io.github.anon10w1z.craftPP.handlers;
 
 import io.github.anon10w1z.craftPP.enchantments.CppEnchantmentBase;
-import io.github.anon10w1z.craftPP.enchantments.TickingEnchantment;
+import io.github.anon10w1z.craftPP.enchantments.PlayerTickingEnchantment;
 import io.github.anon10w1z.craftPP.main.CppModInfo;
 import io.github.anon10w1z.craftPP.main.CraftPlusPlus;
 import io.github.anon10w1z.craftPP.misc.CppExtendedEntityProperties;
@@ -51,6 +51,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import static net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
@@ -177,7 +178,7 @@ public final class CppEventHandler {
 				}
 			}
 			if (entity instanceof EntityPlayer)
-				CppEnchantmentBase.cppEnchantments.stream().filter(cppEnchantment -> cppEnchantment.getClass().isAnnotationPresent(TickingEnchantment.class)).forEach(cppEnchantment -> cppEnchantment.performAction((EntityPlayer) entity, event));
+				CppEnchantmentBase.cppEnchantments.stream().filter(cppEnchantment -> cppEnchantment.getClass().isAnnotationPresent(PlayerTickingEnchantment.class)).forEach(cppEnchantment -> cppEnchantment.performAction((EntityPlayer) entity, event));
 		}
 	}
 
@@ -301,7 +302,9 @@ public final class CppEventHandler {
 	 */
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onHarvestDrops(HarvestDropsEvent event) {
-		CppEnchantmentBase.getByName("blazing").get().performAction(event.harvester, event);
+		Optional<CppEnchantmentBase> blazingEnchantment = CppEnchantmentBase.getByName("blazing");
+		if (blazingEnchantment.isPresent())
+			blazingEnchantment.get().performAction(event.harvester, event);
 	}
 
 	/**
@@ -311,7 +314,9 @@ public final class CppEventHandler {
 	 */
 	@SubscribeEvent
 	public void onArrowNock(ArrowNockEvent event) {
-		CppEnchantmentBase.getByName("quickdraw").get().performAction(event.entityPlayer, event);
+		Optional<CppEnchantmentBase> quickdrawEnchantment = CppEnchantmentBase.getByName("quickdraw");
+		if (quickdrawEnchantment.isPresent())
+			quickdrawEnchantment.get().performAction(event.entityPlayer, event);
 	}
 
 	/**
