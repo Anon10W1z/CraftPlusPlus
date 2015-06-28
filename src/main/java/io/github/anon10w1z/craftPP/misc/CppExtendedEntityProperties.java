@@ -47,6 +47,7 @@ public class CppExtendedEntityProperties implements IExtendedEntityProperties {
 
 	/**
 	 * Registers the Craft++ extended properties for the given item entity
+	 *
 	 * @param entityItem The item entity to register the properties for
 	 */
 	public static void registerExtendedProperties(Entity entityItem) {
@@ -56,6 +57,7 @@ public class CppExtendedEntityProperties implements IExtendedEntityProperties {
 
 	/**
 	 * Returns the Craft++ extended properties for the given item entity
+	 *
 	 * @param entityItem The item entity to obtain the properties from
 	 * @return The CppExtendedProperties of the given item entity
 	 */
@@ -65,6 +67,7 @@ public class CppExtendedEntityProperties implements IExtendedEntityProperties {
 
 	/**
 	 * Saves the extended properties to NBT
+	 *
 	 * @param compound The NBT tag compound to write the properties to
 	 */
 	@Override
@@ -77,6 +80,7 @@ public class CppExtendedEntityProperties implements IExtendedEntityProperties {
 
 	/**
 	 * Loads the extended properties from NBT
+	 *
 	 * @param compound The NBT tag compound to read the properties from
 	 */
 	@Override
@@ -88,6 +92,7 @@ public class CppExtendedEntityProperties implements IExtendedEntityProperties {
 
 	/**
 	 * Initializes the extended property variables of the specified entity
+	 *
 	 * @param entity The entity attached to the properties
 	 * @param world  The world the entity is in
 	 */

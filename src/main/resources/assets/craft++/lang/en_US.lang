@@ -6,7 +6,15 @@ tile.buttonStone.name=Stone Button
 tile.buttonWood.name=Wooden Button
 tile.sand.name=Sand/Red Sand
 
+item.dynamite.name=Dynamite
+item.eggFried.name=Fried Egg
+
 craft++.potionDisplay=Potion Effect Display
+
+enchantment.nimble=Nimble
+enchantment.hops=Hops
+enchantment.blazing=Blazing
+enchantment.quickdraw=Quickdraw
 
 enchantment.level.11=XI
 enchantment.level.12=XII

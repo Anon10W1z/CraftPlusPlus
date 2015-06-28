@@ -9,7 +9,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 /**
- * Dispenser behavior used to dispense falling blocks
+ * Dispenser behavior for falling blocks
  */
 public class BehaviorDispenseBlockFalling extends BehaviorDefaultDispenseItem {
 	@Override

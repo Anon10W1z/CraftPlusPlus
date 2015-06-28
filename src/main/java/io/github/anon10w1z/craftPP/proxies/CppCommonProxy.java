@@ -7,9 +7,9 @@ import net.minecraftforge.fml.common.eventhandler.Event;
  */
 public class CppCommonProxy {
 	/**
-	 * Registers the block inventory renderers for Craft++'s blocks
+	 * Registers the renderers for Craft++'s
 	 */
-	public void registerBlockInventoryRenderers() {
+	public void registerRenderers() {
 
 	}
 
@@ -43,6 +43,7 @@ public class CppCommonProxy {
 
 	/**
 	 * Handles the opening of any GUI
+	 *
 	 * @param event The event to be handled
 	 */
 	public void handleGuiOpen(Event event) {

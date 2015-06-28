@@ -1,11 +1,14 @@
 package io.github.anon10w1z.craftPP.proxies;
 
 import io.github.anon10w1z.craftPP.blocks.CppBlocks;
+import io.github.anon10w1z.craftPP.entities.EntityDynamite;
 import io.github.anon10w1z.craftPP.gui.GuiCppConfig;
+import io.github.anon10w1z.craftPP.items.CppItems;
 import io.github.anon10w1z.craftPP.main.CppModInfo;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.Item;
@@ -15,6 +18,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.fml.client.GuiIngameModOptions;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -30,10 +34,16 @@ public class CppClientProxy extends CppCommonProxy {
 	private static KeyBinding potionKey; //the key binding for toggling the potion overlay
 
 	@Override
-	public void registerBlockInventoryRenderers() {
+	public void registerRenderers() {
+		//Items
+		registerItemInventoryRenderer(CppItems.dynamite, "dynamite");
+		registerItemInventoryRenderer(CppItems.fried_egg, "egg_fried");
+		//Blocks
 		registerBlockInventoryRenderer(CppBlocks.flint_block, "flint");
 		registerBlockInventoryRenderer(CppBlocks.sugar_block, "sugar");
 		registerBlockInventoryRenderer(CppBlocks.charcoal_block, "charcoal");
+		//Entities
+		RenderingRegistry.registerEntityRenderingHandler(EntityDynamite.class, new RenderSnowball(Minecraft.getMinecraft().getRenderManager(), CppItems.dynamite, Minecraft.getMinecraft().getRenderItem()));
 	}
 
 	@Override
@@ -49,13 +59,12 @@ public class CppClientProxy extends CppCommonProxy {
 				GL11.glDisable(GL11.GL_LIGHTING);
 				minecraft.renderEngine.bindTexture(new ResourceLocation("textures/gui/container/inventory.png")); //draw from inventory.png
 				int iconIndex = potion.getStatusIconIndex();
-
-				//some constants for drawing textures, which all refer to inventory.png
+				//constants for drawing
 				final int POTION_ICON_SIZE = 18;
-				final int POTION_ICON_SPACING = POTION_ICON_SIZE + 2;
 				final int POTION_ICON_BASE_X_OFFSET = 0;
 				final int POTION_ICON_BASE_Y_OFFSET = 198;
 				final int POTION_ICONS_PER_ROW = 8;
+				final int POTION_ICON_SPACING = POTION_ICON_SIZE + 2;
 
 				new Gui().drawTexturedModalRect(xPos, yPos, POTION_ICON_BASE_X_OFFSET + iconIndex % POTION_ICONS_PER_ROW * POTION_ICON_SIZE, POTION_ICON_BASE_Y_OFFSET + iconIndex / POTION_ICONS_PER_ROW * POTION_ICON_SIZE, POTION_ICON_SIZE, POTION_ICON_SIZE);
 				xPos += POTION_ICON_SPACING;
@@ -88,8 +97,13 @@ public class CppClientProxy extends CppCommonProxy {
 		}
 	}
 
+	private void registerItemInventoryRenderer(Item item, String name) {
+		minecraft.getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation(CppModInfo.MOD_ID + ":" + name, "inventory"));
+	}
+
 	/**
 	 * Registers a renderer for a block in the inventory
+	 *
 	 * @param block      The block
 	 * @param namePrefix The name prefix of the block
 	 */

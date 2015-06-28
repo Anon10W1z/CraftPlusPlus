@@ -32,6 +32,7 @@ public class CppConfigHandler {
 
 	/**
 	 * Initializes the config handler for Craft++
+	 *
 	 * @param configFile The configuration file (fetched from the FMLPreInitializationEvent)
 	 */
 	public static void init(File configFile) {

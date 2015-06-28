@@ -1,6 +1,7 @@
 package io.github.anon10w1z.craftPP.dispenser;
 
 import io.github.anon10w1z.craftPP.handlers.CppConfigHandler;
+import io.github.anon10w1z.craftPP.items.CppItems;
 import io.github.anon10w1z.craftPP.main.CraftPlusPlus;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDispenser;
@@ -34,10 +35,12 @@ public class CppDispenserBehaviors {
 			if (item instanceof ItemFlintAndSteel && !CppConfigHandler.enableFlintAndSteelDispenserBehavior)
 				registerDispenserBehavior(item, new BehaviorDefaultDispenseItem());
 		}
+		registerDispenserBehavior(CppItems.dynamite, new BehaviorDispenseDynamite());
 	}
 
 	/**
 	 * Registers a dispenser behavior for an item with the game
+	 *
 	 * @param item              The item dispensed by the dispenser
 	 * @param dispenserBehavior The dispenser behavior carried out for the item
 	 */

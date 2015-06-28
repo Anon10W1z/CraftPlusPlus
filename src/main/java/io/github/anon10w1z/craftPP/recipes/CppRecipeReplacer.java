@@ -93,6 +93,7 @@ public class CppRecipeReplacer {
 	/**
 	 * Removes a recipe/recipes from the game. <br>
 	 * All recipes for the resulting ItemStack are removed from the game.
+	 *
 	 * @param result The ItemStack which is outputted from the workbench
 	 */
 	private static void removeRecipes(ItemStack result) {
@@ -105,6 +106,7 @@ public class CppRecipeReplacer {
 
 	/**
 	 * Removes the specified IRecipe (class) from the game
+	 *
 	 * @param recipeClass The class of the IRecipe to remove from the game
 	 */
 	private static void removeRecipe(Class<? extends IRecipe> recipeClass) {
@@ -117,6 +119,7 @@ public class CppRecipeReplacer {
 
 	/**
 	 * Replaces the recipe for stairs with the better one
+	 *
 	 * @param stairs   The stairs
 	 * @param material The material used to craft the stairs
 	 */

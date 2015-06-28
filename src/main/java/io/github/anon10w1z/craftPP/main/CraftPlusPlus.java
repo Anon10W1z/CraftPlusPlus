@@ -3,9 +3,11 @@ package io.github.anon10w1z.craftPP.main;
 import io.github.anon10w1z.craftPP.blocks.CppBlocks;
 import io.github.anon10w1z.craftPP.dispenser.CppDispenserBehaviors;
 import io.github.anon10w1z.craftPP.enchantments.CppEnchantments;
+import io.github.anon10w1z.craftPP.entities.CppEntities;
 import io.github.anon10w1z.craftPP.handlers.CppConfigHandler;
 import io.github.anon10w1z.craftPP.handlers.CppEventHandler;
 import io.github.anon10w1z.craftPP.handlers.CppFuelHandler;
+import io.github.anon10w1z.craftPP.items.CppItems;
 import io.github.anon10w1z.craftPP.misc.CppVanillaPropertiesChanger;
 import io.github.anon10w1z.craftPP.misc.OreDictionaryEnhancer;
 import io.github.anon10w1z.craftPP.proxies.CppCommonProxy;
@@ -28,6 +30,7 @@ import java.util.Collections;
 
 /**
  * The main mod file of Craft++
+ *
  * @author Anon10W1z
  */
 @Mod(modid = CppModInfo.MOD_ID, name = CppModInfo.NAME, version = CppModInfo.VERSION, guiFactory = CppModInfo.PACKAGE_LOCATION + ".gui.CppGuiFactory", dependencies = "after:*")
@@ -52,6 +55,7 @@ public final class CraftPlusPlus {
 
 	/**
 	 * Logs a message with Craft++'s logger with the INFO level
+	 *
 	 * @param message The string to be logged
 	 */
 	public static void logInfo(String message) {
@@ -64,7 +68,8 @@ public final class CraftPlusPlus {
 	 * - Hard-codes the mcmod.info <br>
 	 * - Initializes the config handler <br>
 	 * - Enables the Version Checker support <br>
-	 * - Registers the blocks
+	 * - Registers the blocks and items
+	 *
 	 * @param event The FMLPreInitializationEvent
 	 */
 	@EventHandler
@@ -85,12 +90,15 @@ public final class CraftPlusPlus {
 		CppConfigHandler.init(event.getSuggestedConfigurationFile());
 		logInfo("Registering the blocks");
 		CppBlocks.registerBlocks();
+		logInfo("Registering the items");
+		CppItems.registerItems();
 		logInfo("Pre-initialization completed successfully");
 	}
 
 	/**
 	 * Performs the following actions: <br>
-	 * - Registers the block inventory renderers <br>
+	 * - Registers the entities <br>
+	 * - Registers the renderers <br>
 	 * - Registers the enchantments <br>
 	 * - Registers the event handler <br>
 	 * - Registers the key bindings <br>
@@ -100,12 +108,15 @@ public final class CraftPlusPlus {
 	 * - Initializes the vanilla properties changer <br>
 	 * - Initializes the recipe remover <br>
 	 * - Initializes the ore dictionary enhancer
+	 *
 	 * @param event The FMLInitializationEvent
 	 */
 	@EventHandler
 	public void onInit(FMLInitializationEvent event) {
-		logInfo("Registering the block inventory renderers");
-		proxy.registerBlockInventoryRenderers();
+		logInfo("Registering the entities");
+		CppEntities.registerEntities(this);
+		logInfo("Registering the renderers");
+		proxy.registerRenderers();
 		logInfo("Registering the enchantments");
 		CppEnchantments.registerEnchantments();
 		logInfo("Registering the event handler");

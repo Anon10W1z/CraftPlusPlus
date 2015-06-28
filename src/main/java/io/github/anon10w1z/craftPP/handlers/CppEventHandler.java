@@ -1,7 +1,7 @@
 package io.github.anon10w1z.craftPP.handlers;
 
 import io.github.anon10w1z.craftPP.enchantments.CppEnchantmentBase;
-import io.github.anon10w1z.craftPP.enchantments.CppTickingEnchantment;
+import io.github.anon10w1z.craftPP.enchantments.TickingEnchantment;
 import io.github.anon10w1z.craftPP.main.CppModInfo;
 import io.github.anon10w1z.craftPP.main.CraftPlusPlus;
 import io.github.anon10w1z.craftPP.misc.CppExtendedEntityProperties;
@@ -38,6 +38,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
+import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -45,6 +46,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 
@@ -143,7 +145,8 @@ public final class CppEventHandler {
 	}
 
 	/**
-	 * Makes creepers and baby zombies burn in daylight
+	 * Makes creepers and baby zombies burn in daylight. <br>
+	 * Also gives functionality to all ticking enchantments.
 	 *
 	 * @param event The LivingUpdateEvent
 	 */
@@ -173,10 +176,8 @@ public final class CppEventHandler {
 						entity.setFire(8);
 				}
 			}
-			if (entity instanceof EntityPlayer) {
-				EntityPlayer player = (EntityPlayer) entity;
-				CppEnchantmentBase.cppEnchantments.stream().filter(cppEnchantment -> cppEnchantment instanceof CppTickingEnchantment).forEach(cppEnchantment -> cppEnchantment.performAction(player, event));
-			}
+			if (entity instanceof EntityPlayer)
+				CppEnchantmentBase.cppEnchantments.stream().filter(cppEnchantment -> cppEnchantment.getClass().isAnnotationPresent(TickingEnchantment.class)).forEach(cppEnchantment -> cppEnchantment.performAction((EntityPlayer) entity, event));
 		}
 	}
 
@@ -269,8 +270,7 @@ public final class CppEventHandler {
 	}
 
 	/**
-	 * Enables mob spawners to drop themselves when harvested with silk touch. <br>
-	 * Also enables the Blazing enchantment.
+	 * Enables mob spawners to drop themselves when harvested with silk touch
 	 *
 	 * @param event The (Block) BreakEvent
 	 */
@@ -294,10 +294,24 @@ public final class CppEventHandler {
 		}
 	}
 
-	@SubscribeEvent
+	/**
+	 * Enables the Blazing enchantment
+	 *
+	 * @param event The HarvestDropsEvent
+	 */
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onHarvestDrops(HarvestDropsEvent event) {
-		if (!event.world.isRemote)
-			CppEnchantmentBase.getByName("blazing").get().performAction(event.harvester, event);
+		CppEnchantmentBase.getByName("blazing").get().performAction(event.harvester, event);
+	}
+
+	/**
+	 * Enables the Quickdraw enchantment
+	 *
+	 * @param event The ArrowNockEvent
+	 */
+	@SubscribeEvent
+	public void onArrowNock(ArrowNockEvent event) {
+		CppEnchantmentBase.getByName("quickdraw").get().performAction(event.entityPlayer, event);
 	}
 
 	/**

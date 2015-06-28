@@ -1,0 +1,66 @@
+package io.github.anon10w1z.craftPP.entities;
+
+import io.github.anon10w1z.craftPP.items.CppItems;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.World;
+
+/**
+ * Dynamite entity to go along-side dynamite item
+ */
+public class EntityDynamite extends EntityThrowable {
+	private static final int WET_TICKS = 20;
+	private int ticksWet = 0;
+	private int ticksSinceWet = WET_TICKS;
+
+	@SuppressWarnings("unused")
+	public EntityDynamite(World world) {
+		super(world);
+	}
+
+	public EntityDynamite(World world, double x, double y, double z) {
+		super(world, x, y, z);
+	}
+
+	public EntityDynamite(World world, EntityLivingBase entityLivingBase) {
+		super(world, entityLivingBase);
+	}
+
+	@Override
+	public void onUpdate() {
+		super.onUpdate();
+		if (this.isWet()) {
+			++this.ticksWet;
+		} else
+			this.ticksWet = 0;
+		if (this.ticksWet == 0)
+			++this.ticksSinceWet;
+		else
+			this.ticksSinceWet = 0;
+		if (this.ticksSinceWet < WET_TICKS)
+			for (int i = 0; i < 6; ++i) {
+				float f1 = (this.rand.nextFloat() * 2.0F - 1.0F) * this.width * 0.5F;
+				float f2 = (this.rand.nextFloat() * 2.0F - 1.0F) * this.width * 0.5F;
+				this.worldObj.spawnParticle(EnumParticleTypes.DRIP_WATER, this.posX + f1, this.posY, this.posZ + f2, this.motionX, this.motionY, this.motionZ);
+			}
+	}
+
+	@Override
+	protected void onImpact(MovingObjectPosition movingObjectPosition) {
+		World world = this.worldObj;
+		if (!world.isRemote)
+			if (this.ticksSinceWet < WET_TICKS && isNotCreativeThrower())
+				this.dropItem(CppItems.dynamite, 1);
+			else
+				world.createExplosion(this.getThrower(), this.posX, this.posY, this.posZ, 2.0F, true);
+		this.setDead();
+	}
+
+	private boolean isNotCreativeThrower() {
+		EntityLivingBase thrower = this.getThrower();
+		return thrower == null || !(thrower instanceof EntityPlayer) || !((EntityPlayer) thrower).capabilities.isCreativeMode;
+	}
+}
