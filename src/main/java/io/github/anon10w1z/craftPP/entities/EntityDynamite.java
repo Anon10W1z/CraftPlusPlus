@@ -12,8 +12,17 @@ import net.minecraft.world.World;
  * Dynamite entity to go along-side dynamite item
  */
 public class EntityDynamite extends EntityThrowable {
+	/**
+	 * Number of ticks required for this dynamite to dry off
+	 */
 	private static final int WET_TICKS = 20;
+	/**
+	 * Number of ticks this dynamite has been in water
+	 */
 	private int ticksWet = 0;
+	/**
+	 * Number of ticks it has been since this dynamite has been in water
+	 */
 	private int ticksSinceWet = WET_TICKS;
 
 	@SuppressWarnings("unused")
@@ -42,9 +51,9 @@ public class EntityDynamite extends EntityThrowable {
 			this.ticksSinceWet = 0;
 		if (this.ticksSinceWet < WET_TICKS)
 			for (int i = 0; i < 6; ++i) {
-				float f1 = (this.rand.nextFloat() * 2.0F - 1.0F) * this.width * 0.5F;
-				float f2 = (this.rand.nextFloat() * 2.0F - 1.0F) * this.width * 0.5F;
-				this.worldObj.spawnParticle(EnumParticleTypes.DRIP_WATER, this.posX + f1, this.posY, this.posZ + f2, this.motionX, this.motionY, this.motionZ);
+				float xOffset = (this.rand.nextFloat() * 2 - 1) * this.width * 0.5F;
+				float zOffset = (this.rand.nextFloat() * 2 - 1) * this.width * 0.5F;
+				this.worldObj.spawnParticle(EnumParticleTypes.DRIP_WATER, this.posX + xOffset, this.posY, this.posZ + zOffset, this.motionX, this.motionY, this.motionZ);
 			}
 	}
 
@@ -52,15 +61,21 @@ public class EntityDynamite extends EntityThrowable {
 	protected void onImpact(MovingObjectPosition movingObjectPosition) {
 		World world = this.worldObj;
 		if (!world.isRemote)
-			if (this.ticksSinceWet < WET_TICKS && isNotCreativeThrower())
-				this.dropItem(CppItems.dynamite, 1);
-			else
+			if (this.ticksSinceWet < WET_TICKS) {
+				if (isNotCreativeThrower())
+					this.dropItem(CppItems.dynamite, 1);
+			} else
 				world.createExplosion(this.getThrower(), this.posX, this.posY, this.posZ, 2.0F, true);
 		this.setDead();
 	}
 
+	/**
+	 * Returns whether or not this dynamite's thrower is in creative mode
+	 *
+	 * @return If this dynamite's thrower is in creative mode
+	 */
 	private boolean isNotCreativeThrower() {
 		EntityLivingBase thrower = this.getThrower();
-		return thrower == null || !(thrower instanceof EntityPlayer) || !((EntityPlayer) thrower).capabilities.isCreativeMode;
+		return !(thrower instanceof EntityPlayer) || !((EntityPlayer) thrower).capabilities.isCreativeMode;
 	}
 }

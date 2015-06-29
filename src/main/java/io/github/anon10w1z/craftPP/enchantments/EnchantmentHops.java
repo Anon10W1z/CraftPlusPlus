@@ -25,7 +25,7 @@ public class EnchantmentHops extends CppEnchantmentBase {
 	@Override
 	public void performAction(EntityLivingBase entityLivingBase, Event baseEvent) {
 		int enchantmentLevel = this.getEnchantmentLevel(entityLivingBase.getEquipmentInSlot(1));
-		entityLivingBase.motionY += (float) 1 / 15 * enchantmentLevel;
+		entityLivingBase.motionY += (float) enchantmentLevel / 15;
 	}
 
 	@Override

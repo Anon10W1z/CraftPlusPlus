@@ -15,11 +15,7 @@ public final class CppEnchantments {
 	 * Registers the enchantments for Craft++
 	 */
 	public static void registerEnchantments() {
-		try {
-			enchantmentNames.stream().filter(CppConfigHandler.enchantmentNameToEnable::get).forEach(CppEnchantments::instantiateEnchantment);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		enchantmentNames.stream().filter(CppConfigHandler.enchantmentNameToEnable::get).forEach(CppEnchantments::instantiateEnchantment);
 	}
 
 	private static void instantiateEnchantment(String enchantmentName) {

@@ -16,7 +16,6 @@ import java.util.UUID;
 @LivingTickingEnchantment
 public class EnchantmentNimble extends CppEnchantmentBase {
 	private static UUID nimbleUUID = UUID.fromString("05b61a62-ae84-492e-8536-f365b7143296");
-	private static float nimbleAmount = 1 / 5;
 
 	public EnchantmentNimble() {
 		super("nimble", 2, EnumEnchantmentType.ARMOR_FEET);
@@ -44,7 +43,7 @@ public class EnchantmentNimble extends CppEnchantmentBase {
 	private void addSpeedBuff(EntityLivingBase entityLivingBase, int enchantmentLevel) {
 		IAttributeInstance speedAttribute = entityLivingBase.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.movementSpeed);
 		if (speedAttribute.getModifier(nimbleUUID) == null) {
-			AttributeModifier speedModifier = new AttributeModifier(nimbleUUID, "NimbleBoots", (float) 1 / 5 * enchantmentLevel, 1);
+			AttributeModifier speedModifier = new AttributeModifier(nimbleUUID, "NimbleBoots", (float) enchantmentLevel / 5, 1);
 			speedAttribute.applyModifier(speedModifier);
 		}
 	}
@@ -52,7 +51,7 @@ public class EnchantmentNimble extends CppEnchantmentBase {
 	private void removeSpeedBuff(EntityLivingBase entityLivingBase, int enchantmentLevel) {
 		IAttributeInstance speedAttribute = entityLivingBase.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.movementSpeed);
 		if (speedAttribute.getModifier(nimbleUUID) != null) {
-			AttributeModifier speedModifier = new AttributeModifier(nimbleUUID, "NimbleBoots", (float) 1 / 5 * enchantmentLevel, 1);
+			AttributeModifier speedModifier = new AttributeModifier(nimbleUUID, "NimbleBoots", (float) enchantmentLevel / 5, 1);
 			speedAttribute.removeModifier(speedModifier);
 		}
 	}
