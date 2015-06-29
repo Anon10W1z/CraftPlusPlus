@@ -38,7 +38,7 @@ public class EnchantmentNimble extends CppEnchantmentBase {
 
 	@Override
 	public int getMaxLevel() {
-		return 2;
+		return 3;
 	}
 
 	private void addSpeedBuff(EntityLivingBase entityLivingBase, int enchantmentLevel) {

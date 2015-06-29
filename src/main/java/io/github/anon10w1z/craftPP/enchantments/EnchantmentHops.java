@@ -30,6 +30,6 @@ public class EnchantmentHops extends CppEnchantmentBase {
 
 	@Override
 	public int getMaxLevel() {
-		return 2;
+		return 3;
 	}
 }
