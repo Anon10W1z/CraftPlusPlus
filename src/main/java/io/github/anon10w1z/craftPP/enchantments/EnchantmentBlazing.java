@@ -1,5 +1,6 @@
 package io.github.anon10w1z.craftPP.enchantments;
 
+import io.github.anon10w1z.craftPP.misc.CppUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.EntityLivingBase;
@@ -9,7 +10,6 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -34,18 +34,18 @@ public class EnchantmentBlazing extends CppEnchantmentBase {
 		if (entityLivingBase != null && this.getEnchantmentLevel(entityLivingBase.getHeldItem()) > 0) {
 			HarvestDropsEvent event = (HarvestDropsEvent) baseEvent;
 			List<ItemStack> drops = event.drops;
-			List<ItemStack> dropsCopy = new ArrayList<>(drops);
+			List<ItemStack> dropsCopy = CppUtils.copyList(event.drops);
 			drops.clear();
 			for (ItemStack drop : dropsCopy)
 				if (drop != null) {
-					ItemStack smeltResult = FurnaceRecipes.instance().getSmeltingResult(drop);
-					if (smeltResult != null) {
-						smeltResult = smeltResult.copy();
-						smeltResult.stackSize *= drop.stackSize;
+					ItemStack smeltingResult = FurnaceRecipes.instance().getSmeltingResult(drop);
+					if (smeltingResult != null) {
+						smeltingResult = smeltingResult.copy();
+						smeltingResult.stackSize *= drop.stackSize;
 						int fortuneLevel = event.fortuneLevel;
-						if (!(smeltResult.getItem() instanceof ItemBlock))
-							smeltResult.stackSize *= random.nextInt(fortuneLevel + 1) + 1;
-						drops.add(smeltResult);
+						if (!(smeltingResult.getItem() instanceof ItemBlock))
+							smeltingResult.stackSize *= random.nextInt(fortuneLevel + 1) + 1;
+						drops.add(smeltingResult);
 					} else
 						drops.add(drop);
 				}

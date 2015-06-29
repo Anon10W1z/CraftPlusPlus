@@ -29,7 +29,7 @@ public class EnchantmentNimble extends CppEnchantmentBase {
 
 	@Override
 	public void performAction(EntityLivingBase entityLivingBase, Event baseEvent) {
-		int enchantmentLevel = this.getEnchantmentLevel(entityLivingBase.getCurrentArmor(0));
+		int enchantmentLevel = this.getEnchantmentLevel(entityLivingBase.getEquipmentInSlot(1));
 		if (enchantmentLevel > 0)
 			addSpeedBuff(entityLivingBase, enchantmentLevel);
 		else

@@ -139,8 +139,8 @@ public final class CppEventHandler {
 			World world = event.world;
 			if (heldItem == Items.ender_pearl && !world.isRemote && player.capabilities.isCreativeMode) {
 				world.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (world.rand.nextFloat() * 0.4F + 0.8F));
-				EntityEnderPearl enderpearl = new EntityEnderPearl(world, player);
-				world.spawnEntityInWorld(enderpearl);
+				EntityEnderPearl enderPearl = new EntityEnderPearl(world, player);
+				world.spawnEntityInWorld(enderPearl);
 				player.triggerAchievement(StatList.objectUseStats[Item.getIdFromItem(Items.ender_pearl)]);
 			}
 		}
