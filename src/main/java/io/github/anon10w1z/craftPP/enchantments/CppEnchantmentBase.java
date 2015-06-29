@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnumEnchantmentType;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.eventhandler.Event;
@@ -30,6 +30,7 @@ public abstract class CppEnchantmentBase extends Enchantment {
 
 	/**
 	 * Gets an enchantment by name
+	 *
 	 * @param name The name of the enchantment
 	 * @return The enchantment with the specified name
 	 */
@@ -39,6 +40,7 @@ public abstract class CppEnchantmentBase extends Enchantment {
 
 	/**
 	 * Finds the first free enchantment ID to register this enchantment
+	 *
 	 * @return The enchantment ID for this enchantment to use
 	 */
 	private static int findFreeEnchantmentID() {
@@ -70,14 +72,16 @@ public abstract class CppEnchantmentBase extends Enchantment {
 
 	/**
 	 * Gets the name of this enchantment
+	 *
 	 * @return The name of this enchantment
 	 */
 	public abstract String getCppEnchantmentName();
 
 	/**
 	 * Performs the action this enchantment does
-	 * @param player The player related to the event
-	 * @param baseEvent The event that relates to this enchantment
+	 *
+	 * @param entityLivingBase The living entity related to the event
+	 * @param baseEvent        The event that relates to this enchantment
 	 */
-	public abstract void performAction(EntityPlayer player, Event baseEvent);
+	public abstract void performAction(EntityLivingBase entityLivingBase, Event baseEvent);
 }

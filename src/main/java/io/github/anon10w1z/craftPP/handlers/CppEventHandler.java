@@ -1,7 +1,7 @@
 package io.github.anon10w1z.craftPP.handlers;
 
 import io.github.anon10w1z.craftPP.enchantments.CppEnchantmentBase;
-import io.github.anon10w1z.craftPP.enchantments.PlayerTickingEnchantment;
+import io.github.anon10w1z.craftPP.enchantments.LivingTickingEnchantment;
 import io.github.anon10w1z.craftPP.main.CppModInfo;
 import io.github.anon10w1z.craftPP.main.CraftPlusPlus;
 import io.github.anon10w1z.craftPP.misc.CppExtendedEntityProperties;
@@ -37,6 +37,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
@@ -153,32 +154,31 @@ public final class CppEventHandler {
 	 */
 	@SubscribeEvent
 	public void onLivingUpdate(LivingUpdateEvent event) {
-		EntityLivingBase entity = event.entityLiving;
-		if (!entity.worldObj.isRemote) {
-			World world = entity.worldObj;
-			if (((entity instanceof EntityCreeper && CppConfigHandler.creeperBurnInDaylight) || (entity instanceof EntityZombie && entity.isChild() && CppConfigHandler.babyZombieBurnInDaylight)) && world.isDaytime()) {
-				float f = entity.getBrightness(1);
+		EntityLivingBase entityLivingBase = event.entityLiving;
+		if (!entityLivingBase.worldObj.isRemote) {
+			World world = entityLivingBase.worldObj;
+			if (((entityLivingBase instanceof EntityCreeper && CppConfigHandler.creeperBurnInDaylight) || (entityLivingBase instanceof EntityZombie && entityLivingBase.isChild() && CppConfigHandler.babyZombieBurnInDaylight)) && world.isDaytime()) {
+				float f = entityLivingBase.getBrightness(1);
 				Random random = world.rand;
-				BlockPos blockpos = new BlockPos(entity.posX, Math.round(entity.posY), entity.posZ);
+				BlockPos blockpos = new BlockPos(entityLivingBase.posX, Math.round(entityLivingBase.posY), entityLivingBase.posZ);
 				if (f > 0.5 && random.nextFloat() * 30 < (f - 0.4) * 2 && world.canSeeSky(blockpos)) {
-					ItemStack itemstack = entity.getEquipmentInSlot(4);
+					ItemStack itemstack = entityLivingBase.getEquipmentInSlot(4);
 					boolean doSetFire = true;
 					if (itemstack != null) {
 						doSetFire = false;
 						if (itemstack.isItemStackDamageable()) {
 							itemstack.setItemDamage(itemstack.getItemDamage() + random.nextInt(2));
 							if (itemstack.getItemDamage() >= itemstack.getMaxDamage()) {
-								entity.renderBrokenItemStack(itemstack);
-								entity.setCurrentItemOrArmor(4, null);
+								entityLivingBase.renderBrokenItemStack(itemstack);
+								entityLivingBase.setCurrentItemOrArmor(4, null);
 							}
 						}
 					}
 					if (doSetFire)
-						entity.setFire(8);
+						entityLivingBase.setFire(8);
 				}
 			}
-			if (entity instanceof EntityPlayer)
-				CppEnchantmentBase.cppEnchantments.stream().filter(cppEnchantment -> cppEnchantment.getClass().isAnnotationPresent(PlayerTickingEnchantment.class)).forEach(cppEnchantment -> cppEnchantment.performAction((EntityPlayer) entity, event));
+			CppEnchantmentBase.cppEnchantments.stream().filter(cppEnchantment -> cppEnchantment.getClass().isAnnotationPresent(LivingTickingEnchantment.class)).forEach(cppEnchantment -> cppEnchantment.performAction(entityLivingBase, event));
 		}
 	}
 
@@ -317,6 +317,13 @@ public final class CppEventHandler {
 		Optional<CppEnchantmentBase> quickdrawEnchantment = CppEnchantmentBase.getByName("quickdraw");
 		if (quickdrawEnchantment.isPresent())
 			quickdrawEnchantment.get().performAction(event.entityPlayer, event);
+	}
+
+	@SubscribeEvent
+	public void onLivingJump(LivingJumpEvent event) {
+		Optional<CppEnchantmentBase> hopsEnchantment = CppEnchantmentBase.getByName("hops");
+		if (hopsEnchantment.isPresent())
+			hopsEnchantment.get().performAction(event.entityLiving, event);
 	}
 
 	/**

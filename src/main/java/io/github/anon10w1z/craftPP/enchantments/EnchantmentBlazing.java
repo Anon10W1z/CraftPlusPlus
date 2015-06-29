@@ -2,7 +2,7 @@ package io.github.anon10w1z.craftPP.enchantments;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -16,6 +16,7 @@ import java.util.Random;
 /**
  * Automatically smelts the drops of harvested blocks
  */
+@SuppressWarnings("unused")
 public class EnchantmentBlazing extends CppEnchantmentBase {
 	private static Random random = new Random();
 
@@ -29,8 +30,8 @@ public class EnchantmentBlazing extends CppEnchantmentBase {
 	}
 
 	@Override
-	public void performAction(EntityPlayer player, Event baseEvent) {
-		if (player != null && this.getEnchantmentLevel(player.getHeldItem()) > 0) {
+	public void performAction(EntityLivingBase entityLivingBase, Event baseEvent) {
+		if (entityLivingBase != null && this.getEnchantmentLevel(entityLivingBase.getHeldItem()) > 0) {
 			HarvestDropsEvent event = (HarvestDropsEvent) baseEvent;
 			List<ItemStack> drops = event.drops;
 			List<ItemStack> dropsCopy = new ArrayList<>(drops);
@@ -53,6 +54,6 @@ public class EnchantmentBlazing extends CppEnchantmentBase {
 
 	@Override
 	public boolean canApplyTogether(Enchantment enchantment) {
-		return enchantment != Enchantment.silkTouch;
+		return super.canApplyTogether(enchantment) && enchantment != Enchantment.silkTouch;
 	}
 }

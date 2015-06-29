@@ -1,16 +1,18 @@
 package io.github.anon10w1z.craftPP.enchantments;
 
 import net.minecraft.enchantment.EnumEnchantmentType;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.common.eventhandler.Event;
+
+import java.util.UUID;
 
 /**
  * Gives the wearer jump boost
  */
-@PlayerTickingEnchantment
+@SuppressWarnings("unused")
 public class EnchantmentHops extends CppEnchantmentBase {
+	private static UUID hopsUUID = UUID.fromString("ae3d3fe4-2b1a-46bb-a27d-4694c4aaca0a");
+
 	public EnchantmentHops() {
 		super("hops", 2, EnumEnchantmentType.ARMOR_FEET);
 	}
@@ -21,10 +23,9 @@ public class EnchantmentHops extends CppEnchantmentBase {
 	}
 
 	@Override
-	public void performAction(EntityPlayer player, Event baseEvent) {
-		int enchantmentLevel = this.getEnchantmentLevel(player.getCurrentArmor(0));
-		if (enchantmentLevel > 0)
-			player.addPotionEffect(new PotionEffect(Potion.jump.id, 2, enchantmentLevel - 1));
+	public void performAction(EntityLivingBase entityLivingBase, Event baseEvent) {
+		int enchantmentLevel = this.getEnchantmentLevel(entityLivingBase.getCurrentArmor(0));
+		entityLivingBase.motionY += (float) 1 / 15 * enchantmentLevel;
 	}
 
 	@Override
