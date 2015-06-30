@@ -1,13 +1,14 @@
 package io.github.anon10w1z.craftPP.handlers;
 
 import io.github.anon10w1z.craftPP.enchantments.CppEnchantmentBase;
-import io.github.anon10w1z.craftPP.enchantments.LivingTickingEnchantment;
+import io.github.anon10w1z.craftPP.enchantments.EntityTickingEnchantment;
 import io.github.anon10w1z.craftPP.main.CppModInfo;
 import io.github.anon10w1z.craftPP.main.CraftPlusPlus;
 import io.github.anon10w1z.craftPP.misc.CppExtendedEntityProperties;
 import io.github.anon10w1z.craftPP.misc.CppUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -21,6 +22,7 @@ import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -49,7 +51,10 @@ import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import java.util.Optional;
@@ -154,31 +159,30 @@ public final class CppEventHandler {
 	 */
 	@SubscribeEvent
 	public void onLivingUpdate(LivingUpdateEvent event) {
-		EntityLivingBase entityLivingBase = event.entityLiving;
-		if (!entityLivingBase.worldObj.isRemote) {
-			World world = entityLivingBase.worldObj;
-			if (((entityLivingBase instanceof EntityCreeper && CppConfigHandler.creeperBurnInDaylight) || (entityLivingBase instanceof EntityZombie && entityLivingBase.isChild() && CppConfigHandler.babyZombieBurnInDaylight)) && world.isDaytime()) {
-				float f = entityLivingBase.getBrightness(1);
+		EntityLivingBase livingEntity = event.entityLiving;
+		if (!livingEntity.worldObj.isRemote) {
+			World world = livingEntity.worldObj;
+			if (((livingEntity instanceof EntityCreeper && CppConfigHandler.creeperBurnInDaylight) || (livingEntity instanceof EntityZombie && livingEntity.isChild() && CppConfigHandler.babyZombieBurnInDaylight)) && world.isDaytime()) {
+				float f = livingEntity.getBrightness(1);
 				Random random = world.rand;
-				BlockPos blockpos = new BlockPos(entityLivingBase.posX, Math.round(entityLivingBase.posY), entityLivingBase.posZ);
+				BlockPos blockpos = new BlockPos(livingEntity.posX, Math.round(livingEntity.posY), livingEntity.posZ);
 				if (f > 0.5 && random.nextFloat() * 30 < (f - 0.4) * 2 && world.canSeeSky(blockpos)) {
-					ItemStack itemstack = entityLivingBase.getEquipmentInSlot(4);
+					ItemStack itemstack = livingEntity.getEquipmentInSlot(4);
 					boolean doSetFire = true;
 					if (itemstack != null) {
 						doSetFire = false;
 						if (itemstack.isItemStackDamageable()) {
 							itemstack.setItemDamage(itemstack.getItemDamage() + random.nextInt(2));
 							if (itemstack.getItemDamage() >= itemstack.getMaxDamage()) {
-								entityLivingBase.renderBrokenItemStack(itemstack);
-								entityLivingBase.setCurrentItemOrArmor(4, null);
+								livingEntity.renderBrokenItemStack(itemstack);
+								livingEntity.setCurrentItemOrArmor(4, null);
 							}
 						}
 					}
 					if (doSetFire)
-						entityLivingBase.setFire(8);
+						livingEntity.setFire(8);
 				}
 			}
-			CppEnchantmentBase.cppEnchantments.stream().filter(cppEnchantment -> cppEnchantment.getClass().isAnnotationPresent(LivingTickingEnchantment.class)).forEach(cppEnchantment -> cppEnchantment.performAction(entityLivingBase, event));
 		}
 	}
 
@@ -226,17 +230,37 @@ public final class CppEventHandler {
 	}
 
 	/**
-	 * Allows thrown seeds to plant themselves in farmland
+	 * Allows thrown seeds to plant themselves in farmland. <br>
+	 * Also gives the Homing enchantment functionality.
 	 *
 	 * @param event The WorldTickEvent
 	 */
 	@SubscribeEvent
 	public void onWorldTick(WorldTickEvent event) {
-		if (CppConfigHandler.enableAutoSeedPlanting) {
+		if (CppConfigHandler.enableAutoSeedPlanting && !event.world.isRemote) {
 			World world = event.world;
-			List<EntityItem> entityItemList = world.getEntities(EntityItem.class, IEntitySelector.selectAnything);
-			for (EntityItem entityItem : entityItemList)
+			List<EntityItem> entityItems = world.getEntities(EntityItem.class, IEntitySelector.selectAnything);
+			for (EntityItem entityItem : entityItems)
 				CppExtendedEntityProperties.getExtendedProperties(entityItem).handlePlantingLogic();
+			for (Object entityObject : world.getEntities(Entity.class, IEntitySelector.selectAnything))
+				CppEnchantmentBase.cppEnchantments.stream().filter(cppEnchantment -> cppEnchantment.getClass().isAnnotationPresent(EntityTickingEnchantment.class)).forEach(cppEnchantment -> cppEnchantment.performAction((Entity) entityObject, event));
+		}
+	}
+
+	/**
+	 * Syncs up arrows affected by homing to the client
+	 *
+	 * @param event The ClientTickEvent
+	 */
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public void onClientTick(ClientTickEvent event) {
+		Optional<CppEnchantmentBase> homingEnchantment = CppEnchantmentBase.getByName("homing");
+		World world = Minecraft.getMinecraft().theWorld;
+		if (homingEnchantment.isPresent() && world != null) {
+			List<EntityArrow> arrows = world.getEntities(EntityArrow.class, IEntitySelector.selectAnything);
+			for (EntityArrow arrow : arrows)
+				homingEnchantment.get().performAction(arrow, null);
 		}
 	}
 
@@ -296,7 +320,7 @@ public final class CppEventHandler {
 	}
 
 	/**
-	 * Enables the Blazing enchantment
+	 * Enables the Blazing enchantment functionality
 	 *
 	 * @param event The HarvestDropsEvent
 	 */
@@ -308,7 +332,7 @@ public final class CppEventHandler {
 	}
 
 	/**
-	 * Enables the Quickdraw enchantment
+	 * Enables the Quickdraw enchantment functionality
 	 *
 	 * @param event The ArrowNockEvent
 	 */
@@ -319,6 +343,11 @@ public final class CppEventHandler {
 			quickdrawEnchantment.get().performAction(event.entityPlayer, event);
 	}
 
+	/**
+	 * Enables the Hops enchantment functionality
+	 *
+	 * @param event The LivingJumpEvent
+	 */
 	@SubscribeEvent
 	public void onLivingJump(LivingJumpEvent event) {
 		Optional<CppEnchantmentBase> hopsEnchantment = CppEnchantmentBase.getByName("hops");

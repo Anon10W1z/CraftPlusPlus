@@ -2,6 +2,8 @@ package io.github.anon10w1z.craftPP.proxies;
 
 import io.github.anon10w1z.craftPP.blocks.CppBlocks;
 import io.github.anon10w1z.craftPP.entities.EntityDynamite;
+import io.github.anon10w1z.craftPP.entities.EntityObsidianBoat;
+import io.github.anon10w1z.craftPP.entities.RenderObsidianBoat;
 import io.github.anon10w1z.craftPP.gui.GuiCppConfig;
 import io.github.anon10w1z.craftPP.items.CppItems;
 import io.github.anon10w1z.craftPP.main.CppModInfo;
@@ -38,12 +40,14 @@ public class CppClientProxy extends CppCommonProxy {
 		//Items
 		registerItemInventoryRenderer(CppItems.dynamite, "dynamite");
 		registerItemInventoryRenderer(CppItems.fried_egg, "egg_fried");
+		registerItemInventoryRenderer(CppItems.obsidian_boat, "obsidian_boat");
 		//Blocks
 		registerBlockInventoryRenderer(CppBlocks.flint_block, "flint");
 		registerBlockInventoryRenderer(CppBlocks.sugar_block, "sugar");
 		registerBlockInventoryRenderer(CppBlocks.charcoal_block, "charcoal");
 		//Entities
-		RenderingRegistry.registerEntityRenderingHandler(EntityDynamite.class, new RenderSnowball(Minecraft.getMinecraft().getRenderManager(), CppItems.dynamite, Minecraft.getMinecraft().getRenderItem()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityDynamite.class, new RenderSnowball(minecraft.getRenderManager(), CppItems.dynamite, minecraft.getRenderItem()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityObsidianBoat.class, new RenderObsidianBoat());
 	}
 
 	@Override

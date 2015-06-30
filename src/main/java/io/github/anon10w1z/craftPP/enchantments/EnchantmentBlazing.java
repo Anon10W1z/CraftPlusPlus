@@ -3,6 +3,7 @@ package io.github.anon10w1z.craftPP.enchantments;
 import io.github.anon10w1z.craftPP.misc.CppUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -30,8 +31,8 @@ public class EnchantmentBlazing extends CppEnchantmentBase {
 	}
 
 	@Override
-	public void performAction(EntityLivingBase entityLivingBase, Event baseEvent) {
-		if (entityLivingBase != null && this.getEnchantmentLevel(entityLivingBase.getHeldItem()) > 0) {
+	public void performAction(Entity entity, Event baseEvent) {
+		if (entity != null && this.getEnchantmentLevel(((EntityLivingBase) entity).getHeldItem()) > 0) {
 			HarvestDropsEvent event = (HarvestDropsEvent) baseEvent;
 			List<ItemStack> drops = event.drops;
 			List<ItemStack> dropsCopy = CppUtils.copyList(event.drops);

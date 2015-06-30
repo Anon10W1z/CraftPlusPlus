@@ -1,6 +1,7 @@
 package io.github.anon10w1z.craftPP.enchantments;
 
 import net.minecraft.enchantment.EnumEnchantmentType;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -13,7 +14,7 @@ import java.util.UUID;
  * Gives the wearer speed
  */
 @SuppressWarnings("unused")
-@LivingTickingEnchantment
+@EntityTickingEnchantment
 public class EnchantmentNimble extends CppEnchantmentBase {
 	private static UUID nimbleUUID = UUID.fromString("05b61a62-ae84-492e-8536-f365b7143296");
 
@@ -27,12 +28,15 @@ public class EnchantmentNimble extends CppEnchantmentBase {
 	}
 
 	@Override
-	public void performAction(EntityLivingBase entityLivingBase, Event baseEvent) {
-		int enchantmentLevel = this.getEnchantmentLevel(entityLivingBase.getEquipmentInSlot(1));
-		if (enchantmentLevel > 0)
-			addSpeedBuff(entityLivingBase, enchantmentLevel);
-		else
-			removeSpeedBuff(entityLivingBase, enchantmentLevel);
+	public void performAction(Entity entity, Event baseEvent) {
+		if (entity instanceof EntityLivingBase) {
+			EntityLivingBase livingEntity = (EntityLivingBase) entity;
+			int enchantmentLevel = this.getEnchantmentLevel(livingEntity.getEquipmentInSlot(1));
+			if (enchantmentLevel > 0)
+				addSpeedBuff(livingEntity, enchantmentLevel);
+			else
+				removeSpeedBuff(livingEntity, enchantmentLevel);
+		}
 	}
 
 	@Override
@@ -40,16 +44,28 @@ public class EnchantmentNimble extends CppEnchantmentBase {
 		return 3;
 	}
 
-	private void addSpeedBuff(EntityLivingBase entityLivingBase, int enchantmentLevel) {
-		IAttributeInstance speedAttribute = entityLivingBase.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.movementSpeed);
+	/**
+	 * Adds the speed buff to the specified living entity at the specified enchantment level
+	 *
+	 * @param livingEntity     The living entity to add the speed buff to
+	 * @param enchantmentLevel The enchantment level of the speed buff
+	 */
+	private void addSpeedBuff(EntityLivingBase livingEntity, int enchantmentLevel) {
+		IAttributeInstance speedAttribute = livingEntity.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.movementSpeed);
 		if (speedAttribute.getModifier(nimbleUUID) == null) {
 			AttributeModifier speedModifier = new AttributeModifier(nimbleUUID, "NimbleBoots", (float) enchantmentLevel / 5, 1);
 			speedAttribute.applyModifier(speedModifier);
 		}
 	}
 
-	private void removeSpeedBuff(EntityLivingBase entityLivingBase, int enchantmentLevel) {
-		IAttributeInstance speedAttribute = entityLivingBase.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.movementSpeed);
+	/**
+	 * Removes the speed buff from the specified living entity at the specified enchantment level
+	 *
+	 * @param livingEntity     The living entity to remove the speed buff from
+	 * @param enchantmentLevel The enchantment level of the speed buff
+	 */
+	private void removeSpeedBuff(EntityLivingBase livingEntity, int enchantmentLevel) {
+		IAttributeInstance speedAttribute = livingEntity.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.movementSpeed);
 		if (speedAttribute.getModifier(nimbleUUID) != null) {
 			AttributeModifier speedModifier = new AttributeModifier(nimbleUUID, "NimbleBoots", (float) enchantmentLevel / 5, 1);
 			speedAttribute.removeModifier(speedModifier);

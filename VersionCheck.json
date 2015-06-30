@@ -2,11 +2,11 @@
   "versionList": [
     {
       "mcVersion": "Minecraft 1.8",
-      "modVersion": "2.3.3",
+      "modVersion": "3.1",
       "changeLog": [
-        "Version 2.3.3 fixes some more bugs."
+        "Version 3.1 fixes some more bugs."
       ],
-      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/2.3.3/craft.-2.3.3.jar",
+      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/CraftPlusPlus-3.1.jar",
       "isDirectLink": "true",
       "newFileName": ""
     }

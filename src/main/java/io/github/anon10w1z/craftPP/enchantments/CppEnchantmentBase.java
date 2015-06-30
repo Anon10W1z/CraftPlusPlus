@@ -4,11 +4,12 @@ import com.google.common.collect.Lists;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnumEnchantmentType;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +26,7 @@ public abstract class CppEnchantmentBase extends Enchantment {
 		super(findFreeEnchantmentID(), new ResourceLocation(resourceName), weight, type);
 		this.setName(getCppEnchantmentName());
 		addToBookList(this);
+		Arrays.sort(enchantmentsBookList, (enchantment1, enchantment2) -> Integer.compare(enchantment1.effectId, enchantment2.effectId));
 		cppEnchantments.add(this);
 	}
 
@@ -44,10 +46,7 @@ public abstract class CppEnchantmentBase extends Enchantment {
 	 * @return The enchantment ID for this enchantment to use
 	 */
 	private static int findFreeEnchantmentID() {
-		int enchantmentID = 0;
-		while (Enchantment.getEnchantmentById(enchantmentID) != null)
-			++enchantmentID;
-		return enchantmentID;
+		return Arrays.stream(Enchantment.enchantmentsBookList).mapToInt(enchantment -> enchantment.effectId).max().getAsInt() + 1;
 	}
 
 	/**
@@ -80,8 +79,8 @@ public abstract class CppEnchantmentBase extends Enchantment {
 	/**
 	 * Performs the action this enchantment does
 	 *
-	 * @param entityLivingBase The living entity related to the event
-	 * @param baseEvent        The event that relates to this enchantment
+	 * @param entity    The entity related to the event
+	 * @param baseEvent The event that relates to this enchantment
 	 */
-	public abstract void performAction(EntityLivingBase entityLivingBase, Event baseEvent);
+	public abstract void performAction(Entity entity, Event baseEvent);
 }

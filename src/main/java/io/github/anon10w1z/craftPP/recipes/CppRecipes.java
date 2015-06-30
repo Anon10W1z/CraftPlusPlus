@@ -23,6 +23,7 @@ public class CppRecipes {
 		//Craft++ Items
 		GameRegistry.addRecipe(new ItemStack(CppItems.dynamite, 1, 0), " W", " G", "S ", 'W', Items.string, 'G', Items.gunpowder, 'S', Blocks.sand);
 		GameRegistry.addSmelting(Items.egg, new ItemStack(CppItems.fried_egg), 0.35F);
+		GameRegistry.addRecipe(new ItemStack(CppItems.obsidian_boat), "O O", "OOO", 'O', Blocks.obsidian);
 		//Better Vanilla
 		GameRegistry.addShapelessRecipe(new ItemStack(Items.string, 4), Blocks.wool);
 	}
@@ -35,6 +36,6 @@ public class CppRecipes {
 	 */
 	private static void registerStorageRecipes(ItemStack input, Block output) {
 		GameRegistry.addRecipe(new ItemStack(output), "III", "III", "III", 'I', input);
-		GameRegistry.addShapelessRecipe(input.copy().splitStack(9), output);
+		GameRegistry.addShapelessRecipe(input.splitStack(9), output);
 	}
 }

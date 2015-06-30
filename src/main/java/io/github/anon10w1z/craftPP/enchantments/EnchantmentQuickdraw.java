@@ -2,7 +2,7 @@ package io.github.anon10w1z.craftPP.enchantments;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
@@ -24,10 +24,11 @@ public class EnchantmentQuickdraw extends CppEnchantmentBase {
 	}
 
 	@Override
-	public void performAction(EntityLivingBase entityLivingBase, Event baseEvent) {
-		ItemStack heldItem = entityLivingBase.getHeldItem();
+	public void performAction(Entity entity, Event baseEvent) {
+		EntityPlayer player = (EntityPlayer) entity;
+		ItemStack heldItem = player.getHeldItem();
 		if (heldItem != null && heldItem.getItem() instanceof ItemBow && getEnchantmentLevel(heldItem) > 0) {
-			((EntityPlayer) entityLivingBase).setItemInUse(entityLivingBase.getHeldItem(), heldItem.getMaxItemUseDuration() / 3);
+			player.setItemInUse(player.getHeldItem(), heldItem.getMaxItemUseDuration() / 3);
 			((ArrowNockEvent) baseEvent).result = heldItem;
 			baseEvent.setCanceled(true);
 		}
@@ -35,6 +36,6 @@ public class EnchantmentQuickdraw extends CppEnchantmentBase {
 
 	@Override
 	public boolean canApplyTogether(Enchantment enchantment) {
-		return super.canApplyTogether(enchantment) && enchantment != Enchantment.infinity && enchantment != Enchantment.flame;
+		return super.canApplyTogether(enchantment) && enchantment != Enchantment.infinity;
 	}
 }

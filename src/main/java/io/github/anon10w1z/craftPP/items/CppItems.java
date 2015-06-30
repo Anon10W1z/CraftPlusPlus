@@ -10,11 +10,14 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class CppItems {
 	public static Item dynamite;
 	public static Item fried_egg;
+	public static Item obsidian_boat;
 
 	public static void registerItems() {
 		dynamite = new ItemDynamite();
 		GameRegistry.registerItem(dynamite, "dynamite");
 		fried_egg = new ItemFood(5, 0.6F, false).setUnlocalizedName("eggFried");
 		GameRegistry.registerItem(fried_egg, "egg_fried");
+		obsidian_boat = new ItemObsidianBoat();
+		GameRegistry.registerItem(obsidian_boat, "obsidian_boat");
 	}
 }

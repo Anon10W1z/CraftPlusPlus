@@ -50,7 +50,7 @@ public class EntityDynamite extends EntityThrowable {
 		else
 			this.ticksSinceWet = 0;
 		if (this.ticksSinceWet < WET_TICKS)
-			for (int i = 0; i < 6; ++i) {
+			for (int i = 0; i < 3; ++i) {
 				float xOffset = (this.rand.nextFloat() * 2 - 1) * this.width * 0.5F;
 				float zOffset = (this.rand.nextFloat() * 2 - 1) * this.width * 0.5F;
 				this.worldObj.spawnParticle(EnumParticleTypes.DRIP_WATER, this.posX + xOffset, this.posY, this.posZ + zOffset, this.motionX, this.motionY, this.motionZ);

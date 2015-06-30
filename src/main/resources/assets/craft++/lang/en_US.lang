@@ -8,6 +8,7 @@ tile.sand.name=Sand/Red Sand
 
 item.dynamite.name=Dynamite
 item.eggFried.name=Fried Egg
+item.boatObsidian.name=Obsidian Boat
 
 craft++.potionDisplay=Potion Effect Display
 
@@ -15,6 +16,7 @@ enchantment.nimble=Nimble
 enchantment.hops=Hops
 enchantment.blazing=Blazing
 enchantment.quickdraw=Quickdraw
+enchantment.homing=Homing
 
 enchantment.level.11=XI
 enchantment.level.12=XII
