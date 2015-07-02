@@ -2,11 +2,11 @@
   "versionList": [
     {
       "mcVersion": "Minecraft 1.8",
-      "modVersion": "3.1",
+      "modVersion": "3.2",
       "changeLog": [
-        "Version 3.1 fixes some more bugs."
+        "Version 3.2 adds Siphon and Veteran enchantments."
       ],
-      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/CraftPlusPlus-3.1.jar",
+      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/CraftPlusPlus-3.2.jar",
       "isDirectLink": "true",
       "newFileName": ""
     }

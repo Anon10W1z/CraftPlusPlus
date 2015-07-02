@@ -383,12 +383,10 @@ public class EntityObsidianBoat extends Entity {
 		if (p_180433_3_) {
 			if (this.fallDistance > 60) {
 				this.fall(this.fallDistance, 1);
-
 				if (!this.worldObj.isRemote && !this.isDead) {
 					this.setDead();
 					this.dropItem(CppItems.obsidian_boat, 1);
 				}
-
 				this.fallDistance = 0;
 			}
 		} else if (this.worldObj.getBlockState((new BlockPos(this)).down()).getBlock().getMaterial() != Material.lava && p_180433_1_ < 0.0D)

@@ -1,7 +1,9 @@
 package io.github.anon10w1z.craftPP.handlers;
 
 import io.github.anon10w1z.craftPP.enchantments.CppEnchantmentBase;
+import io.github.anon10w1z.craftPP.enchantments.CppEnchantments;
 import io.github.anon10w1z.craftPP.enchantments.EntityTickingEnchantment;
+import io.github.anon10w1z.craftPP.gui.GuiCppConfig;
 import io.github.anon10w1z.craftPP.main.CppModInfo;
 import io.github.anon10w1z.craftPP.main.CraftPlusPlus;
 import io.github.anon10w1z.craftPP.misc.CppExtendedEntityProperties;
@@ -16,6 +18,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityEnderPearl;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityZombie;
@@ -35,6 +38,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.entity.EntityEvent;
@@ -48,7 +52,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
-import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.client.GuiIngameModOptions;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -57,7 +61,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 import static net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
@@ -72,6 +75,7 @@ public final class CppEventHandler {
 	/**
 	 * Whether or not to enable the potion effect overlay
 	 */
+	@SideOnly(Side.CLIENT)
 	private static boolean displayPotionEffects = true;
 
 	/**
@@ -92,6 +96,13 @@ public final class CppEventHandler {
 				nameTag.setStackDisplayName(entityNameTag);
 				entity.entityDropItem(nameTag, 0);
 				entity.setCustomNameTag("");
+			}
+			//All animals drop bones
+			if (entity instanceof EntityAnimal) {
+				int boneDropAmount = world.rand.nextInt(CppConfigHandler.maxAnimalBoneDropAmount - CppConfigHandler.minAnimalBoneDropAmount + 1) + CppConfigHandler.minAnimalBoneDropAmount;
+				if (entity instanceof EntityChicken)
+					boneDropAmount = CppConfigHandler.minAnimalBoneDropAmount;
+				entity.dropItem(Items.bone, boneDropAmount);
 			}
 			//Bats drop leather
 			if (entity instanceof EntityBat && CppConfigHandler.batLeatherDropChance > Math.random())
@@ -142,7 +153,7 @@ public final class CppEventHandler {
 		if (player.getHeldItem() != null && event.action == Action.RIGHT_CLICK_AIR) {
 			Item heldItem = player.getHeldItem().getItem();
 			World world = event.world;
-			if (heldItem == Items.ender_pearl && !world.isRemote && player.capabilities.isCreativeMode) {
+			if (!world.isRemote && player.capabilities.isCreativeMode && heldItem == Items.ender_pearl) {
 				world.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (world.rand.nextFloat() * 0.4F + 0.8F));
 				EntityEnderPearl enderPearl = new EntityEnderPearl(world, player);
 				world.spawnEntityInWorld(enderPearl);
@@ -165,8 +176,8 @@ public final class CppEventHandler {
 			if (((livingEntity instanceof EntityCreeper && CppConfigHandler.creeperBurnInDaylight) || (livingEntity instanceof EntityZombie && livingEntity.isChild() && CppConfigHandler.babyZombieBurnInDaylight)) && world.isDaytime()) {
 				float f = livingEntity.getBrightness(1);
 				Random random = world.rand;
-				BlockPos blockpos = new BlockPos(livingEntity.posX, Math.round(livingEntity.posY), livingEntity.posZ);
-				if (f > 0.5 && random.nextFloat() * 30 < (f - 0.4) * 2 && world.canSeeSky(blockpos)) {
+				BlockPos blockPos = new BlockPos(livingEntity.posX, Math.round(livingEntity.posY), livingEntity.posZ);
+				if (f > 0.5 && random.nextFloat() * 30 < (f - 0.4) * 2 && world.canSeeSky(blockPos)) {
 					ItemStack itemstack = livingEntity.getEquipmentInSlot(4);
 					boolean doSetFire = true;
 					if (itemstack != null) {
@@ -243,24 +254,26 @@ public final class CppEventHandler {
 			for (EntityItem entityItem : entityItems)
 				CppExtendedEntityProperties.getExtendedProperties(entityItem).handlePlantingLogic();
 			for (Object entityObject : world.getEntities(Entity.class, IEntitySelector.selectAnything))
-				CppEnchantmentBase.cppEnchantments.stream().filter(cppEnchantment -> cppEnchantment.getClass().isAnnotationPresent(EntityTickingEnchantment.class)).forEach(cppEnchantment -> cppEnchantment.performAction((Entity) entityObject, event));
+				CppEnchantmentBase.cppEnchantments.stream().filter(cppEnchantment -> cppEnchantment.getClass().isAnnotationPresent(EntityTickingEnchantment.class)).forEach(cppEnchantment -> cppEnchantment.performAction((Entity) entityObject, null));
 		}
 	}
 
 	/**
-	 * Syncs up arrows affected by homing to the client
+	 * Syncs up motion-affecting enchantments to the client
 	 *
 	 * @param event The ClientTickEvent
 	 */
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onClientTick(ClientTickEvent event) {
-		Optional<CppEnchantmentBase> homingEnchantment = CppEnchantmentBase.getByName("homing");
 		World world = Minecraft.getMinecraft().theWorld;
-		if (homingEnchantment.isPresent() && world != null) {
-			List<EntityArrow> arrows = world.getEntities(EntityArrow.class, IEntitySelector.selectAnything);
-			for (EntityArrow arrow : arrows)
-				homingEnchantment.get().performAction(arrow, null);
+		if (world != null) {
+			List<Entity> arrows = world.getEntities(EntityArrow.class, IEntitySelector.selectAnything);
+			for (Entity arrow : arrows)
+				CppEnchantments.performAction("homing", arrow, null);
+			List<Entity> xpOrbs = world.getEntities(EntityXPOrb.class, IEntitySelector.selectAnything);
+			for (Entity xpOrb : xpOrbs)
+				CppEnchantments.performAction("veteran", xpOrb, null);
 		}
 	}
 
@@ -326,9 +339,9 @@ public final class CppEventHandler {
 	 */
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onHarvestDrops(HarvestDropsEvent event) {
-		Optional<CppEnchantmentBase> blazingEnchantment = CppEnchantmentBase.getByName("blazing");
-		if (blazingEnchantment.isPresent())
-			blazingEnchantment.get().performAction(event.harvester, event);
+		EntityPlayer harvester = event.harvester;
+		CppEnchantments.performAction("blazing", harvester, event);
+		CppEnchantments.performAction("siphon", harvester, event);
 	}
 
 	/**
@@ -338,9 +351,7 @@ public final class CppEventHandler {
 	 */
 	@SubscribeEvent
 	public void onArrowNock(ArrowNockEvent event) {
-		Optional<CppEnchantmentBase> quickdrawEnchantment = CppEnchantmentBase.getByName("quickdraw");
-		if (quickdrawEnchantment.isPresent())
-			quickdrawEnchantment.get().performAction(event.entityPlayer, event);
+		CppEnchantments.performAction("quickdraw", event.entityPlayer, event);
 	}
 
 	/**
@@ -350,9 +361,7 @@ public final class CppEventHandler {
 	 */
 	@SubscribeEvent
 	public void onLivingJump(LivingJumpEvent event) {
-		Optional<CppEnchantmentBase> hopsEnchantment = CppEnchantmentBase.getByName("hops");
-		if (hopsEnchantment.isPresent())
-			hopsEnchantment.get().performAction(event.entityLiving, event);
+		CppEnchantments.performAction("hops", event.entityLiving, event);
 	}
 
 	/**
@@ -375,8 +384,10 @@ public final class CppEventHandler {
 	 *
 	 * @param event The event to pass to the client proxy (check if it is a GuiOpenEvent there)
 	 */
+	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
-	public void onEvent(Event event) {
-		CraftPlusPlus.proxy.handleGuiOpen(event);
+	public void onGuiOpen(GuiOpenEvent event) {
+		if (event.gui instanceof GuiIngameModOptions)
+			event.gui = new GuiCppConfig();
 	}
 }

@@ -22,6 +22,8 @@ public class CppConfigHandler {
 	public static double creeperDropTntChance;
 	public static double endermanBlockDropChance;
 	public static double batLeatherDropChance;
+	public static int minAnimalBoneDropAmount;
+	public static int maxAnimalBoneDropAmount;
 	//Recipes
 	public static boolean useBetterStoneToolRecipes;
 	public static boolean useBetterStairsRecipes;
@@ -52,9 +54,11 @@ public class CppConfigHandler {
 	 */
 	public static void syncConfig() {
 		String mobDropsCategory = Configuration.CATEGORY_GENERAL + Configuration.CATEGORY_SPLITTER + "Mob Drops";
-		creeperDropTntChance = get(mobDropsCategory, "Chance of creepers dropping TNT", 1D, "The chance of creepers dropping TNT, out of 10").setMinValue(0).setMaxValue(10).getDouble() / 10;
-		endermanBlockDropChance = get(mobDropsCategory, "Chance of enderman dropping held block", 10D, "The chance of enderman dropping their held block, out of 10").setMinValue(0).setMaxValue(10).getDouble() / 10;
-		batLeatherDropChance = get(mobDropsCategory, "Chance of bats dropping leather", 10D, "The chance of bats dropping leather, out of 10").setMinValue(0).setMaxValue(10).getDouble() / 10;
+		creeperDropTntChance = get(mobDropsCategory, "Chance of creepers dropping TNT", 1D, "The chance of creepers dropping TNT, out of 10.").setMinValue(0).setMaxValue(10).getDouble() / 10;
+		endermanBlockDropChance = get(mobDropsCategory, "Chance of enderman dropping held block", 10D, "The chance of enderman dropping their held block, out of 10.").setMinValue(0).setMaxValue(10).getDouble() / 10;
+		batLeatherDropChance = get(mobDropsCategory, "Chance of bats dropping leather", 10D, "The chance of bats dropping leather, out of 10.").setMinValue(0).setMaxValue(10).getDouble() / 10;
+		maxAnimalBoneDropAmount = get(mobDropsCategory, "Maximum number of bones animals drop", 3, "The maximum number of bones animals cam drop.").setMinValue(0).getInt();
+		minAnimalBoneDropAmount = get(mobDropsCategory, "Minimum number of bones animals drop", 1, "The minimum number of bones animals cam drop.").setMinValue(0).setMaxValue(maxAnimalBoneDropAmount).getInt();
 		config.setCategoryComment(mobDropsCategory, "Modify mob drops");
 
 		String recipesCategory = Configuration.CATEGORY_GENERAL + Configuration.CATEGORY_SPLITTER + "Recipes";
@@ -84,6 +88,10 @@ public class CppConfigHandler {
 
 		if (config.hasChanged())
 			config.save();
+	}
+
+	public static Property get(String category, String key, int defaultValue, String comment) {
+		return config.get(category, key, defaultValue, comment);
 	}
 
 	public static Property get(String category, String key, double defaultValue, String comment) {

@@ -26,16 +26,11 @@ public class EnchantmentBlazing extends CppEnchantmentBase {
 	}
 
 	@Override
-	public String getCppEnchantmentName() {
-		return "blazing";
-	}
-
-	@Override
 	public void performAction(Entity entity, Event baseEvent) {
 		if (entity != null && this.getEnchantmentLevel(((EntityLivingBase) entity).getHeldItem()) > 0) {
 			HarvestDropsEvent event = (HarvestDropsEvent) baseEvent;
 			List<ItemStack> drops = event.drops;
-			List<ItemStack> dropsCopy = CppUtils.copyList(event.drops);
+			List<ItemStack> dropsCopy = CppUtils.copyList(drops);
 			drops.clear();
 			for (ItemStack drop : dropsCopy)
 				if (drop != null) {
@@ -51,6 +46,16 @@ public class EnchantmentBlazing extends CppEnchantmentBase {
 						drops.add(drop);
 				}
 		}
+	}
+
+	@Override
+	public int getMinimumEnchantability(int enchantmentLevel) {
+		return 15;
+	}
+
+	@Override
+	public int getMaximumEnchantability(int enchantmentLevel) {
+		return 61;
 	}
 
 	@Override

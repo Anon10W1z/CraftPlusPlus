@@ -19,19 +19,24 @@ public class EnchantmentQuickdraw extends CppEnchantmentBase {
 	}
 
 	@Override
-	public String getCppEnchantmentName() {
-		return "quickdraw";
-	}
-
-	@Override
 	public void performAction(Entity entity, Event baseEvent) {
 		EntityPlayer player = (EntityPlayer) entity;
 		ItemStack heldItem = player.getHeldItem();
 		if (heldItem != null && heldItem.getItem() instanceof ItemBow && getEnchantmentLevel(heldItem) > 0) {
-			player.setItemInUse(player.getHeldItem(), heldItem.getMaxItemUseDuration() / 3);
+			player.setItemInUse(heldItem, heldItem.getMaxItemUseDuration() / 3);
 			((ArrowNockEvent) baseEvent).result = heldItem;
 			baseEvent.setCanceled(true);
 		}
+	}
+
+	@Override
+	public int getMinimumEnchantability(int enchantmentLevel) {
+		return 20;
+	}
+
+	@Override
+	public int getMaximumEnchantability(int enchantmentLevel) {
+		return 50;
 	}
 
 	@Override

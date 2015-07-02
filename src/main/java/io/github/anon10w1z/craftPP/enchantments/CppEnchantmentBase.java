@@ -7,11 +7,12 @@ import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
+import java.util.OptionalInt;
+import java.util.stream.IntStream;
 
 /**
  * Base class for all of Craft++'s enchantments
@@ -22,31 +23,24 @@ public abstract class CppEnchantmentBase extends Enchantment {
 	 */
 	public static List<CppEnchantmentBase> cppEnchantments = Lists.newArrayList();
 
-	public CppEnchantmentBase(String resourceName, int weight, EnumEnchantmentType type) {
-		super(findFreeEnchantmentID(), new ResourceLocation(resourceName), weight, type);
-		this.setName(getCppEnchantmentName());
+	public CppEnchantmentBase(String name, int weight, EnumEnchantmentType type) {
+		super(findFreeEnchantmentID(name), new ResourceLocation(name), weight, type);
+		this.setName(name);
 		addToBookList(this);
-		Arrays.sort(enchantmentsBookList, (enchantment1, enchantment2) -> Integer.compare(enchantment1.effectId, enchantment2.effectId));
 		cppEnchantments.add(this);
-	}
-
-	/**
-	 * Gets an enchantment by name
-	 *
-	 * @param name The name of the enchantment
-	 * @return The enchantment with the specified name
-	 */
-	public static Optional<CppEnchantmentBase> getByName(String name) {
-		return cppEnchantments.stream().filter(enchantment -> enchantment.name.equals(name)).findFirst();
 	}
 
 	/**
 	 * Finds the first free enchantment ID to register this enchantment
 	 *
+	 * @param enchantmentName the name of the enchantment
 	 * @return The enchantment ID for this enchantment to use
 	 */
-	private static int findFreeEnchantmentID() {
-		return Arrays.stream(Enchantment.enchantmentsBookList).mapToInt(enchantment -> enchantment.effectId).max().getAsInt() + 1;
+	private static int findFreeEnchantmentID(String enchantmentName) {
+		OptionalInt freeEnchantmentID = IntStream.range(0, 256).filter(i -> Enchantment.getEnchantmentById(i) == null).findFirst();
+		if (!freeEnchantmentID.isPresent())
+			throw new NoFreeEnchantmentIDException(enchantmentName);
+		return freeEnchantmentID.getAsInt();
 	}
 
 	/**
@@ -60,21 +54,14 @@ public abstract class CppEnchantmentBase extends Enchantment {
 	}
 
 	@Override
-	public int getMinEnchantability(int level) {
-		return 5 + (level - 1) * 10;
+	public int getMinEnchantability(int enchantmentLevel) {
+		return getMinimumEnchantability(enchantmentLevel);
 	}
 
 	@Override
-	public int getMaxEnchantability(int level) {
-		return this.getMinEnchantability(level) + 20;
+	public int getMaxEnchantability(int enchantmentLevel) {
+		return getMaximumEnchantability(enchantmentLevel);
 	}
-
-	/**
-	 * Gets the name of this enchantment
-	 *
-	 * @return The name of this enchantment
-	 */
-	public abstract String getCppEnchantmentName();
 
 	/**
 	 * Performs the action this enchantment does
@@ -83,4 +70,14 @@ public abstract class CppEnchantmentBase extends Enchantment {
 	 * @param baseEvent The event that relates to this enchantment
 	 */
 	public abstract void performAction(Entity entity, Event baseEvent);
+
+	public abstract int getMinimumEnchantability(int enchantmentLevel);
+
+	public abstract int getMaximumEnchantability(int enchantmentLevel);
+
+	private static class NoFreeEnchantmentIDException extends RuntimeException {
+		private NoFreeEnchantmentIDException(String enchantmentName) {
+			super("Could not find a free enchantment ID for " + StatCollector.translateToLocal("enchantment." + enchantmentName));
+		}
+	}
 }

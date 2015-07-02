@@ -14,7 +14,9 @@ craft++.potionDisplay=Potion Effect Display
 
 enchantment.nimble=Nimble
 enchantment.hops=Hops
+enchantment.veteran=Veteran
 enchantment.blazing=Blazing
+enchantment.siphon=Siphon
 enchantment.quickdraw=Quickdraw
 enchantment.homing=Homing
 

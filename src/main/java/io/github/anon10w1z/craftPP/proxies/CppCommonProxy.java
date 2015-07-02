@@ -1,7 +1,5 @@
 package io.github.anon10w1z.craftPP.proxies;
 
-import net.minecraftforge.fml.common.eventhandler.Event;
-
 /**
  * The common (dual-side) proxy for Craft++
  */
@@ -39,14 +37,5 @@ public class CppCommonProxy {
 	 */
 	public boolean isGuiOpen() {
 		return false;
-	}
-
-	/**
-	 * Handles the opening of any GUI
-	 *
-	 * @param event The event to be handled
-	 */
-	public void handleGuiOpen(Event event) {
-
 	}
 }

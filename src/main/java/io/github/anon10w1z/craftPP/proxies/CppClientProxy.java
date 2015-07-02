@@ -4,7 +4,6 @@ import io.github.anon10w1z.craftPP.blocks.CppBlocks;
 import io.github.anon10w1z.craftPP.entities.EntityDynamite;
 import io.github.anon10w1z.craftPP.entities.EntityObsidianBoat;
 import io.github.anon10w1z.craftPP.entities.RenderObsidianBoat;
-import io.github.anon10w1z.craftPP.gui.GuiCppConfig;
 import io.github.anon10w1z.craftPP.items.CppItems;
 import io.github.anon10w1z.craftPP.main.CppModInfo;
 import net.minecraft.block.Block;
@@ -17,11 +16,8 @@ import net.minecraft.item.Item;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.event.GuiOpenEvent;
-import net.minecraftforge.fml.client.GuiIngameModOptions;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.common.eventhandler.Event;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -90,15 +86,6 @@ public class CppClientProxy extends CppCommonProxy {
 	@Override
 	public boolean isGuiOpen() {
 		return minecraft.currentScreen != null;
-	}
-
-	@Override
-	public void handleGuiOpen(Event event) {
-		if (event instanceof GuiOpenEvent) {
-			GuiOpenEvent guiOpenEvent = (GuiOpenEvent) event;
-			if (guiOpenEvent.gui instanceof GuiIngameModOptions)
-				guiOpenEvent.gui = new GuiCppConfig();
-		}
 	}
 
 	private void registerItemInventoryRenderer(Item item, String name) {

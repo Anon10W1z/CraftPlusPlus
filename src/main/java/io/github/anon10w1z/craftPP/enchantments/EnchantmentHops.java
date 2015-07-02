@@ -5,28 +5,29 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
-import java.util.UUID;
-
 /**
  * Gives the wearer jump boost
  */
 @SuppressWarnings("unused")
 public class EnchantmentHops extends CppEnchantmentBase {
-	private static UUID hopsUUID = UUID.fromString("ae3d3fe4-2b1a-46bb-a27d-4694c4aaca0a");
-
 	public EnchantmentHops() {
 		super("hops", 2, EnumEnchantmentType.ARMOR_FEET);
 	}
 
 	@Override
-	public String getCppEnchantmentName() {
-		return "hops";
+	public void performAction(Entity entity, Event baseEvent) {
+		int enchantmentLevel = this.getEnchantmentLevel(((EntityLivingBase) entity).getEquipmentInSlot(1));
+		entity.motionY += (float) enchantmentLevel / 20;
 	}
 
 	@Override
-	public void performAction(Entity entity, Event baseEvent) {
-		int enchantmentLevel = this.getEnchantmentLevel(((EntityLivingBase) entity).getEquipmentInSlot(1));
-		entity.motionY += (float) enchantmentLevel / 15;
+	public int getMinimumEnchantability(int enchantmentLevel) {
+		return 5 + (enchantmentLevel - 1) * 8;
+	}
+
+	@Override
+	public int getMaximumEnchantability(int enchantmentLevel) {
+		return enchantmentLevel * 10 + 51;
 	}
 
 	@Override
