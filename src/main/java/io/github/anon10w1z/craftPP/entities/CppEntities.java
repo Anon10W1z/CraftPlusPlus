@@ -18,7 +18,7 @@ public class CppEntities {
 	public static void registerEntities(Object mod) {
 		currentMod = mod;
 		registerEntity(EntityDynamite.class, "Dynamite");
-		registerEntity(EntityObsidianBoat.class, "Obsidian Boat");
+		registerEntity(EntityObsidianBoat.class, "ObsidianBoat");
 	}
 
 	private static void registerEntity(Class<? extends Entity> entityClass, String entityName) {

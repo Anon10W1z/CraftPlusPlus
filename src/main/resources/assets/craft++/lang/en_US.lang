@@ -12,6 +12,9 @@ item.boatObsidian.name=Obsidian Boat
 
 craft++.potionDisplay=Potion Effect Display
 
+
+craft++.Dynamite=Dynamite
+craft++.ObsidianBoat=ObsidianBoat
 enchantment.nimble=Nimble
 enchantment.hops=Hops
 enchantment.veteran=Veteran

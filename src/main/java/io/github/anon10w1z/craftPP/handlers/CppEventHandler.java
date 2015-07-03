@@ -75,7 +75,6 @@ public final class CppEventHandler {
 	/**
 	 * Whether or not to enable the potion effect overlay
 	 */
-	@SideOnly(Side.CLIENT)
 	private static boolean displayPotionEffects = true;
 
 	/**

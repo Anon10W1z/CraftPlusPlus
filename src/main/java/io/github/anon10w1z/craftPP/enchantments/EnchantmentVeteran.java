@@ -1,6 +1,5 @@
 package io.github.anon10w1z.craftPP.enchantments;
 
-import net.minecraft.command.IEntitySelector;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityXPOrb;
@@ -23,30 +22,19 @@ public class EnchantmentVeteran extends CppEnchantmentBase {
 	public void performAction(Entity entity, Event baseEvent) {
 		if (entity instanceof EntityXPOrb) {
 			World world = entity.worldObj;
-			double range = 64;
-			double distance = range;
-			EntityPlayer closestPlayer = null;
-			for (Object playerObject : world.getPlayers(EntityPlayer.class, IEntitySelector.NOT_SPECTATING)) {
-				EntityPlayer player = (EntityPlayer) playerObject;
-				if (player.getDistanceToEntity(entity) < distance && getEnchantmentLevel(player.getCurrentArmor(3)) > 0) {
-					closestPlayer = player;
-					distance = player.getDistanceToEntity(entity);
-				}
-			}
+			double range = 32;
+			EntityPlayer closestPlayer = world.getClosestPlayerToEntity(entity, range);
 			if (closestPlayer != null) {
-				int veteranLevel = getEnchantmentLevel(closestPlayer.getCurrentArmor(3));
-				if (veteranLevel > 0) {
-					double xDiff = (closestPlayer.posX - entity.posX) / range;
-					double yDiff = (closestPlayer.posY + closestPlayer.getEyeHeight() - entity.posY) / range;
-					double zDiff = (closestPlayer.posZ - entity.posZ) / range;
-					double movementFactor = Math.sqrt(xDiff * xDiff + yDiff * yDiff + zDiff * zDiff);
-					double invertedMovementFactor = 1 - movementFactor;
-					if (invertedMovementFactor > 0) {
-						invertedMovementFactor *= invertedMovementFactor;
-						entity.motionX += xDiff / movementFactor * invertedMovementFactor * 0.1;
-						entity.motionY += yDiff / movementFactor * invertedMovementFactor * 0.1;
-						entity.motionZ += zDiff / movementFactor * invertedMovementFactor * 0.1;
-					}
+				double xDiff = (closestPlayer.posX - entity.posX) / range;
+				double yDiff = (closestPlayer.posY + closestPlayer.getEyeHeight() - entity.posY) / range;
+				double zDiff = (closestPlayer.posZ - entity.posZ) / range;
+				double movementFactor = Math.sqrt(xDiff * xDiff + yDiff * yDiff + zDiff * zDiff);
+				double invertedMovementFactor = 1 - movementFactor;
+				if (invertedMovementFactor > 0) {
+					invertedMovementFactor *= invertedMovementFactor;
+					entity.motionX += xDiff / movementFactor * invertedMovementFactor * 0.1;
+					entity.motionY += yDiff / movementFactor * invertedMovementFactor * 0.1;
+					entity.motionZ += zDiff / movementFactor * invertedMovementFactor * 0.1;
 				}
 			}
 		}

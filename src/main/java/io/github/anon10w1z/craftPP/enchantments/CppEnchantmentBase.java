@@ -66,8 +66,8 @@ public abstract class CppEnchantmentBase extends Enchantment {
 	/**
 	 * Performs the action this enchantment does
 	 *
-	 * @param entity    The entity related to the event
-	 * @param baseEvent The event that relates to this enchantment
+	 * @param entity    The entity to go along with the enchantment
+	 * @param baseEvent The event to go along with the enchantment
 	 */
 	public abstract void performAction(Entity entity, Event baseEvent);
 

@@ -42,9 +42,16 @@ public final class CppEnchantments {
 		return CppEnchantmentBase.cppEnchantments.stream().filter(enchantment -> enchantment.getName().replaceFirst("enchantment\\.", "").equals(enchantmentName)).findFirst();
 	}
 
+	/**
+	 * Performs the action of the enchantment with the specified name
+	 *
+	 * @param enchantmentName The name of the enchantment
+	 * @param entity          The entity to go along with the enchantment
+	 * @param baseEvent       The event to go along with the enchantment
+	 */
 	public static void performAction(String enchantmentName, Entity entity, Event baseEvent) {
-		Optional<CppEnchantmentBase> enchantment = getByName(enchantmentName);
-		if (enchantment.isPresent())
-			enchantment.get().performAction(entity, baseEvent);
+		Optional<CppEnchantmentBase> cppEnchantment = getByName(enchantmentName);
+		if (cppEnchantment.isPresent())
+			cppEnchantment.get().performAction(entity, baseEvent);
 	}
 }
