@@ -20,14 +20,9 @@ public class BehaviorDispenseObsidianBoat extends BehaviorDefaultDispenseItem {
 		double d2 = source.getZ() + (double) ((float) enumfacing.getFrontOffsetZ() * 1.125F);
 		BlockPos blockpos = source.getBlockPos().offset(enumfacing);
 		Material material = world.getBlockState(blockpos).getBlock().getMaterial();
-		int d3;
-		if (Material.lava.equals(material))
-			d3 = 1;
-		else {
-			if (!Material.air.equals(material) || !Material.lava.equals(world.getBlockState(blockpos.down()).getBlock().getMaterial()))
-				return new BehaviorDispenseBlockFalling().dispense(source, stack);
-			d3 = 0;
-		}
+		if (!Material.air.equals(material) || !Material.lava.equals(world.getBlockState(blockpos.down()).getBlock().getMaterial()))
+			return new BehaviorDispenseBlockFalling().dispense(source, stack);
+		int d3 = material.equals(Material.lava) ? 1 : 0;
 		EntityObsidianBoat obsidianBoat = new EntityObsidianBoat(world, d0, d1 + d3, d2);
 		world.spawnEntityInWorld(obsidianBoat);
 		stack.splitStack(1);

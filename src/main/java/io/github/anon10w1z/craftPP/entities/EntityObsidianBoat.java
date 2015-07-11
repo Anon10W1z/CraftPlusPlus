@@ -15,6 +15,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
+/**
+ * Obsidian boat entity to go along-side obsidian boat item
+ */
 public class EntityObsidianBoat extends Entity {
 	private boolean isBoatEmpty;
 	private double speedMultiplier;

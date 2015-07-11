@@ -14,6 +14,9 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
+/**
+ * Obsidian boat item to along-side obsidian boat entity
+ */
 public class ItemObsidianBoat extends Item {
 	public ItemObsidianBoat() {
 		super();
