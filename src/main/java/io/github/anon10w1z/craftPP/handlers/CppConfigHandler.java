@@ -57,20 +57,20 @@ public class CppConfigHandler {
 		creeperDropTntChance = get(mobDropsCategory, "Chance of creepers dropping TNT", 1D, "The chance of creepers dropping TNT, out of 10.").setMinValue(0).setMaxValue(10).getDouble() / 10;
 		endermanBlockDropChance = get(mobDropsCategory, "Chance of enderman dropping held block", 10D, "The chance of enderman dropping their held block, out of 10.").setMinValue(0).setMaxValue(10).getDouble() / 10;
 		batLeatherDropChance = get(mobDropsCategory, "Chance of bats dropping leather", 10D, "The chance of bats dropping leather, out of 10.").setMinValue(0).setMaxValue(10).getDouble() / 10;
-		maxAnimalBoneDropAmount = get(mobDropsCategory, "Maximum number of bones animals drop", 3, "The maximum number of bones animals cam drop.").setMinValue(0).getInt();
-		minAnimalBoneDropAmount = get(mobDropsCategory, "Minimum number of bones animals drop", 1, "The minimum number of bones animals cam drop.").setMinValue(0).setMaxValue(maxAnimalBoneDropAmount).getInt();
+		maxAnimalBoneDropAmount = get(mobDropsCategory, "Maximum number of bones animals drop", 2, "The maximum number of bones animals can drop.").setMinValue(0).getInt();
+		minAnimalBoneDropAmount = get(mobDropsCategory, "Minimum number of bones animals drop", 1, "The minimum number of bones animals can drop.").setMinValue(0).setMaxValue(maxAnimalBoneDropAmount).getInt();
 		config.setCategoryComment(mobDropsCategory, "Modify mob drops");
 
 		String recipesCategory = Configuration.CATEGORY_GENERAL + Configuration.CATEGORY_SPLITTER + "Recipes";
 		useBetterStoneToolRecipes = get(recipesCategory, "Stone tools crafted from stone", true, "Are stone tools crafted out of stone?");
 		useBetterStairsRecipes = get(recipesCategory, "Better stairs recipe enabled", true, "Is the better stairs recipe enabled?");
-		config.setCategoryComment(recipesCategory, "Enable/disable certain recipes");
+		config.setCategoryComment(recipesCategory, "Toggle Craft++'s recipe enhancements");
 		config.setCategoryRequiresMcRestart(recipesCategory, true);
 
 		String enchantmentsCategory = Configuration.CATEGORY_GENERAL + Configuration.CATEGORY_SPLITTER + "Enchantments";
 		for (String enchantmentName : CppEnchantments.enchantmentNames)
 			enchantmentNameToEnable.put(enchantmentName, get(enchantmentsCategory, "Enable " + enchantmentName, true, "Is the " + enchantmentName + " enchantment enabled?"));
-		config.setCategoryComment(enchantmentsCategory, "Enable/disable Craft++'s enchantments");
+		config.setCategoryComment(enchantmentsCategory, "Toggle each of Craft++'s enchantments");
 		config.setCategoryRequiresMcRestart(enchantmentsCategory, true);
 
 		String miscCategory = Configuration.CATEGORY_GENERAL + Configuration.CATEGORY_SPLITTER + "Miscellaneous";

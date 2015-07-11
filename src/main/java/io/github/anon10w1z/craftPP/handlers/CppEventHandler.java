@@ -29,6 +29,7 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -45,10 +46,7 @@ import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
-import net.minecraftforge.event.entity.player.ArrowNockEvent;
-import net.minecraftforge.event.entity.player.EntityInteractEvent;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.*;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
@@ -62,6 +60,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Stream;
 
 import static net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 
@@ -70,6 +69,9 @@ import static net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigCha
  */
 @SuppressWarnings({"unused", "unchecked"})
 public final class CppEventHandler {
+	/**
+	 * The singleton instance of the event handler
+	 */
 	public static CppEventHandler instance = new CppEventHandler();
 
 	/**
@@ -364,12 +366,28 @@ public final class CppEventHandler {
 	}
 
 	/**
+	 * Enables bones to be given after eating meat
+	 *
+	 * @param event The PlayerUseItem (Finish) event
+	 */
+	@SubscribeEvent
+	public void onPlayerUseItemFinish(PlayerUseItemEvent.Finish event) {
+		EntityPlayer player = event.entityPlayer;
+		ItemStack itemstack = event.result;
+		if (!player.worldObj.isRemote && Stream.of("pork", "fish", "beef", "chicken", "rabbit", "mutton").anyMatch(itemstack.getUnlocalizedName()::contains) && itemstack.getItem() instanceof ItemFood)
+			if (itemstack.stackSize == 0)
+				event.result = new ItemStack(Items.bone);
+			else
+				player.inventory.addItemStackToInventory(new ItemStack(Items.bone));
+	}
+
+	/**
 	 * Draws potion effect icons in the top-left corner
 	 *
 	 * @param event The (Post) RenderGameOverlayEvent
 	 */
 	@SubscribeEvent
-	public void onRenderGameOverlay(RenderGameOverlayEvent.Post event) {
+	public void onPostRenderGameOverlay(RenderGameOverlayEvent.Post event) {
 		if (event.type == ElementType.CROSSHAIRS) {
 			if (CraftPlusPlus.proxy.isPotionKeyPressed())
 				displayPotionEffects = !displayPotionEffects; //toggle the potion effect overlay
@@ -381,7 +399,7 @@ public final class CppEventHandler {
 	/**
 	 * Changes the mod options GUI into Craft++'s config GUI
 	 *
-	 * @param event The event to pass to the client proxy (check if it is a GuiOpenEvent there)
+	 * @param event The GuiOpenEvent
 	 */
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent

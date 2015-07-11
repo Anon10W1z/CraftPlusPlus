@@ -47,12 +47,16 @@ public final class CppUtils {
 	 * @return An object of the specified type with the first possible of the passed names
 	 */
 	public static <T> T findObject(Object fieldContainer, String... fieldNames) {
-		try {
-			Field field = ReflectionHelper.findField(fieldContainer.getClass(), fieldNames);
-			return (T) field.get(fieldContainer);
-		} catch (Exception exception) {
-			return null;
+		Class fieldClass = fieldContainer.getClass();
+		while (fieldClass != null) {
+			try {
+				Field field = ReflectionHelper.findField(fieldContainer.getClass(), fieldNames);
+				return (T) field.get(fieldContainer);
+			} catch (Exception exception) {
+				fieldClass = fieldClass.getSuperclass();
+			}
 		}
+		return null;
 	}
 
 	/**
