@@ -98,13 +98,6 @@ public final class CppEventHandler {
 				entity.entityDropItem(nameTag, 0);
 				entity.setCustomNameTag("");
 			}
-			//All animals drop bones
-			if (entity instanceof EntityAnimal) {
-				int boneDropAmount = world.rand.nextInt(CppConfigHandler.maxAnimalBoneDropAmount - CppConfigHandler.minAnimalBoneDropAmount + 1) + CppConfigHandler.minAnimalBoneDropAmount;
-				if (entity instanceof EntityChicken)
-					boneDropAmount = CppConfigHandler.minAnimalBoneDropAmount;
-				entity.dropItem(Items.bone, boneDropAmount);
-			}
 			//Bats drop leather
 			if (entity instanceof EntityBat && CppConfigHandler.batLeatherDropChance > Math.random())
 				entity.dropItem(Items.leather, 1);
@@ -238,12 +231,12 @@ public final class CppEventHandler {
 	 */
 	@SubscribeEvent
 	public void onEntityConstructing(EntityEvent.EntityConstructing event) {
-		CppExtendedEntityProperties.registerExtendedProperties(event.entity); //verified to be item entity at registration time
+		if (event.entity instanceof EntityItem)
+			CppExtendedEntityProperties.registerExtendedProperties((EntityItem) event.entity);
 	}
 
 	/**
-	 * Allows thrown seeds to plant themselves in farmland. <br>
-	 * Also gives the Homing enchantment functionality.
+	 * Allows thrown seeds to plant themselves in farmland, and gives the Homing enchantment functionality
 	 *
 	 * @param event The WorldTickEvent
 	 */
@@ -366,9 +359,9 @@ public final class CppEventHandler {
 	}
 
 	/**
-	 * Enables bones to be given after eating meat
+	 * Enables a bone to be given to players after eating meat
 	 *
-	 * @param event The PlayerUseItem (Finish) event
+	 * @param event The PlayerUseItem(Finish)Event
 	 */
 	@SubscribeEvent
 	public void onPlayerUseItemFinish(PlayerUseItemEvent.Finish event) {

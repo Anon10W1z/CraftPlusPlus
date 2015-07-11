@@ -50,9 +50,8 @@ public class CppExtendedEntityProperties implements IExtendedEntityProperties {
 	 *
 	 * @param entityItem The item entity to register the properties for
 	 */
-	public static void registerExtendedProperties(Entity entityItem) {
-		if (entityItem instanceof EntityItem)
-			entityItem.registerExtendedProperties(EXTENDED_PROPERTIES_NAME, new CppExtendedEntityProperties((EntityItem) entityItem));
+	public static void registerExtendedProperties(EntityItem entityItem) {
+		entityItem.registerExtendedProperties(EXTENDED_PROPERTIES_NAME, new CppExtendedEntityProperties(entityItem));
 	}
 
 	/**

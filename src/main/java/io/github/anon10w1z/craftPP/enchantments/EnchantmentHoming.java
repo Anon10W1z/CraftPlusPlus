@@ -22,7 +22,6 @@ public class EnchantmentHoming extends CppEnchantmentBase {
 		super("homing", 1, EnumEnchantmentType.BOW);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void performAction(Entity entity, Event baseEvent) {
 		if (entity instanceof EntityArrow) {
@@ -32,6 +31,7 @@ public class EnchantmentHoming extends CppEnchantmentBase {
 				int homingLevel = this.getEnchantmentLevel(shooter.getHeldItem());
 				double distance = Math.pow(2, homingLevel - 1) * 32;
 				World world = arrow.worldObj;
+				@SuppressWarnings("unchecked")
 				List<EntityLivingBase> livingEntities = world.getEntities(EntityLivingBase.class, IEntitySelector.NOT_SPECTATING);
 				EntityLivingBase target = null;
 				for (EntityLivingBase livingEntity : livingEntities) {
