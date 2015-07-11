@@ -9,7 +9,6 @@ import io.github.anon10w1z.craftPP.handlers.CppEventHandler;
 import io.github.anon10w1z.craftPP.handlers.CppFuelHandler;
 import io.github.anon10w1z.craftPP.items.CppItems;
 import io.github.anon10w1z.craftPP.misc.CppVanillaPropertiesChanger;
-import io.github.anon10w1z.craftPP.misc.OreDictionaryEnhancer;
 import io.github.anon10w1z.craftPP.proxies.CppCommonProxy;
 import io.github.anon10w1z.craftPP.recipes.CppRecipeReplacer;
 import io.github.anon10w1z.craftPP.recipes.CppRecipes;
@@ -106,8 +105,7 @@ public final class CraftPlusPlus {
 	 * - Registers the crafting recipes <br>
 	 * - Registers the dispenser behaviors <br>
 	 * - Initializes the vanilla properties changer <br>
-	 * - Initializes the recipe remover <br>
-	 * - Initializes the ore dictionary enhancer
+	 * - Initializes the recipe remover
 	 *
 	 * @param event The FMLInitializationEvent
 	 */
@@ -134,8 +132,6 @@ public final class CraftPlusPlus {
 		CppVanillaPropertiesChanger.init();
 		logInfo("Initializing the crafting recipe remover");
 		CppRecipeReplacer.replaceRecipes();
-		logInfo("Initializing the ore dictionary enhancer");
-		OreDictionaryEnhancer.init();
 		logInfo("Initialization completed successfully");
 	}
 }

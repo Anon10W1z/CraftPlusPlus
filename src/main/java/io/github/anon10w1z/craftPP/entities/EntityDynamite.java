@@ -49,7 +49,7 @@ public class EntityDynamite extends EntityThrowable {
 			++this.ticksSinceWet;
 		else
 			this.ticksSinceWet = 0;
-		if (this.ticksSinceWet < WET_TICKS)
+		if (this.ticksSinceWet < WET_TICKS && !this.isInWater())
 			for (int i = 0; i < 3; ++i) {
 				float xOffset = (this.rand.nextFloat() * 2 - 1) * this.width * 0.5F;
 				float zOffset = (this.rand.nextFloat() * 2 - 1) * this.width * 0.5F;
@@ -65,7 +65,7 @@ public class EntityDynamite extends EntityThrowable {
 				if (isNotCreativeThrower())
 					this.dropItem(CppItems.dynamite, 1);
 			} else
-				world.createExplosion(this.getThrower(), this.posX, this.posY, this.posZ, 2.0F, true);
+				world.createExplosion(this, this.posX, this.posY, this.posZ, 2F, true);
 		this.setDead();
 	}
 

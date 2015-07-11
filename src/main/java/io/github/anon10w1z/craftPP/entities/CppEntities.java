@@ -1,5 +1,6 @@
 package io.github.anon10w1z.craftPP.entities;
 
+import io.github.anon10w1z.craftPP.main.CraftPlusPlus;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
@@ -8,14 +9,14 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
  */
 public class CppEntities {
 	private static int currentEntityID = 0;
-	private static Object currentMod;
+	private static CraftPlusPlus currentMod;
 
 	/**
 	 * Registers the entities for Craft++
 	 *
 	 * @param mod The Craft++ instance
 	 */
-	public static void registerEntities(Object mod) {
+	public static void registerEntities(CraftPlusPlus mod) {
 		currentMod = mod;
 		registerEntity(EntityDynamite.class, "Dynamite");
 		registerEntity(EntityObsidianBoat.class, "ObsidianBoat");

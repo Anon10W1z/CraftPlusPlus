@@ -364,10 +364,12 @@ public class EntityObsidianBoat extends Entity {
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbtTagCompound) {}
+	protected void writeEntityToNBT(NBTTagCompound nbtTagCompound) {
+	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbtTagCompound) {}
+	protected void readEntityFromNBT(NBTTagCompound nbtTagCompound) {
+	}
 
 	@Override
 	public boolean interactFirst(EntityPlayer player) {
