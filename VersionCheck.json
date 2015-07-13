@@ -2,11 +2,11 @@
   "versionList": [
     {
       "mcVersion": "Minecraft 1.8",
-      "modVersion": "3.2.2",
+      "modVersion": "3.3",
       "changeLog": [
-        "Version 3.2.2 makes meat give you a bone when eaten."
+        "Version 3.3 adds in the Vigor enchantment, which adds one heart to your max health per level."
       ],
-      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/3.2.2/CraftPlusPlus-3.2.2.jar",
+      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/3.3/CraftPlusPlus-3.3.jar",
       "isDirectLink": "true",
       "newFileName": ""
     }

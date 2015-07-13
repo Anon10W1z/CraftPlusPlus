@@ -14,7 +14,7 @@ import java.util.Optional;
  * Initializes Craft++'s enchantments
  */
 public final class CppEnchantments {
-	public static List<String> enchantmentNames = Arrays.asList("Nimble", "Hops", "Veteran", "Blazing", "Siphon", "Quickdraw", "Homing");
+	public static List<String> enchantmentNames = Arrays.asList("Nimble", "Hops", "Vigor", "Veteran", "Blazing", "Siphon", "Quickdraw", "Homing");
 
 	/**
 	 * Registers the enchantments for Craft++
