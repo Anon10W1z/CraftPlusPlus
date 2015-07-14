@@ -30,9 +30,9 @@ public class ItemObsidianBoat extends Item {
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer player) {
 		float f1 = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch);
 		float f2 = player.prevRotationYaw + (player.rotationYaw - player.prevRotationYaw);
-		double d0 = player.prevPosX + (player.posX - player.prevPosX);
-		double d1 = player.prevPosY + (player.posY - player.prevPosY) + player.getEyeHeight();
-		double d2 = player.prevPosZ + (player.posZ - player.prevPosZ);
+		double d0 = player.posX;
+		double d1 = player.posY + player.getEyeHeight();
+		double d2 = player.posZ;
 		Vec3 vec3 = new Vec3(d0, d1, d2);
 		float f3 = MathHelper.cos(-f2 * 0.017453292F - (float) Math.PI);
 		float f4 = MathHelper.sin(-f2 * 0.017453292F - (float) Math.PI);
@@ -52,9 +52,11 @@ public class ItemObsidianBoat extends Item {
 		for (Entity entity : entities)
 			if (entity.canBeCollidedWith()) {
 				float f10 = entity.getCollisionBorderSize();
-				AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox().expand(f10, f10, f10);
-				if (axisalignedbb.isVecInside(vec3))
+				AxisAlignedBB axisAlignedBB = entity.getEntityBoundingBox().expand(f10, f10, f10);
+				if (axisAlignedBB.isVecInside(vec3)) {
 					flag = true;
+					break;
+				}
 			}
 		if (flag)
 			return itemstack;

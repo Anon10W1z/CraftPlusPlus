@@ -22,7 +22,7 @@ public class EnchantmentQuickdraw extends CppEnchantmentBase {
 	public void performAction(Entity entity, Event baseEvent) {
 		EntityPlayer player = (EntityPlayer) entity;
 		ItemStack heldItem = player.getHeldItem();
-		if (heldItem != null && heldItem.getItem() instanceof ItemBow && getEnchantmentLevel(heldItem) > 0) {
+		if (heldItem != null && heldItem.getItem() instanceof ItemBow && this.getEnchantmentLevel(heldItem) > 0) {
 			player.setItemInUse(heldItem, heldItem.getMaxItemUseDuration() / 3);
 			((ArrowNockEvent) baseEvent).result = heldItem;
 			baseEvent.setCanceled(true);

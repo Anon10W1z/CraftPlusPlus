@@ -24,7 +24,7 @@ public class EnchantmentVeteran extends CppEnchantmentBase {
 			World world = entity.worldObj;
 			double range = 32;
 			EntityPlayer closestPlayer = world.getClosestPlayerToEntity(entity, range);
-			if (closestPlayer != null && getEnchantmentLevel(closestPlayer.getEquipmentInSlot(4)) > 0) {
+			if (closestPlayer != null && this.getEnchantmentLevel(closestPlayer.getEquipmentInSlot(4)) > 0) {
 				double xDiff = (closestPlayer.posX - entity.posX) / range;
 				double yDiff = (closestPlayer.posY + closestPlayer.getEyeHeight() - entity.posY) / range;
 				double zDiff = (closestPlayer.posZ - entity.posZ) / range;
