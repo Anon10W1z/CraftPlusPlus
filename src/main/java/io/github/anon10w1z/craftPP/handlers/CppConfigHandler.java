@@ -2,6 +2,7 @@ package io.github.anon10w1z.craftPP.handlers;
 
 import com.google.common.collect.Maps;
 import io.github.anon10w1z.craftPP.enchantments.CppEnchantments;
+import io.github.anon10w1z.craftPP.main.CraftPlusPlus;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.config.GuiConfigEntries.NumberSliderEntry;
@@ -31,6 +32,7 @@ public class CppConfigHandler {
 	public static boolean creeperBurnInDaylight;
 	public static boolean babyZombieBurnInDaylight;
 	public static boolean enableAutoSeedPlanting;
+	public static float binocularZoomAmount;
 	//Miscellaneous: Requires Restart
 	public static boolean commandBlockInRedstoneTab;
 	public static boolean enableFlintAndSteelDispenserBehavior;
@@ -51,10 +53,11 @@ public class CppConfigHandler {
 	 * Syncs the config file
 	 */
 	public static void syncConfig() {
+		CraftPlusPlus.logInfo("Syncing config file");
 		String mobDropsCategory = Configuration.CATEGORY_GENERAL + Configuration.CATEGORY_SPLITTER + "Mob Drops";
-		creeperDropTntChance = get(mobDropsCategory, "Chance of creepers dropping TNT", 1D, "The chance of creepers dropping TNT, out of 10.").setMinValue(0).setMaxValue(10).getDouble() / 10;
-		endermanBlockDropChance = get(mobDropsCategory, "Chance of enderman dropping held block", 10D, "The chance of enderman dropping their held block, out of 10.").setMinValue(0).setMaxValue(10).getDouble() / 10;
-		batLeatherDropChance = get(mobDropsCategory, "Chance of bats dropping leather", 10D, "The chance of bats dropping leather, out of 10.").setMinValue(0).setMaxValue(10).getDouble() / 10;
+		creeperDropTntChance = get(mobDropsCategory, "Chance of creepers dropping TNT", 1D, "The chance of creepers dropping TNT, out of 10.", true).setMinValue(0).setMaxValue(10).getDouble() / 10;
+		endermanBlockDropChance = get(mobDropsCategory, "Chance of enderman dropping held block", 10D, "The chance of enderman dropping their held block, out of 10.", true).setMinValue(0).setMaxValue(10).getDouble() / 10;
+		batLeatherDropChance = get(mobDropsCategory, "Chance of bats dropping leather", 10D, "The chance of bats dropping leather, out of 10.", true).setMinValue(0).setMaxValue(10).getDouble() / 10;
 		config.setCategoryComment(mobDropsCategory, "Modify mob drops");
 
 		String recipesCategory = Configuration.CATEGORY_GENERAL + Configuration.CATEGORY_SPLITTER + "Recipes";
@@ -73,6 +76,7 @@ public class CppConfigHandler {
 		creeperBurnInDaylight = get(miscCategory, "Creepers burn in daylight", true, "Do creepers burn in daylight?");
 		babyZombieBurnInDaylight = get(miscCategory, "Baby zombies burn in daylight", true, "Do baby zombies burn in daylight?");
 		enableAutoSeedPlanting = get(miscCategory, "Enable automatic seed planting", true, "Do dropped seeds plant themselves?");
+		binocularZoomAmount = (float) get(miscCategory, "Binocular Zoom Amount", 4, "By how much do binoculars divide your FOV?", false).setMinValue(1D).getDouble();
 		config.setCategoryComment(miscCategory, "Miscellaneous settings");
 		//Requires Restart
 		String miscRequiresRestartCategory = miscCategory + Configuration.CATEGORY_SPLITTER + "Requires Restart";
@@ -86,13 +90,9 @@ public class CppConfigHandler {
 			config.save();
 	}
 
-	public static Property get(String category, String key, int defaultValue, String comment) {
-		return config.get(category, key, defaultValue, comment);
-	}
-
-	public static Property get(String category, String key, double defaultValue, String comment) {
+	public static Property get(String category, String key, double defaultValue, String comment, boolean slider) {
 		Property property = config.get(category, key, defaultValue, comment);
-		if (FMLCommonHandler.instance().getEffectiveSide().isClient())
+		if (slider && FMLCommonHandler.instance().getEffectiveSide().isClient())
 			return property.setConfigEntryClass(NumberSliderEntry.class);
 		return property;
 	}

@@ -5,6 +5,7 @@ import io.github.anon10w1z.craftPP.items.CppItems;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -24,6 +25,9 @@ public class CppRecipes {
 		GameRegistry.addRecipe(new ItemStack(CppItems.dynamite, 1, 0), " W", " G", "S ", 'W', Items.string, 'G', Items.gunpowder, 'S', Blocks.sand);
 		GameRegistry.addSmelting(Items.egg, new ItemStack(CppItems.fried_egg), 0.35F);
 		GameRegistry.addRecipe(new ItemStack(CppItems.obsidian_boat), "O O", "OOO", 'O', Blocks.obsidian);
+		ItemStack dyeStack = new ItemStack(Items.dye, 1, EnumDyeColor.BLACK.getDyeDamage());
+		GameRegistry.addRecipe(new ItemStack(CppItems.binocular_lens, 4), " I ", "IPI", " I ", 'I', Items.iron_ingot, 'P', Blocks.glass_pane);
+		GameRegistry.addRecipe(new ItemStack(CppItems.binoculars), "DDD", "LIL", "DDD", 'D', dyeStack, 'L', CppItems.binocular_lens, 'I', Items.iron_ingot);
 		//Better Vanilla
 		GameRegistry.addShapelessRecipe(new ItemStack(Items.string, 4), Blocks.wool);
 	}

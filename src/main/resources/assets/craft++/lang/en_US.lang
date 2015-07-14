@@ -7,8 +7,10 @@ tile.buttonWood.name=Wooden Button
 tile.sand.name=Sand/Red Sand
 
 item.dynamite.name=Dynamite
-item.eggFried.name=Fried Egg
 item.boatObsidian.name=Obsidian Boat
+item.eggFried.name=Fried Egg
+item.binocularLens.name=Binocular Lens
+item.binoculars.name=Binoculars
 
 craft++.potionDisplay=Potion Effect Display
 

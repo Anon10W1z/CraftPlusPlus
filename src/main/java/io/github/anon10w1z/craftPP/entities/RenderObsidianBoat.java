@@ -13,7 +13,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderObsidianBoat extends Render {
-	private static final ResourceLocation boatTextures = new ResourceLocation("craft++:textures/entity/obsidian_boat.png");
+	private static final ResourceLocation boatTextures = new ResourceLocation("minecraft:textures/blocks/obsidian.png");
 	protected ModelBase modelBoat = new ModelBoat();
 
 	public RenderObsidianBoat() {

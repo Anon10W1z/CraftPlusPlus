@@ -2,11 +2,11 @@
   "versionList": [
     {
       "mcVersion": "Minecraft 1.8",
-      "modVersion": "3.4",
+      "modVersion": "3.5",
       "changeLog": [
-        "Version 3.4 adds in the ability to use item and block IDs instead of their names in commands."
+        "Version 3.5 adds in binoculars, which zooms in to help you see."
       ],
-      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/3.4/CraftPlusPlus-3.4.jar",
+      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/3.5/CraftPlusPlus-3.5.jar",
       "isDirectLink": "true",
       "newFileName": ""
     }

@@ -4,6 +4,7 @@ import io.github.anon10w1z.craftPP.enchantments.CppEnchantmentBase;
 import io.github.anon10w1z.craftPP.enchantments.CppEnchantments;
 import io.github.anon10w1z.craftPP.enchantments.EntityTickingEnchantment;
 import io.github.anon10w1z.craftPP.gui.GuiCppConfig;
+import io.github.anon10w1z.craftPP.items.CppItems;
 import io.github.anon10w1z.craftPP.main.CppModInfo;
 import io.github.anon10w1z.craftPP.main.CraftPlusPlus;
 import io.github.anon10w1z.craftPP.misc.CppExtendedEntityProperties;
@@ -38,6 +39,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
@@ -254,25 +256,6 @@ public final class CppEventHandler {
 	}
 
 	/**
-	 * Syncs up motion-affecting enchantments to the client
-	 *
-	 * @param event The ClientTickEvent
-	 */
-	@SideOnly(Side.CLIENT)
-	@SubscribeEvent
-	public void onClientTick(ClientTickEvent event) {
-		World world = Minecraft.getMinecraft().theWorld;
-		if (world != null) {
-			List<Entity> arrows = world.getEntities(EntityArrow.class, IEntitySelector.selectAnything);
-			for (Entity arrow : arrows)
-				CppEnchantments.performAction("homing", arrow, null);
-			List<Entity> xpOrbs = world.getEntities(EntityXPOrb.class, IEntitySelector.selectAnything);
-			for (Entity xpOrb : xpOrbs)
-				CppEnchantments.performAction("veteran", xpOrb, null);
-		}
-	}
-
-	/**
 	 * Adds tooltips for monster spawners
 	 *
 	 * @param event The ItemTooltipEvent
@@ -357,6 +340,37 @@ public final class CppEventHandler {
 	@SubscribeEvent
 	public void onLivingJump(LivingJumpEvent event) {
 		CppEnchantments.performAction("hops", event.entityLiving, event);
+	}
+
+	/**
+	 * Enables binoculars functionality
+	 *
+	 * @param event The FOVUpdateEvent
+	 */
+	@SubscribeEvent
+	public void onFOVUpdate(FOVUpdateEvent event) {
+		ItemStack helmet = event.entity.getEquipmentInSlot(4);
+		if (helmet != null && helmet.getItem() == CppItems.binoculars)
+			event.newfov = event.fov / CppConfigHandler.binocularZoomAmount;
+	}
+
+	/**
+	 * Syncs up motion-affecting enchantments to the client
+	 *
+	 * @param event The ClientTickEvent
+	 */
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public void onClientTick(ClientTickEvent event) {
+		World world = Minecraft.getMinecraft().theWorld;
+		if (world != null) {
+			List<Entity> arrows = world.getEntities(EntityArrow.class, IEntitySelector.selectAnything);
+			for (Entity arrow : arrows)
+				CppEnchantments.performAction("homing", arrow, null);
+			List<Entity> xpOrbs = world.getEntities(EntityXPOrb.class, IEntitySelector.selectAnything);
+			for (Entity xpOrb : xpOrbs)
+				CppEnchantments.performAction("veteran", xpOrb, null);
+		}
 	}
 
 	/**

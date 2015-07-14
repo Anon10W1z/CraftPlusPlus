@@ -34,13 +34,15 @@ public class CppClientProxy extends CppCommonProxy {
 	@Override
 	public void registerRenderers() {
 		//Items
-		registerItemInventoryRenderer(CppItems.dynamite, "dynamite");
-		registerItemInventoryRenderer(CppItems.fried_egg, "egg_fried");
-		registerItemInventoryRenderer(CppItems.obsidian_boat, "obsidian_boat");
+		this.registerItemInventoryRenderer(CppItems.dynamite, "dynamite");
+		this.registerItemInventoryRenderer(CppItems.fried_egg, "egg_fried");
+		this.registerItemInventoryRenderer(CppItems.obsidian_boat, "obsidian_boat");
+		this.registerItemInventoryRenderer(CppItems.binocular_lens, "binocular_lens");
+		this.registerItemInventoryRenderer(CppItems.binoculars, "binoculars");
 		//Blocks
-		registerBlockInventoryRenderer(CppBlocks.flint_block, "flint");
-		registerBlockInventoryRenderer(CppBlocks.sugar_block, "sugar");
-		registerBlockInventoryRenderer(CppBlocks.charcoal_block, "charcoal");
+		this.registerBlockInventoryRenderer(CppBlocks.flint_block, "flint");
+		this.registerBlockInventoryRenderer(CppBlocks.sugar_block, "sugar");
+		this.registerBlockInventoryRenderer(CppBlocks.charcoal_block, "charcoal");
 		//Entities
 		RenderingRegistry.registerEntityRenderingHandler(EntityDynamite.class, new RenderSnowball(minecraft.getRenderManager(), CppItems.dynamite, minecraft.getRenderItem()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityObsidianBoat.class, new RenderObsidianBoat());
@@ -74,7 +76,7 @@ public class CppClientProxy extends CppCommonProxy {
 
 	@Override
 	public void registerKeyBindings() {
-		potionKey = new KeyBinding(CppModInfo.MOD_ID + ".potionDisplay", Keyboard.KEY_P, "key.categories.ui");
+		potionKey = new KeyBinding("key.potionDisplay", Keyboard.KEY_P, "key.categories.ui");
 		ClientRegistry.registerKeyBinding(potionKey);
 	}
 
