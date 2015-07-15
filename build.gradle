@@ -38,10 +38,6 @@ minecraft {
     mappings = "snapshot_nodoc_20141130"
 }
 
-jar {
-    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-}
-
 task deobfJar(type: Jar) {
     from sourceSets.main.output
     classifier = 'deobf'
