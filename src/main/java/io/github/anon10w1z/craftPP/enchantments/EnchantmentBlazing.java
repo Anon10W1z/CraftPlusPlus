@@ -1,6 +1,6 @@
 package io.github.anon10w1z.craftPP.enchantments;
 
-import io.github.anon10w1z.craftPP.misc.CppUtils;
+import io.github.anon10w1z.craftPP.main.CppUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;

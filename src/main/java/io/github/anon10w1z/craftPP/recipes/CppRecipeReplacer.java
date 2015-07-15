@@ -1,8 +1,8 @@
 package io.github.anon10w1z.craftPP.recipes;
 
 import io.github.anon10w1z.craftPP.handlers.CppConfigHandler;
+import io.github.anon10w1z.craftPP.main.CppUtils;
 import io.github.anon10w1z.craftPP.main.CraftPlusPlus;
-import io.github.anon10w1z.craftPP.misc.CppUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;

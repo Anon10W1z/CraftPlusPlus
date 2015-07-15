@@ -12,7 +12,7 @@ import net.minecraftforge.common.util.EnumHelper;
  */
 public class ItemBinoculars extends ItemArmor {
 	public ItemBinoculars() {
-		super(EnumHelper.addArmorMaterial("BINOCULARS", "binoculars", -1, new int[]{0, 0, 0, 0}, 0), 0, 0);
+		super(EnumHelper.addArmorMaterial("BINOCULARS", "", 0, new int[]{0, 0, 0, 0}, 0), 0, 0);
 		this.setUnlocalizedName("binoculars");
 		this.setCreativeTab(CreativeTabs.tabMisc);
 	}

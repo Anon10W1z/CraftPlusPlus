@@ -1,7 +1,6 @@
 package io.github.anon10w1z.craftPP.main;
 
 import io.github.anon10w1z.craftPP.blocks.CppBlocks;
-import io.github.anon10w1z.craftPP.commands.CppCommands;
 import io.github.anon10w1z.craftPP.dispenser.CppDispenserBehaviors;
 import io.github.anon10w1z.craftPP.enchantments.CppEnchantments;
 import io.github.anon10w1z.craftPP.entities.CppEntities;
@@ -23,7 +22,6 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.Logger;
 
@@ -135,15 +133,5 @@ public final class CraftPlusPlus {
 		logInfo("Initializing the crafting recipe remover");
 		CppRecipeReplacer.replaceRecipes();
 		logInfo("Initialization completed successfully");
-	}
-
-	/**
-	 * Registers the commands for Craft++
-	 *
-	 * @param event The FMLServerStartingEvent
-	 */
-	@EventHandler
-	public void onServerStarting(FMLServerStartingEvent event) {
-		CppCommands.registerCommands(event);
 	}
 }

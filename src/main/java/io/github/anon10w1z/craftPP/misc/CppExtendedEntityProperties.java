@@ -1,5 +1,6 @@
 package io.github.anon10w1z.craftPP.misc;
 
+import io.github.anon10w1z.craftPP.main.CppUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;

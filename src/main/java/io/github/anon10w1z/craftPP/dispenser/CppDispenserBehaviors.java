@@ -27,8 +27,8 @@ public class CppDispenserBehaviors {
 			//Falling Blocks
 			if (item instanceof ItemBlock) {
 				Block block = ((ItemBlock) item).block;
-				List<Material> fallingMaterials = Arrays.asList(Material.sand, Material.clay, Material.snow, Material.craftedSnow);
-				if (block instanceof BlockFalling && fallingMaterials.contains(block.getMaterial()))
+				List<Material> fallingMaterials = Arrays.asList(Material.sand, Material.ground, Material.clay, Material.snow, Material.craftedSnow);
+				if ((block instanceof BlockFalling || CppConfigHandler.additionalFallingBlocks.contains(block)) && fallingMaterials.contains(block.getMaterial()))
 					registerDispenserBehavior(item, new BehaviorDispenseBlockFalling());
 			}
 			//Flint And Steel (default behavior)

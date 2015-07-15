@@ -6,9 +6,9 @@ import io.github.anon10w1z.craftPP.enchantments.EntityTickingEnchantment;
 import io.github.anon10w1z.craftPP.gui.GuiCppConfig;
 import io.github.anon10w1z.craftPP.items.CppItems;
 import io.github.anon10w1z.craftPP.main.CppModInfo;
+import io.github.anon10w1z.craftPP.main.CppUtils;
 import io.github.anon10w1z.craftPP.main.CraftPlusPlus;
 import io.github.anon10w1z.craftPP.misc.CppExtendedEntityProperties;
-import io.github.anon10w1z.craftPP.misc.CppUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -195,17 +195,6 @@ public final class CppEventHandler {
 	}
 
 	/**
-	 * Syncs the config file if it changes
-	 *
-	 * @param event The OnConfigChangedEvent
-	 */
-	@SubscribeEvent
-	public void onConfigChanged(OnConfigChangedEvent event) {
-		if (event.modID.equals(CppModInfo.MOD_ID))
-			CppConfigHandler.syncConfig();
-	}
-
-	/**
 	 * Allows a player to shear name tags off living entities
 	 *
 	 * @param event The EntityInteractEvent
@@ -339,7 +328,18 @@ public final class CppEventHandler {
 	 */
 	@SubscribeEvent
 	public void onLivingJump(LivingJumpEvent event) {
-		CppEnchantments.performAction("hops", event.entityLiving, event);
+		CppEnchantments.performAction("hops", event.entityLiving, null);
+	}
+
+	/**
+	 * Syncs the config file if it changes
+	 *
+	 * @param event The OnConfigChangedEvent
+	 */
+	@SubscribeEvent
+	public void onConfigChanged(OnConfigChangedEvent event) {
+		if (event.modID.equals(CppModInfo.MOD_ID))
+			CppConfigHandler.syncConfig();
 	}
 
 	/**
@@ -351,7 +351,7 @@ public final class CppEventHandler {
 	public void onFOVUpdate(FOVUpdateEvent event) {
 		ItemStack helmet = event.entity.getEquipmentInSlot(4);
 		if (helmet != null && helmet.getItem() == CppItems.binoculars)
-			event.newfov = event.fov / CppConfigHandler.binocularZoomAmount;
+			event.newfov /= CppConfigHandler.binocularZoomAmount;
 	}
 
 	/**

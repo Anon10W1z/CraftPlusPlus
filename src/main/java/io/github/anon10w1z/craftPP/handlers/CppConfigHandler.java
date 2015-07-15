@@ -3,13 +3,17 @@ package io.github.anon10w1z.craftPP.handlers;
 import com.google.common.collect.Maps;
 import io.github.anon10w1z.craftPP.enchantments.CppEnchantments;
 import io.github.anon10w1z.craftPP.main.CraftPlusPlus;
+import net.minecraft.block.Block;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.config.GuiConfigEntries.NumberSliderEntry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * The config handler for Craft++
@@ -33,6 +37,7 @@ public class CppConfigHandler {
 	public static boolean babyZombieBurnInDaylight;
 	public static boolean enableAutoSeedPlanting;
 	public static float binocularZoomAmount;
+	public static List<Block> additionalFallingBlocks;
 	//Miscellaneous: Requires Restart
 	public static boolean commandBlockInRedstoneTab;
 	public static boolean enableFlintAndSteelDispenserBehavior;
@@ -77,6 +82,7 @@ public class CppConfigHandler {
 		babyZombieBurnInDaylight = get(miscCategory, "Baby zombies burn in daylight", true, "Do baby zombies burn in daylight?");
 		enableAutoSeedPlanting = get(miscCategory, "Enable automatic seed planting", true, "Do dropped seeds plant themselves?");
 		binocularZoomAmount = (float) get(miscCategory, "Binocular Zoom Amount", 4, "By how much do binoculars divide your FOV?", false).setMinValue(1D).getDouble();
+		additionalFallingBlocks = Arrays.stream(config.getStringList("Additional Falling Blocks", miscCategory, new String[]{"dirt", "clay"}, "A list of additional blocks that can fall like sand.")).map(Block::getBlockFromName).filter(block -> block != null).collect(Collectors.toList());
 		config.setCategoryComment(miscCategory, "Miscellaneous settings");
 		//Requires Restart
 		String miscRequiresRestartCategory = miscCategory + Configuration.CATEGORY_SPLITTER + "Requires Restart";

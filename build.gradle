@@ -15,6 +15,11 @@ buildscript {
     }
 }
 
+dependencies {
+    compile 'net.bytebuddy:byte-buddy:0.6.12'
+    compile 'net.bytebuddy:byte-buddy-agent:0.6.12'
+}
+
 apply plugin: 'forge'
 
 version = "3.5"
@@ -31,6 +36,10 @@ minecraft {
     version = "1.8-11.14.1.1371"
     runDir = "eclipse"
     mappings = "snapshot_nodoc_20141130"
+}
+
+jar {
+    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
 }
 
 task deobfJar(type: Jar) {

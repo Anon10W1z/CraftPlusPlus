@@ -1,4 +1,4 @@
-package io.github.anon10w1z.craftPP.misc;
+package io.github.anon10w1z.craftPP.main;
 
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
