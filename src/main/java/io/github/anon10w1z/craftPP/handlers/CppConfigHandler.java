@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 /**
  * The config handler for Craft++
  */
-public class CppConfigHandler {
+public final class CppConfigHandler {
 	/**
 	 * The actual configuration containing the configuration file
 	 */

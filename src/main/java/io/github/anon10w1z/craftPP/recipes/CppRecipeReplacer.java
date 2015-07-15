@@ -99,9 +99,7 @@ public class CppRecipeReplacer {
 	private static void removeRecipes(ItemStack result) {
 		List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
 		List<IRecipe> recipeListCopy = CppUtils.copyList(recipeList);
-		for (IRecipe recipe : recipeListCopy)
-			if (ItemStack.areItemStacksEqual(result, recipe.getRecipeOutput()))
-				recipeList.remove(recipe);
+		recipeListCopy.stream().filter(recipe -> ItemStack.areItemStacksEqual(result, recipe.getRecipeOutput())).forEach(recipeList::remove);
 	}
 
 	/**
@@ -112,9 +110,7 @@ public class CppRecipeReplacer {
 	private static void removeRecipe(Class<? extends IRecipe> recipeClass) {
 		List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
 		List<IRecipe> recipeListCopy = CppUtils.copyList(recipeList);
-		for (IRecipe recipe : recipeListCopy)
-			if (recipe.getClass() == recipeClass)
-				recipeList.remove(recipe);
+		recipeListCopy.stream().filter(recipe -> recipe.getClass() == recipeClass).forEach(recipeList::remove);
 	}
 
 	/**

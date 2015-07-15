@@ -15,11 +15,6 @@ buildscript {
     }
 }
 
-dependencies {
-    compile 'net.bytebuddy:byte-buddy:0.6.12'
-    compile 'net.bytebuddy:byte-buddy-agent:0.6.12'
-}
-
 apply plugin: 'forge'
 
 version = "3.5"
@@ -31,6 +26,11 @@ group = "io.github.anon10w1z.craftPP"
 archivesBaseName = "craft++"
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+dependencies {
+    compile 'net.bytebuddy:byte-buddy:0.6.12'
+    compile 'net.bytebuddy:byte-buddy-agent:0.6.12'
+}
 
 minecraft {
     version = "1.8-11.14.1.1371"
