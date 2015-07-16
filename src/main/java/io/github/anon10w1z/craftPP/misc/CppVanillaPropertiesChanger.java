@@ -1,11 +1,6 @@
 package io.github.anon10w1z.craftPP.misc;
 
 import io.github.anon10w1z.craftPP.handlers.CppConfigHandler;
-import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.description.method.MethodDescription;
-import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
-import net.bytebuddy.implementation.MethodDelegation;
-import net.bytebuddy.matcher.ElementMatcher;
 import net.minecraft.block.Block;
 import net.minecraft.block.Block.SoundType;
 import net.minecraft.block.BlockFire;
@@ -15,20 +10,31 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.util.WeightedRandomFishable;
 import net.minecraftforge.common.FishingHooks;
 import net.minecraftforge.fml.common.Loader;
 
-import static net.bytebuddy.matcher.ElementMatchers.named;
-import static net.bytebuddy.matcher.ElementMatchers.returns;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The vanilla properties changer for Craft++
  */
 public class CppVanillaPropertiesChanger {
+	private static Map<String, String> obfuscationMap = new HashMap<String, String>() {
+		{
+			if ((boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment")) {
+				this.put(Block.class.getName(), Block.class.getName());
+				this.put(CommandBase.class.getName(), CommandBase.class.getName());
+			} else {
+				this.put(Block.class.getName(), "atr");
+				this.put(CommandBase.class.getName(), "z");
+			}
+		}
+	};
+
 	/**
 	 * Initializes the vanilla properties changer
 	 */
@@ -67,18 +73,5 @@ public class CppVanillaPropertiesChanger {
 		String onNeighborBlockChangeName = deobfuscated ? "onNeighborBlockChange" : "func_176204_a";
 		String updateTickName = deobfuscated ? "updateTick" : "func_180650_b";
 		String tickRateName = deobfuscated ? "tickRate" : "func_149738_a";
-		installMethodInterceptor(Block.class, named(onBlockAddedName).or(named(onNeighborBlockChangeName)).or(named(updateTickName)).or(named(tickRateName)), CppBlockInterceptor.class);
-		installMethodInterceptor(CommandBase.class, returns(Item.class).or(returns(Block.class)), CppCommandInterceptor.class);
-	}
-
-	/**
-	 * Installs a method interceptor's functionality into all methods matching the given method matcher
-	 *
-	 * @param methodContainer   The class that contains the method(s) to be redefined
-	 * @param methodMatcher     The method matcher used to find methods
-	 * @param methodInterceptor The method interceptor class
-	 */
-	private static void installMethodInterceptor(Class methodContainer, ElementMatcher<? super MethodDescription> methodMatcher, Class methodInterceptor) {
-		new ByteBuddy().redefine(methodContainer).method(methodMatcher).intercept(MethodDelegation.to(methodInterceptor)).make().load(methodContainer.getClassLoader(), ClassReloadingStrategy.fromInstalledAgent());
 	}
 }

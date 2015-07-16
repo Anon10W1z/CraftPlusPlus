@@ -1,7 +1,6 @@
 package io.github.anon10w1z.craftPP.misc;
 
 import io.github.anon10w1z.craftPP.handlers.CppConfigHandler;
-import net.bytebuddy.implementation.bind.annotation.This;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.material.Material;
@@ -18,17 +17,17 @@ import java.util.Random;
  */
 @SuppressWarnings("unused")
 public class CppBlockInterceptor {
-	public static void onBlockAdded(World world, BlockPos blockPos, IBlockState blockState, @This Block block) {
+	public static void onBlockAdded(World world, BlockPos blockPos, IBlockState blockState, Block block) {
 		if (CppConfigHandler.additionalFallingBlocks.contains(block))
 			world.scheduleUpdate(blockPos, block, block.tickRate(world));
 	}
 
-	public static void onNeighborBlockChange(World world, BlockPos blockPos, IBlockState blockState, Block neighborBlock, @This Block block) {
+	public static void onNeighborBlockChange(World world, BlockPos blockPos, IBlockState blockState, Block neighborBlock, Block block) {
 		if (CppConfigHandler.additionalFallingBlocks.contains(block))
 			world.scheduleUpdate(blockPos, block, block.tickRate(world));
 	}
 
-	public static void updateTick(World world, BlockPos blockPos, IBlockState blockState, Random random, @This Block block) {
+	public static void updateTick(World world, BlockPos blockPos, IBlockState blockState, Random random, Block block) {
 		if (!world.isRemote && CppConfigHandler.additionalFallingBlocks.contains(block)) {
 			boolean canFallInto;
 			if (world.isAirBlock(blockPos.down()))
@@ -62,7 +61,7 @@ public class CppBlockInterceptor {
 		}
 	}
 
-	public static int tickRate(World world, @This Block block) {
+	public static int tickRate(World world, Block block) {
 		if (CppConfigHandler.additionalFallingBlocks.contains(block))
 			return 2;
 		return 10;
