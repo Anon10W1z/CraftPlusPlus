@@ -1,5 +1,7 @@
 {
   "variants": {
-    "normal": {"model": "craft++:sugar_block"}
+    "normal": {
+      "model": "craft++:sugar_block"
+    }
   }
 }

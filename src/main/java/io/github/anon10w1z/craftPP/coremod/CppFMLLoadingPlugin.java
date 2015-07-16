@@ -4,6 +4,9 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
 import java.util.Map;
 
+/**
+ * The coremod loading plugin of Craft++
+ */
 public class CppFMLLoadingPlugin implements IFMLLoadingPlugin {
 	@Override
 	public String[] getASMTransformerClass() {

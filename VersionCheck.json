@@ -2,11 +2,11 @@
   "versionList": [
     {
       "mcVersion": "Minecraft 1.8",
-      "modVersion": "3.5",
+      "modVersion": "3.6",
       "changeLog": [
-        "Version 3.5 adds in binoculars, which zooms in to help you see."
+        "Version 3.6 adds falling sand and clay."
       ],
-      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/3.5/CraftPlusPlus-3.5.jar",
+      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/3.6/CraftPlusPlus-3.6.jar",
       "isDirectLink": "true",
       "newFileName": ""
     }

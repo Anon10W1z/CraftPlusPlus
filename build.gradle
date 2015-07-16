@@ -17,7 +17,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "3.5"
+version = "3.6"
 def ENV = System.getenv()
 if (ENV.DRONE_BUILD_NUMBER)
     version += "-build" + ENV.DRONE_BUILD_NUMBER
@@ -27,15 +27,16 @@ archivesBaseName = "craft++"
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-dependencies {
-    compile 'net.bytebuddy:byte-buddy:0.6.12'
-    compile 'net.bytebuddy:byte-buddy-agent:0.6.12'
-}
-
 minecraft {
     version = "1.8-11.14.1.1371"
     runDir = "eclipse"
     mappings = "snapshot_nodoc_20141130"
+}
+
+jar {
+    manifest {
+        attributes 'FMLCorePlugin': 'io.github.anon10w1z.craftPP.coremod.CppFMLLoadingPlugin', 'FMLCorePluginContainsFMLMod': 'true'
+    }
 }
 
 task deobfJar(type: Jar) {
