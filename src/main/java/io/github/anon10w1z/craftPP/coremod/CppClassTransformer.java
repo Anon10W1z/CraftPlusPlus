@@ -68,13 +68,13 @@ public class CppClassTransformer implements IClassTransformer {
 				injectionList.add(new VarInsnNode(ALOAD, 2));
 				injectionList.add(new VarInsnNode(ALOAD, 0));
 				injectionList.add(new MethodInsnNode(INVOKESTATIC, DELEGATE_CLASS_NAME, "onTick", delegateMethodDescriptor, false));
-				methodNode.instructions.insert(injectionList);
-			} else if (methodNode.name.equals(targetMethodName3) && (!obfuscated || methodNode.desc.equals("(Laqu;)I"))) {
+				methodInstructions.insert(injectionList);
+			} else if (methodName.equals(targetMethodName3) && (!obfuscated || methodDescriptor.equals("(Laqu;)I"))) {
 				InsnList injectionList = new InsnList();
 				injectionList.add(new VarInsnNode(ALOAD, 0));
 				injectionList.add(new MethodInsnNode(INVOKESTATIC, DELEGATE_CLASS_NAME, "tickRate", delegateMethodDescriptor1, false));
 				injectionList.add(new InsnNode(IRETURN));
-				methodNode.instructions.insert(injectionList);
+				methodInstructions.insert(injectionList);
 			}
 		}
 		ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
