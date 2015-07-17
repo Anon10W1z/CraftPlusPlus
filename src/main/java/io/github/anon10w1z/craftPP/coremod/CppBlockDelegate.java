@@ -69,7 +69,7 @@ public class CppBlockDelegate {
 	 * @param block The block
 	 * @return The tick rate of the block
 	 */
-	public static int tickRate(Block block) {
+	public static int getTickRate(Block block) {
 		if (CppConfigHandler.additionalFallingBlocks.contains(block))
 			return 2;
 		return 10;

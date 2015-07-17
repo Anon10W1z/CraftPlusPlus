@@ -35,7 +35,7 @@ minecraft {
 
 jar {
     manifest {
-        attributes 'FMLCorePlugin': 'io.github.anon10w1z.craftPP.coremod.CppFMLLoadingPlugin', 'FMLCorePluginContainsFMLMod': 'true'
+        attributes 'FMLCorePlugin': 'io.github.anon10w1z.craftPP.coremod.CppLoadingPlugin', 'FMLCorePluginContainsFMLMod': 'true'
     }
 }
 
