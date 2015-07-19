@@ -286,16 +286,16 @@ public final class CppEventHandler {
 			World world = event.world;
 			BlockPos blockPos = event.pos;
 			TileEntityMobSpawner spawnerTileEntity = (TileEntityMobSpawner) world.getTileEntity(blockPos);
-			NBTTagCompound spawnerTagCompound = new NBTTagCompound(); //tag for spawner (contained within tag for stack)
+			NBTTagCompound spawnerTagCompound = new NBTTagCompound();
 			spawnerTileEntity.getSpawnerBaseLogic().writeToNBT(spawnerTagCompound);
-			NBTTagCompound stackTagCompound = new NBTTagCompound(); //tag for stack
+			NBTTagCompound stackTagCompound = new NBTTagCompound();
 			stackTagCompound.setTag("BlockEntityTag", spawnerTagCompound);
 			ItemStack spawnerStack = new ItemStack(Blocks.mob_spawner);
 			spawnerStack.setTagCompound(stackTagCompound);
-			EntityItem spawnerEntityItem = new EntityItem(world, blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5, spawnerStack);
+			EntityItem spawnerEntityItem = new EntityItem(world, blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, spawnerStack);
 			spawnerEntityItem.setDefaultPickupDelay();
 			world.spawnEntityInWorld(spawnerEntityItem);
-			event.setExpToDrop(0); //prevents infinite XP loophole
+			event.setExpToDrop(0);
 		}
 	}
 

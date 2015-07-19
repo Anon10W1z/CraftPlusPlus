@@ -9,29 +9,30 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-@SuppressWarnings("unused")
 public class CppBlockDelegate {
 	/**
-	 * Schedules a block update if the block is a Craft++ falling blocks
+	 * Schedules a block update if the block is a Craft++ falling block
 	 *
 	 * @param world    The world
 	 * @param blockPos The block position
 	 * @param block    The block
 	 */
+	@SuppressWarnings("unused")
 	public static void scheduleBlockUpdate(World world, BlockPos blockPos, Block block) {
-		if (CppConfigHandler.additionalFallingBlocks.contains(block))
+		if (isFallingBlock(block))
 			world.scheduleUpdate(blockPos, block, block.tickRate(world));
 	}
 
 	/**
-	 * Called every tick on every ticking block in the world (edited to make Craft++'s falling blocks fall)
+	 * Called on every update tick on every ticking block in the world (edited to make Craft++'s falling blocks fall)
 	 *
 	 * @param world    The world
 	 * @param blockPos The block position
 	 * @param block    The block
 	 */
-	public static void onTick(World world, BlockPos blockPos, Block block) {
-		if (!world.isRemote && CppConfigHandler.additionalFallingBlocks.contains(block)) {
+	@SuppressWarnings("unused")
+	public static void onUpdateTick(World world, BlockPos blockPos, Block block) {
+		if (!world.isRemote && isFallingBlock(block)) {
 			boolean canFallInto;
 			if (world.isAirBlock(blockPos.down()))
 				canFallInto = true;
@@ -69,9 +70,20 @@ public class CppBlockDelegate {
 	 * @param block The block
 	 * @return The tick rate of the block
 	 */
+	@SuppressWarnings("unused")
 	public static int getTickRate(Block block) {
-		if (CppConfigHandler.additionalFallingBlocks.contains(block))
+		if (isFallingBlock(block))
 			return 2;
 		return 10;
+	}
+
+	/**
+	 * Returns whether or not the given block is a falling block
+	 *
+	 * @param block The block
+	 * @return Whether or not the block is a falling block
+	 */
+	private static boolean isFallingBlock(Block block) {
+		return CppConfigHandler.additionalFallingBlocks.contains(block) || block instanceof BlockFalling;
 	}
 }

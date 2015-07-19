@@ -1,16 +1,19 @@
 package io.github.anon10w1z.craftPP.coremod;
 
+import io.github.anon10w1z.craftPP.main.CppModInfo;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.MCVersion;
-import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.SortingIndex;
+import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.Name;
+import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 
 import java.util.Map;
 
 /**
  * The coremod loading plugin of Craft++
  */
+@Name("Craft++ Coremod")
 @MCVersion("1.8")
-@SortingIndex(2000)
+@TransformerExclusions(CppModInfo.PACKAGE_LOCATION + ".coremod")
 public class CppLoadingPlugin implements IFMLLoadingPlugin {
 	@Override
 	public String[] getASMTransformerClass() {

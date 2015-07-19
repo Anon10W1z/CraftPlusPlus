@@ -2,11 +2,11 @@
   "versionList": [
     {
       "mcVersion": "Minecraft 1.8",
-      "modVersion": "3.6.1",
+      "modVersion": "3.6.2",
       "changeLog": [
-        "Version 3.6.1 fixes crash upon loading the coremod."
+        "Version 3.6.2 allows more blocks to be allowed as fallable."
       ],
-      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/3.6.1/CraftPlusPlus-3.6.1.jar",
+      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/3.6.2/CraftPlusPlus-3.6.2.jar",
       "isDirectLink": "true",
       "newFileName": ""
     }
