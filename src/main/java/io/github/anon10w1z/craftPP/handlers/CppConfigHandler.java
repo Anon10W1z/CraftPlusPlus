@@ -84,7 +84,7 @@ public final class CppConfigHandler {
 		babyZombieBurnInDaylight = get(miscCategory, "Baby zombies burn in daylight", true, "Do baby zombies burn in daylight?");
 		enableAutoSeedPlanting = get(miscCategory, "Enable automatic seed planting", true, "Do dropped seeds plant themselves?");
 		binocularZoomAmount = (float) get(miscCategory, "Binocular Zoom Amount", 4, "By how much do binoculars divide your FOV?", false).setMinValue(1D).getDouble();
-		additionalFallingBlocks = Arrays.stream(config.getStringList("Additional Falling Blocks", miscCategory, new String[]{GameRegistry.findUniqueIdentifierFor(Blocks.dirt).toString(), GameRegistry.findUniqueIdentifierFor(Blocks.clay).toString()}, "A list of additional blocks that can fall like sand.")).map(Block::getBlockFromName).filter(block -> block != null).collect(Collectors.toList());
+		additionalFallingBlocks = Arrays.stream(config.getStringList("Additional Falling Blocks", miscCategory, new String[]{GameRegistry.findUniqueIdentifierFor(Blocks.dirt).name, GameRegistry.findUniqueIdentifierFor(Blocks.clay).name}, "A list of additional blocks that can fall like sand.")).map(Block::getBlockFromName).filter(block -> block != null).collect(Collectors.toList());
 		config.setCategoryComment(miscCategory, "Miscellaneous settings");
 		//Requires Restart
 		String miscRequiresRestartCategory = miscCategory + Configuration.CATEGORY_SPLITTER + "Requires Restart";

@@ -50,7 +50,7 @@ public final class CraftPlusPlus {
 	/**
 	 * The logger for Craft++
 	 */
-	private Logger logger;
+	private static Logger logger;
 
 	/**
 	 * Logs a message with Craft++'s logger with the INFO level
@@ -58,7 +58,7 @@ public final class CraftPlusPlus {
 	 * @param message The string to be logged
 	 */
 	public static void logInfo(String message) {
-		instance.logger.info("Craft++: " + message);
+		logger.info("Craft++: " + message);
 	}
 
 	/**
@@ -73,7 +73,7 @@ public final class CraftPlusPlus {
 	 */
 	@EventHandler
 	public void onPreInit(FMLPreInitializationEvent event) {
-		this.logger = event.getModLog();
+		logger = event.getModLog();
 		logInfo("Initialized the logger");
 		logInfo("Hard-coding the mcmod.info");
 		ModMetadata modMetadata = event.getModMetadata();

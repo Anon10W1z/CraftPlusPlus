@@ -98,8 +98,8 @@ public class CppClassTransformer implements IClassTransformer {
 		if (patchCount == 0)
 			return bytes;
 		System.out.println("Patched " + patchCount + " method" + (patchCount != 1 ? "s" : "") + " in class " + deobfuscatedClassName);
-		ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
-		classNode.accept(writer);
-		return writer.toByteArray();
+		ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
+		classNode.accept(classWriter);
+		return classWriter.toByteArray();
 	}
 }

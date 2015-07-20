@@ -2,11 +2,11 @@
   "versionList": [
     {
       "mcVersion": "Minecraft 1.8",
-      "modVersion": "3.6.2",
+      "modVersion": "3.6.3",
       "changeLog": [
-        "Version 3.6.2 allows more blocks to be allowed as fallable."
+        "Version 3.6.3 revamps how signs work."
       ],
-      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/3.6.2/CraftPlusPlus-3.6.2.jar",
+      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/3.6.3/CraftPlusPlus-3.6.3.jar",
       "isDirectLink": "true",
       "newFileName": ""
     }

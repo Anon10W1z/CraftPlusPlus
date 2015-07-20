@@ -2,6 +2,7 @@ package io.github.anon10w1z.craftPP.coremod;
 
 import io.github.anon10w1z.craftPP.handlers.CppConfigHandler;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDragonEgg;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityFallingBlock;
@@ -84,6 +85,6 @@ public class CppBlockDelegate {
 	 * @return Whether or not the block is a falling block
 	 */
 	private static boolean isFallingBlock(Block block) {
-		return CppConfigHandler.additionalFallingBlocks.contains(block) || block instanceof BlockFalling;
+		return CppConfigHandler.additionalFallingBlocks.contains(block) || block instanceof BlockFalling || block instanceof BlockDragonEgg;
 	}
 }

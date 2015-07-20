@@ -1,0 +1,6 @@
+{
+  "parent": "craft++:item/base_item",
+  "textures": {
+    "layer0": "craft++:items/sponge_wipe"
+  }
+}

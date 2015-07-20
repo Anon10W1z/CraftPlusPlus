@@ -10,6 +10,9 @@ import io.github.anon10w1z.craftPP.main.CppUtils;
 import io.github.anon10w1z.craftPP.main.CraftPlusPlus;
 import io.github.anon10w1z.craftPP.misc.CppExtendedEntityProperties;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockSign;
+import net.minecraft.block.BlockStandingSign;
+import net.minecraft.block.BlockWallSign;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.IEntitySelector;
@@ -26,18 +29,19 @@ import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntityMobSpawner;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
+import net.minecraft.tileentity.TileEntitySign;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
@@ -59,11 +63,15 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 
@@ -147,16 +155,73 @@ public final class CppEventHandler {
 	@SubscribeEvent
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		EntityPlayer player = event.entityPlayer;
-		if (player.getHeldItem() != null && event.action == Action.RIGHT_CLICK_AIR) {
-			Item heldItem = player.getHeldItem().getItem();
-			World world = event.world;
-			if (!world.isRemote && player.capabilities.isCreativeMode && heldItem == Items.ender_pearl) {
+		World world = event.world;
+		if (!world.isRemote) {
+			Action action = event.action;
+			Item heldItem = player.getHeldItem() == null ? null : player.getHeldItem().getItem();
+			//Ender pearls
+			if (event.action == Action.RIGHT_CLICK_AIR && player.capabilities.isCreativeMode && heldItem == Items.ender_pearl) {
 				world.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (world.rand.nextFloat() * 0.4F + 0.8F));
 				EntityEnderPearl enderPearl = new EntityEnderPearl(world, player);
 				world.spawnEntityInWorld(enderPearl);
 				player.triggerAchievement(StatList.objectUseStats[Item.getIdFromItem(Items.ender_pearl)]);
 			}
+			//Signs
+			if (event.action == Action.RIGHT_CLICK_BLOCK) {
+				if (heldItem == Items.sign) {
+					event.setCanceled(true);
+					Block block = world.getBlockState(event.pos).getBlock();
+					if (event.face != EnumFacing.DOWN && !(block instanceof BlockSign) && block.getMaterial().isSolid()) {
+						EnumFacing facing = event.face;
+						BlockPos blockPos = event.pos.offset(facing);
+						if (player.canPlayerEdit(blockPos, facing, player.getHeldItem()) && Blocks.standing_sign.canPlaceBlockAt(world, blockPos)) {
+							if (facing == EnumFacing.UP) {
+								int rotation = MathHelper.floor_double(((player.rotationYaw + 180) * 16 / 360) + 0.5) & 15;
+								world.setBlockState(blockPos, Blocks.standing_sign.getDefaultState().withProperty(BlockStandingSign.ROTATION, rotation), 3);
+							} else
+								world.setBlockState(blockPos, Blocks.wall_sign.getDefaultState().withProperty(BlockWallSign.FACING, facing), 3);
+							if (!player.capabilities.isCreativeMode)
+								--player.getHeldItem().stackSize;
+							TileEntitySign tileEntitySign = (TileEntitySign) world.getTileEntity(blockPos);
+							ReflectionHelper.setPrivateValue(TileEntitySign.class, tileEntitySign, true, "isEditable", "field_145916_j");
+							return;
+						}
+					}
+				}
+				if (event.world.getTileEntity(event.pos) instanceof TileEntitySign) {
+					TileEntitySign tileEntitySign = (TileEntitySign) event.world.getTileEntity(event.pos);
+					if (heldItem == CppItems.sponge_wipe) {
+						String signText = String.join("", Arrays.stream(tileEntitySign.signText).map(chatComponent -> getTextWithoutFormattingCodes(chatComponent.getUnformattedText())).collect(Collectors.toList()));
+						if (!signText.equals("")) {
+							ReflectionHelper.setPrivateValue(TileEntitySign.class, tileEntitySign, new IChatComponent[]{new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText("")}, "signText", "field_145915_a");
+							if (player instanceof EntityPlayerMP)
+								((EntityPlayerMP) player).playerNetServerHandler.sendPacket(tileEntitySign.getDescriptionPacket());
+							if (!player.capabilities.isCreativeMode)
+								player.inventory.consumeInventoryItem(CppItems.sponge_wipe);
+						}
+					}
+					if (ItemStack.areItemsEqual(player.getHeldItem(), new ItemStack(Items.dye, 1, EnumDyeColor.BLACK.getDyeDamage()))) {
+						String signText = String.join("", Arrays.stream(tileEntitySign.signText).map(chatComponent -> getTextWithoutFormattingCodes(chatComponent.getUnformattedText())).collect(Collectors.toList()));
+						if (signText.equals("")) {
+							ReflectionHelper.setPrivateValue(TileEntitySign.class, tileEntitySign, true, "isEditable", "field_145916_j");
+							player.openEditSign(tileEntitySign);
+							if (!player.capabilities.isCreativeMode && --player.inventory.mainInventory[player.inventory.currentItem].stackSize <= 0)
+								player.inventory.mainInventory[player.inventory.currentItem] = null;
+						}
+					}
+				}
+			}
 		}
+	}
+
+	/**
+	 * Strips the input text of its formatting codes
+	 *
+	 * @param text The text
+	 * @return The text without its formatting codes
+	 */
+	private String getTextWithoutFormattingCodes(String text) {
+		return Pattern.compile("(?i)" + '\u00a7' + "[0-9A-FK-OR]").matcher(text).replaceAll("");
 	}
 
 	/**
