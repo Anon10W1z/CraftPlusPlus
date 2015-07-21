@@ -7,6 +7,7 @@ import io.github.anon10w1z.craftPP.entities.CppEntities;
 import io.github.anon10w1z.craftPP.handlers.CppConfigHandler;
 import io.github.anon10w1z.craftPP.handlers.CppEventHandler;
 import io.github.anon10w1z.craftPP.handlers.CppFuelHandler;
+import io.github.anon10w1z.craftPP.handlers.CppGuiHandler;
 import io.github.anon10w1z.craftPP.items.CppItems;
 import io.github.anon10w1z.craftPP.misc.CppVanillaPropertiesChanger;
 import io.github.anon10w1z.craftPP.proxies.CppCommonProxy;
@@ -22,6 +23,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.Logger;
 
@@ -98,6 +100,7 @@ public final class CraftPlusPlus {
 	 * Performs the following actions: <br>
 	 * - Registers the entities <br>
 	 * - Registers the renderers <br>
+	 * - Registers the GUI handler <br>
 	 * - Registers the enchantments <br>
 	 * - Registers the event handler <br>
 	 * - Registers the key bindings <br>
@@ -115,6 +118,8 @@ public final class CraftPlusPlus {
 		CppEntities.registerEntities(this);
 		logInfo("Registering the renderers");
 		proxy.registerRenderers();
+		logInfo("Registering the GUI handler");
+		NetworkRegistry.INSTANCE.registerGuiHandler(this, new CppGuiHandler());
 		logInfo("Registering the enchantments");
 		CppEnchantments.registerEnchantments();
 		logInfo("Registering the event handler");

@@ -8,8 +8,9 @@ tile.sand.name=Sand/Red Sand
 
 item.dynamite.name=Dynamite
 item.boatObsidian.name=Obsidian Boat
-item.spongeWipe.name=Sponge Wipe
 item.eggFried.name=Fried Egg
+item.spongeWipe.name=Sponge Wipe
+item.craftingPad.name=Crafting Pad
 item.binocularLens.name=Binocular Lens
 item.binoculars.name=Binoculars
 

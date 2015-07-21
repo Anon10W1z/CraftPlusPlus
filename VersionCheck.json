@@ -2,11 +2,11 @@
   "versionList": [
     {
       "mcVersion": "Minecraft 1.8",
-      "modVersion": "3.6.3",
+      "modVersion": "3.6.4",
       "changeLog": [
-        "Version 3.6.3 revamps how signs work."
+        "Version 3.6.4 revamps how crafting tables work."
       ],
-      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/3.6.3/CraftPlusPlus-3.6.3.jar",
+      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/3.6.4/CraftPlusPlus-3.6.4.jar",
       "isDirectLink": "true",
       "newFileName": ""
     }

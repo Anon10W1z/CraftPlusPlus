@@ -24,7 +24,7 @@ public class CppClassTransformer implements IClassTransformer {
 	 * @return Whether or not the class name represents a vanilla block class
 	 */
 	private static boolean isVanillaBlockClass(String className) {
-		return className != null && className.startsWith("net.minecraft.block.Block") && !className.contains("$") && !className.endsWith("EventData");
+		return className != null && (className.startsWith("net.minecraft.block.Block") || className.startsWith("net/minecraft/block/Block")) && !className.contains("$") && !className.endsWith("EventData");
 	}
 
 	@Override

@@ -36,8 +36,9 @@ public class CppClientProxy extends CppCommonProxy {
 		//Items
 		this.registerItemInventoryRenderer(CppItems.dynamite, "dynamite");
 		this.registerItemInventoryRenderer(CppItems.obsidian_boat, "obsidian_boat");
-		this.registerItemInventoryRenderer(CppItems.sponge_wipe, "sponge_wipe");
 		this.registerItemInventoryRenderer(CppItems.fried_egg, "egg_fried");
+		this.registerItemInventoryRenderer(CppItems.sponge_wipe, "sponge_wipe");
+		this.registerItemInventoryRenderer(CppItems.crafting_pad, "crafting_pad");
 		this.registerItemInventoryRenderer(CppItems.binocular_lens, "binocular_lens");
 		this.registerItemInventoryRenderer(CppItems.binoculars, "binoculars");
 		//Blocks

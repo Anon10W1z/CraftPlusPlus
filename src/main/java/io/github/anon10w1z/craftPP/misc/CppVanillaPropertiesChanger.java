@@ -1,6 +1,7 @@
 package io.github.anon10w1z.craftPP.misc;
 
 import io.github.anon10w1z.craftPP.handlers.CppConfigHandler;
+import io.github.anon10w1z.craftPP.items.CppItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.Block.SoundType;
 import net.minecraft.block.BlockFire;
@@ -10,9 +11,12 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.Achievement;
+import net.minecraft.stats.AchievementList;
 import net.minecraft.util.WeightedRandomFishable;
 import net.minecraftforge.common.FishingHooks;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 /**
  * The vanilla properties changer for Craft++
@@ -50,5 +54,7 @@ public class CppVanillaPropertiesChanger {
 		}
 		//Adding fishables
 		FishingHooks.addJunk(new WeightedRandomFishable(new ItemStack(Items.paper), 10));
+		//Modifying achievements
+		ReflectionHelper.setPrivateValue(Achievement.class, AchievementList.buildWorkBench, new ItemStack(CppItems.crafting_pad), "theItemStack", "field_75990_d");
 	}
 }
