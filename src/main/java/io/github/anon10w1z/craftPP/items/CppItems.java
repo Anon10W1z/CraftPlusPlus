@@ -28,7 +28,7 @@ public class CppItems {
 		GameRegistry.registerItem(sponge_wipe, "sponge_wipe");
 		crafting_pad = new ItemCraftingPad();
 		GameRegistry.registerItem(crafting_pad, "crafting_pad");
-		binocular_lens = new Item().setUnlocalizedName("binocularLens").setCreativeTab(CreativeTabs.tabMisc);
+		binocular_lens = new Item().setUnlocalizedName("binocularLens").setCreativeTab(CreativeTabs.tabTools);
 		GameRegistry.registerItem(binocular_lens, "binocular_lens");
 		binoculars = new ItemBinoculars();
 		GameRegistry.registerItem(binoculars, "binoculars");

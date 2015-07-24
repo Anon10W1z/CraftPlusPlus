@@ -15,12 +15,13 @@ public class ItemCraftingPad extends Item {
 	public ItemCraftingPad() {
 		super();
 		this.setUnlocalizedName("craftingPad");
-		this.setCreativeTab(CreativeTabs.tabInventory);
+		this.setCreativeTab(CreativeTabs.tabTools);
 	}
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer player) {
-		player.openGui(CraftPlusPlus.instance, 0, world, 0, 0, 0);
+		if (!world.isRemote)
+			player.openGui(CraftPlusPlus.instance, 0, world, 0, 0, 0);
 		return itemstack;
 	}
 

@@ -2,11 +2,11 @@
   "versionList": [
     {
       "mcVersion": "Minecraft 1.8",
-      "modVersion": "3.6.4",
+      "modVersion": "3.6.5",
       "changeLog": [
-        "Version 3.6.4 revamps how crafting tables work."
+        "Version 3.6.5 fixes the crafting pad delete item bug."
       ],
-      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/3.6.4/CraftPlusPlus-3.6.4.jar",
+      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/3.6.5/CraftPlusPlus-3.6.5.jar",
       "isDirectLink": "true",
       "newFileName": ""
     }
