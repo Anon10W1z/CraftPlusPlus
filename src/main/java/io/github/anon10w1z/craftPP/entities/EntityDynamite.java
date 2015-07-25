@@ -20,11 +20,11 @@ public class EntityDynamite extends EntityThrowable {
 	/**
 	 * Datawatcher ID for ticks wet
 	 */
-	private static final int TICKS_WET_ID = 2;
+	private static final int TICKS_WET_ID = 5;
 	/**
 	 * Datawatcher ID for ticks since wet
 	 */
-	private static final int TICKS_SINCE_WET_ID = 3;
+	private static final int TICKS_SINCE_WET_ID = 6;
 
 	@SuppressWarnings("unused")
 	public EntityDynamite(World world) {
