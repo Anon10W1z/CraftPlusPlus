@@ -21,9 +21,9 @@ version = "3.6.5"
 def ENV = System.getenv()
 if (ENV.DRONE_BUILD_NUMBER)
     version += "-build" + ENV.DRONE_BUILD_NUMBER
-group = "io.github.anon10w1z.craftPP"
+group = "io.github.anon10w1z.cpp"
 
-archivesBaseName = "craft++"
+archivesBaseName = "CraftPlusPlus"
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -35,19 +35,20 @@ minecraft {
 
 jar {
     manifest {
-        attributes 'FMLCorePlugin': 'io.github.anon10w1z.craftPP.coremod.CppLoadingPlugin', 'FMLCorePluginContainsFMLMod': 'true'
+        attributes 'FMLCorePlugin': 'io.github.anon10w1z.cpp.coremod.CppLoadingPlugin', 'FMLCorePluginContainsFMLMod': 'true', 'Main-Class': 'io.github.anon10w1z.cpp.main.CppInstaller'
     }
 }
 
-task deobfJar(type: Jar) {
-    from sourceSets.main.output
-    classifier = 'deobf'
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    archivesBaseName = "CraftPlusPlus"
+    classifier = 'javadoc'
+    from javadoc.destinationDir
 }
 
-tasks.build.dependsOn('deobfJar')
+tasks.build.dependsOn('javadocJar')
 
 artifacts {
-    archives deobfJar
+    archives javadocJar
 }
 
 apply plugin: 'idea'
