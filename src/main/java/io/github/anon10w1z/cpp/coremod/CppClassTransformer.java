@@ -52,6 +52,12 @@ public class CppClassTransformer implements IClassTransformer {
 		String targetMethodName1 = obfuscated ? "a" : "onNeighborBlockChange";
 		String targetMethodName2 = obfuscated ? "b" : "updateTick";
 		String targetMethodName3 = obfuscated ? "a" : "tickRate";
+
+		String targetMethodDescriptor = obfuscated ? "(Laqu;Ldt;Lbec;)V" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/BlockPos;Lnet/minecraft/block/state/IBlockState;)V";
+		String targetMethodDescriptor1 = obfuscated ? "(Laqu;Ldt;Lbec;Latr;)V" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/BlockPos;Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/block/Block;)V";
+		String targetMethodDescriptor2 = obfuscated ? "(Laqu;Ldt;Lbec;Ljava/util/Random;)V" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/BlockPos;Lnet/minecraft/block/state/IBlockState;Ljava/util/Random;)V";
+		String targetMethodDescriptor3 = obfuscated ? "(Laqu;)I" : "(Lnet/minecraft/world/World;)I";
+
 		String delegateMethodDescriptor = obfuscated ? "(Laqu;Ldt;Latr;)V" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/BlockPos;Lnet/minecraft/block/Block;)V";
 		String delegateMethodDescriptor1 = obfuscated ? "(Latr;)I" : "(Lnet/minecraft/block/Block;)I";
 		int patchCount = 0;
@@ -59,7 +65,7 @@ public class CppClassTransformer implements IClassTransformer {
 			String methodName = methodNode.name;
 			String methodDescriptor = methodNode.desc;
 			InsnList methodInstructions = methodNode.instructions;
-			if (methodName.equals(targetMethodName) && (!obfuscated || methodDescriptor.equals("(Laqu;Ldt;Lbec;)V"))) {
+			if (methodName.equals(targetMethodName) && methodDescriptor.equals(targetMethodDescriptor)) {
 				InsnList injectionList = new InsnList();
 				injectionList.add(new VarInsnNode(ALOAD, 1));
 				injectionList.add(new VarInsnNode(ALOAD, 2));
@@ -68,7 +74,7 @@ public class CppClassTransformer implements IClassTransformer {
 				methodInstructions.insert(injectionList);
 				++patchCount;
 			}
-			if (methodName.equals(targetMethodName1) && (!obfuscated || methodDescriptor.equals("(Laqu;Ldt;Lbec;Latr;)V"))) {
+			if (methodName.equals(targetMethodName1) && methodDescriptor.equals(targetMethodDescriptor1)) {
 				InsnList injectionList = new InsnList();
 				injectionList.add(new VarInsnNode(ALOAD, 1));
 				injectionList.add(new VarInsnNode(ALOAD, 2));
@@ -77,7 +83,7 @@ public class CppClassTransformer implements IClassTransformer {
 				methodInstructions.insert(injectionList);
 				++patchCount;
 			}
-			if (methodName.equals(targetMethodName2) && (!obfuscated || methodDescriptor.equals("(Laqu;Ldt;Lbec;Ljava/util/Random;)V"))) {
+			if (methodName.equals(targetMethodName2) && methodDescriptor.equals(targetMethodDescriptor2)) {
 				InsnList injectionList = new InsnList();
 				injectionList.add(new VarInsnNode(ALOAD, 1));
 				injectionList.add(new VarInsnNode(ALOAD, 2));
@@ -86,11 +92,12 @@ public class CppClassTransformer implements IClassTransformer {
 				methodInstructions.insert(injectionList);
 				++patchCount;
 			}
-			if (methodName.equals(targetMethodName3) && (!obfuscated || methodDescriptor.equals("(Laqu;)I"))) {
+			if (methodName.equals(targetMethodName3) && methodDescriptor.equals(targetMethodDescriptor3)) {
 				InsnList injectionList = new InsnList();
 				injectionList.add(new VarInsnNode(ALOAD, 0));
 				injectionList.add(new MethodInsnNode(INVOKESTATIC, DELEGATE_CLASS_NAME, "getTickRate", delegateMethodDescriptor1, false));
 				injectionList.add(new InsnNode(IRETURN));
+				methodInstructions.insert(injectionList);
 				methodInstructions.insert(injectionList);
 				++patchCount;
 			}

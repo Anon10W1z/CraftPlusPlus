@@ -16,8 +16,8 @@ public class CppInstaller {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			JFrame installerFrame = new JFrame();
-			installerFrame.setLayout(new BoxLayout(installerFrame.getContentPane(), BoxLayout.Y_AXIS));
+			JFrame installerFrame = new JFrame("Craft++ Installer");
+			installerFrame.setLayout(new BoxLayout(installerFrame.getContentPane(), BoxLayout.X_AXIS));
 			installerFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 			String osName = System.getProperty("os.name").toUpperCase();
@@ -78,6 +78,7 @@ public class CppInstaller {
 
 			installerFrame.pack();
 			installerFrame.setVisible(true);
+			installerFrame.setLocationRelativeTo(null);
 		});
 	}
 }
