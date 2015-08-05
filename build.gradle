@@ -17,7 +17,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "3.6.7"
+version = "3.6.8"
 def ENV = System.getenv()
 if (ENV.DRONE_BUILD_NUMBER)
     version += "-build" + ENV.DRONE_BUILD_NUMBER
@@ -35,7 +35,7 @@ minecraft {
 
 jar {
     manifest {
-        attributes 'FMLCorePlugin': 'io.github.anon10w1z.cpp.coremod.CppLoadingPlugin'
+        attributes 'FMLCorePlugin': 'io.github.anon10w1z.cpp.coremod.CppLoadingPlugin', 'FMLCorePluginContainsFMLMod': 'true'
     }
 }
 
