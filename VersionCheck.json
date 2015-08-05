@@ -2,11 +2,11 @@
   "versionList": [
     {
       "mcVersion": "Minecraft 1.8",
-      "modVersion": "3.6.6",
+      "modVersion": "3.6.7",
       "changeLog": [
-        "Version 3.6.6 enhances the code and adds an installer."
+        "Version 3.6.7 removes the self-installer."
       ],
-      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/3.6.6/CraftPlusPlus-3.6.6.jar",
+      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/3.6.7/CraftPlusPlus-3.6.7.jar",
       "isDirectLink": "true",
       "newFileName": ""
     }
