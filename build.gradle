@@ -35,12 +35,12 @@ minecraft {
 
 jar {
     manifest {
-        attributes 'FMLCorePlugin': 'io.github.anon10w1z.cpp.coremod.CppLoadingPlugin', 'FMLCorePluginContainsFMLMod': 'true', 'Main-Class': 'io.github.anon10w1z.cpp.main.CppInstaller'
+        attributes 'FMLCorePlugin': 'io.github.anon10w1z.cpp.coremod.CppLoadingPlugin'
     }
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    archivesBaseName = "CraftPlusPlus"
+    archivesBaseName = "craft++"
     classifier = 'javadoc'
     from javadoc.destinationDir
 }
