@@ -58,7 +58,7 @@ public class EnchantmentNimble extends CppEnchantmentBase {
 	private void addSpeedBuff(EntityLivingBase livingEntity, int enchantmentLevel) {
 		IAttributeInstance speedAttribute = livingEntity.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.movementSpeed);
 		if (speedAttribute.getModifier(nimbleUUID) == null) {
-			AttributeModifier speedModifier = new AttributeModifier(nimbleUUID, "Nimble", (float) enchantmentLevel * 0.20000000298023224, 1);
+			AttributeModifier speedModifier = new AttributeModifier(nimbleUUID, "Nimble", (float) enchantmentLevel * 0.20000000298023224, 2);
 			speedAttribute.applyModifier(speedModifier);
 		}
 	}
@@ -72,7 +72,7 @@ public class EnchantmentNimble extends CppEnchantmentBase {
 	private void removeSpeedBuff(EntityLivingBase livingEntity, int enchantmentLevel) {
 		IAttributeInstance speedAttribute = livingEntity.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.movementSpeed);
 		if (speedAttribute.getModifier(nimbleUUID) != null) {
-			AttributeModifier speedModifier = new AttributeModifier(nimbleUUID, "Nimble", (float) enchantmentLevel * 0.20000000298023224, 1);
+			AttributeModifier speedModifier = new AttributeModifier(nimbleUUID, "Nimble", (float) enchantmentLevel * 0.20000000298023224, 2);
 			speedAttribute.removeModifier(speedModifier);
 		}
 	}

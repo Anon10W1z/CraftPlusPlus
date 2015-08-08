@@ -17,7 +17,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "3.6.8"
+version = "3.6.9"
 def ENV = System.getenv()
 if (ENV.DRONE_BUILD_NUMBER)
     version += "-build" + ENV.DRONE_BUILD_NUMBER

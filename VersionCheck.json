@@ -2,11 +2,11 @@
   "versionList": [
     {
       "mcVersion": "Minecraft 1.8",
-      "modVersion": "3.6.7",
+      "modVersion": "3.6.9",
       "changeLog": [
-        "Version 3.6.7 removes the self-installer."
+        "Version 3.6.9 makes Nimble and Hops give the exact same boosts as their corresponding potion effects."
       ],
-      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/3.6.8/CraftPlusPlus-3.6.8.jar",
+      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/3.6.9/CraftPlusPlus-3.6.9.jar",
       "isDirectLink": "true",
       "newFileName": ""
     }
