@@ -51,6 +51,7 @@ import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
+import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -393,7 +394,17 @@ public final class CppEventHandler {
 	 */
 	@SubscribeEvent
 	public void onLivingJump(LivingJumpEvent event) {
-		CppEnchantments.performAction("hops", event.entityLiving, null);
+		CppEnchantments.performAction("hops", event.entityLiving, event);
+	}
+
+	/**
+	 * Prevents taking extra fall damage from the Hops enchantment
+	 *
+	 * @param event The LivingFallEvent
+	 */
+	@SubscribeEvent
+	public void onLivingFall(LivingFallEvent event) {
+		CppEnchantments.performAction("hops", event.entityLiving, event);
 	}
 
 	/**

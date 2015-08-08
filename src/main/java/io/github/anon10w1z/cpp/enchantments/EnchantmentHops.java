@@ -3,6 +3,8 @@ package io.github.anon10w1z.cpp.enchantments;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
+import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 /**
@@ -16,8 +18,11 @@ public class EnchantmentHops extends CppEnchantmentBase {
 
 	@Override
 	public void performAction(Entity entity, Event baseEvent) {
-		int enchantmentLevel = this.getEnchantmentLevel(((EntityLivingBase) entity).getEquipmentInSlot(1));
-		entity.motionY += (float) enchantmentLevel / 15;
+		float enchantmentLevel = this.getEnchantmentLevel(((EntityLivingBase) entity).getEquipmentInSlot(1));
+		if (baseEvent instanceof LivingJumpEvent)
+			entity.motionY += enchantmentLevel / 10;
+		else if (baseEvent instanceof LivingFallEvent)
+			((LivingFallEvent) baseEvent).distance -= enchantmentLevel;
 	}
 
 	@Override
