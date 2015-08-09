@@ -36,7 +36,7 @@ public class EnchantmentHoming extends CppEnchantmentBase {
 				EntityLivingBase target = null;
 				for (EntityLivingBase livingEntity : livingEntities) {
 					double distanceToArrow = livingEntity.getDistanceToEntity(arrow);
-					if (distanceToArrow < distance && livingEntity.canEntityBeSeen(arrow) && !livingEntity.getPersistentID().equals(shooter.getPersistentID())) {
+					if (distanceToArrow < distance && shooter.canEntityBeSeen(livingEntity) && !livingEntity.getPersistentID().equals(shooter.getPersistentID())) {
 						distance = distanceToArrow;
 						target = livingEntity;
 					}
@@ -45,7 +45,7 @@ public class EnchantmentHoming extends CppEnchantmentBase {
 					double x = target.posX - arrow.posX;
 					double y = target.getEntityBoundingBox().minY + target.height / 2 - (arrow.posY + arrow.height / 2);
 					double z = target.posZ - arrow.posZ;
-					arrow.setThrowableHeading(x, y, z, 1, 0);
+					arrow.setThrowableHeading(x, y, z, 1.25F, 0);
 				}
 			}
 		}

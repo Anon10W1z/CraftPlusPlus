@@ -2,11 +2,11 @@
   "versionList": [
     {
       "mcVersion": "Minecraft 1.8",
-      "modVersion": "3.6.9",
+      "modVersion": "3.6.10",
       "changeLog": [
-        "Version 3.6.9 makes Nimble and Hops give the exact same boosts as their corresponding potion effects."
+        "Version 3.6.10 fixes a potential crash when using LiteLoader along with the coremod."
       ],
-      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/3.6.9/CraftPlusPlus-3.6.9.jar",
+      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/3.6.10/CraftPlusPlus-3.6.10.jar",
       "isDirectLink": "true",
       "newFileName": ""
     }

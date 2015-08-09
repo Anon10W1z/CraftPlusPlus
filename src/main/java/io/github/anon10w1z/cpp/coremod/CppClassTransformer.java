@@ -29,12 +29,16 @@ public class CppClassTransformer implements IClassTransformer {
 
 	@Override
 	public byte[] transform(String className, String deobfuscatedClassName, byte[] bytes) {
-		ClassNode classNode = new ClassNode();
-		ClassReader classReader = new ClassReader(bytes);
-		classReader.accept(classNode, 0);
-		if (isVanillaBlockClass(deobfuscatedClassName) || isVanillaBlockClass(classNode.superName))
-			return this.transformBlock(bytes, !className.equals(deobfuscatedClassName), deobfuscatedClassName);
-		return bytes;
+		try {
+			ClassNode classNode = new ClassNode();
+			ClassReader classReader = new ClassReader(bytes);
+			classReader.accept(classNode, 0);
+			if (isVanillaBlockClass(deobfuscatedClassName) || isVanillaBlockClass(classNode.superName))
+				return this.transformBlock(bytes, !className.equals(deobfuscatedClassName), deobfuscatedClassName);
+			return bytes;
+		} catch (Exception e) {
+			return bytes;
+		}
 	}
 
 	/**
