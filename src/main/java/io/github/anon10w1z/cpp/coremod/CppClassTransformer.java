@@ -52,6 +52,7 @@ public class CppClassTransformer implements IClassTransformer {
 		ClassNode classNode = new ClassNode();
 		ClassReader classReader = new ClassReader(bytes);
 		classReader.accept(classNode, 0);
+
 		String targetMethodName = obfuscated ? "c" : "onBlockAdded";
 		String targetMethodName1 = obfuscated ? "a" : "onNeighborBlockChange";
 		String targetMethodName2 = obfuscated ? "b" : "updateTick";

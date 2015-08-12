@@ -2,11 +2,11 @@
   "versionList": [
     {
       "mcVersion": "Minecraft 1.8",
-      "modVersion": "3.6.10",
+      "modVersion": "3.6.11",
       "changeLog": [
-        "Version 3.6.10 fixes a potential crash when using LiteLoader along with the coremod."
+        "Version 3.6.11 fixes a potential crash when spawning item entities without a world."
       ],
-      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/3.6.10/CraftPlusPlus-3.6.10.jar",
+      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/3.6.11/CraftPlusPlus-3.6.11.jar",
       "isDirectLink": "true",
       "newFileName": ""
     }
