@@ -15,7 +15,7 @@ public class CppClassTransformer implements IClassTransformer {
 	/**
 	 * The class name to delegate the methods to
 	 */
-	private static final String DELEGATE_CLASS_NAME = CppModInfo.PACKAGE_LOCATION.replace('.', '/') + "/coremod/CppBlockDelegate";
+	private static final String DELEGATE_CLASS_NAME = CppModInfo.PACKAGE_LOCATION.replace('.', '/') + "/coremod/CppCoremodHooks";
 
 	/**
 	 * Returns whether or not the given class name represents a vanilla block class
@@ -103,13 +103,26 @@ public class CppClassTransformer implements IClassTransformer {
 				injectionList.add(new MethodInsnNode(INVOKESTATIC, DELEGATE_CLASS_NAME, "getTickRate", delegateMethodDescriptor1, false));
 				injectionList.add(new InsnNode(IRETURN));
 				methodInstructions.insert(injectionList);
-				methodInstructions.insert(injectionList);
 				++patchCount;
 			}
 		}
-		if (patchCount == 0)
-			return bytes;
-		System.out.println("Patched " + patchCount + " method" + (patchCount != 1 ? "s" : "") + " in class " + deobfuscatedClassName);
+		if (deobfuscatedClassName.equals("net.minecraft.block.BlockCactus")) {
+			String cactusTargetMethodName = obfuscated ? "d" : "canBlockStay";
+			String cactusTargetMethodDescriptor = obfuscated ? "(Laqu;Ldt;)Z" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/BlockPos;)Z";
+			String cactusDelegateMethodDescriptor = obfuscated ? "(Laqu;Ldt;Latr;)Z" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/BlockPos;Lnet/minecraft/block/Block;)Z";
+			classNode.methods.stream().filter(methodNode -> methodNode.name.equals(cactusTargetMethodName) && methodNode.desc.equals(cactusTargetMethodDescriptor)).forEach(methodNode -> {
+				InsnList injectionList = new InsnList();
+				injectionList.add(new VarInsnNode(ALOAD, 1));
+				injectionList.add(new VarInsnNode(ALOAD, 2));
+				injectionList.add(new VarInsnNode(ALOAD, 0));
+				injectionList.add(new MethodInsnNode(INVOKESTATIC, DELEGATE_CLASS_NAME, "canCactusStay", cactusDelegateMethodDescriptor, false));
+				injectionList.add(new InsnNode(IRETURN));
+				methodNode.instructions.insert(injectionList);
+			});
+			++patchCount;
+		}
+		if (patchCount > 0)
+			System.out.println("Patched " + patchCount + " method" + (patchCount > 1 ? "s" : "") + " in class " + deobfuscatedClassName);
 		ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
 		classNode.accept(classWriter);
 		return classWriter.toByteArray();

@@ -15,7 +15,6 @@ import net.minecraft.stats.Achievement;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.util.WeightedRandomFishable;
 import net.minecraftforge.common.FishingHooks;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 /**
@@ -45,8 +44,6 @@ public class CppVanillaPropertiesChanger {
 		if (CppConfigHandler.commandBlockInRedstoneTab)
 			Blocks.command_block.setCreativeTab(CreativeTabs.tabRedstone);
 		Blocks.dragon_egg.setCreativeTab(CreativeTabs.tabDecorations);
-		if (Loader.isModLoaded("NotEnoughItems") || Loader.isModLoaded("TooManyItems"))
-			Blocks.mob_spawner.setCreativeTab(CreativeTabs.tabMisc);
 		//Modifying block names
 		if (CppConfigHandler.renameButtons) {
 			Blocks.stone_button.setUnlocalizedName("buttonStone");

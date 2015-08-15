@@ -38,6 +38,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.stats.AchievementList;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.tileentity.TileEntitySign;
@@ -62,6 +63,7 @@ import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.client.GuiIngameModOptions;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
@@ -405,6 +407,17 @@ public final class CppEventHandler {
 	@SubscribeEvent
 	public void onLivingFall(LivingFallEvent event) {
 		CppEnchantments.performAction("hops", event.entityLiving, event);
+	}
+
+	/**
+	 * Gives the player the workbenching achievement when crafting a crafting pad
+	 *
+	 * @param event The ItemCraftingEvent
+	 */
+	@SubscribeEvent
+	public void onItemCrafted(ItemCraftedEvent event) {
+		if (event.crafting.getItem() == CppItems.crafting_pad && event.player != null)
+			event.player.triggerAchievement(AchievementList.buildWorkBench);
 	}
 
 	/**

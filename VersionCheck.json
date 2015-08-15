@@ -4,9 +4,9 @@
       "mcVersion": "Minecraft 1.8",
       "modVersion": "3.6.11",
       "changeLog": [
-        "Version 3.6.11 fixes a potential crash when spawning item entities without a world."
+        "Version 3.6.12 allows cacti to be placed next to solid blocks."
       ],
-      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/3.6.11/CraftPlusPlus-3.6.11.jar",
+      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/3.6.12/CraftPlusPlus-3.6.12.jar",
       "isDirectLink": "true",
       "newFileName": ""
     }

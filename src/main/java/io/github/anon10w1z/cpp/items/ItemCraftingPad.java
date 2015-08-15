@@ -5,7 +5,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.AchievementList;
 import net.minecraft.world.World;
 
 /**
@@ -23,10 +22,5 @@ public class ItemCraftingPad extends Item {
 		if (!world.isRemote)
 			player.openGui(CraftPlusPlus.instance, 0, world, 0, 0, 0);
 		return itemstack;
-	}
-
-	@Override
-	public void onCreated(ItemStack itemstack, World world, EntityPlayer player) {
-		player.triggerAchievement(AchievementList.buildWorkBench);
 	}
 }

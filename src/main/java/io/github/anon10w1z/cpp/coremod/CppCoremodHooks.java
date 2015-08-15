@@ -8,9 +8,15 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IPlantable;
 
-public class CppBlockDelegate {
+/**
+ * Craft++'s coremod hooks
+ */
+@SuppressWarnings("unused")
+public class CppCoremodHooks {
 	/**
 	 * Schedules a block update if the block is a Craft++ falling block
 	 *
@@ -18,7 +24,6 @@ public class CppBlockDelegate {
 	 * @param blockPos The block position
 	 * @param block    The block
 	 */
-	@SuppressWarnings("unused")
 	public static void scheduleBlockUpdate(World world, BlockPos blockPos, Block block) {
 		if (isFallingBlock(block))
 			world.scheduleUpdate(blockPos, block, block.tickRate(world));
@@ -31,7 +36,6 @@ public class CppBlockDelegate {
 	 * @param blockPos The block position
 	 * @param block    The block
 	 */
-	@SuppressWarnings("unused")
 	public static void onUpdateTick(World world, BlockPos blockPos, Block block) {
 		if (!world.isRemote && isFallingBlock(block)) {
 			boolean canFallInto;
@@ -71,11 +75,22 @@ public class CppBlockDelegate {
 	 * @param block The block
 	 * @return The tick rate of the block
 	 */
-	@SuppressWarnings("unused")
 	public static int getTickRate(Block block) {
 		if (isFallingBlock(block))
 			return 2;
 		return 10;
+	}
+
+	/**
+	 * Returns whether the given cactus block can stay at the given block position in the given world
+	 *
+	 * @param world    The world
+	 * @param blockPos The block position
+	 * @param block    The block
+	 * @return Whether the given cactus block can stay at the block position in the world
+	 */
+	public static boolean canCactusStay(World world, BlockPos blockPos, Block block) {
+		return world.getBlockState(blockPos.down()).getBlock().canSustainPlant(world, blockPos.down(), EnumFacing.UP, (IPlantable) block);
 	}
 
 	/**
