@@ -64,7 +64,7 @@ public class CppClassTransformer implements IClassTransformer {
 		String targetMethodDescriptor3 = obfuscated ? "(Laqu;)I" : "(Lnet/minecraft/world/World;)I";
 
 		String delegateMethodDescriptor = obfuscated ? "(Laqu;Ldt;Latr;)V" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/BlockPos;Lnet/minecraft/block/Block;)V";
-		String delegateMethodDescriptor1 = obfuscated ? "(Latr;)I" : "(Lnet/minecraft/block/Block;)I";
+		String delegateMethodDescriptor1 = obfuscated ? "(Latr;)Z" : "(Lnet/minecraft/block/Block;)Z";
 		int patchCount = 0;
 		for (MethodNode methodNode : classNode.methods) {
 			String methodName = methodNode.name;
@@ -100,8 +100,12 @@ public class CppClassTransformer implements IClassTransformer {
 			if (methodName.equals(targetMethodName3) && methodDescriptor.equals(targetMethodDescriptor3)) {
 				InsnList injectionList = new InsnList();
 				injectionList.add(new VarInsnNode(ALOAD, 0));
-				injectionList.add(new MethodInsnNode(INVOKESTATIC, DELEGATE_CLASS_NAME, "getTickRate", delegateMethodDescriptor1, false));
+				injectionList.add(new MethodInsnNode(INVOKESTATIC, DELEGATE_CLASS_NAME, "isFallingBlock", delegateMethodDescriptor1, false));
+				LabelNode labelNode = new LabelNode();
+				injectionList.add(new JumpInsnNode(IFEQ, labelNode));
+				injectionList.add(new InsnNode(ICONST_2));
 				injectionList.add(new InsnNode(IRETURN));
+				injectionList.add(labelNode);
 				methodInstructions.insert(injectionList);
 				++patchCount;
 			}

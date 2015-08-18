@@ -2,7 +2,6 @@ package io.github.anon10w1z.cpp.coremod;
 
 import io.github.anon10w1z.cpp.handlers.CppConfigHandler;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDragonEgg;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityFallingBlock;
@@ -70,18 +69,6 @@ public class CppCoremodHooks {
 	}
 
 	/**
-	 * Gets the tick rate for the block (edited to tick Craft++'s falling blocks 10 times a second instead of 2)
-	 *
-	 * @param block The block
-	 * @return The tick rate of the block
-	 */
-	public static int getTickRate(Block block) {
-		if (isFallingBlock(block))
-			return 2;
-		return 10;
-	}
-
-	/**
 	 * Returns whether the given cactus block can stay at the given block position in the given world
 	 *
 	 * @param world    The world
@@ -94,12 +81,12 @@ public class CppCoremodHooks {
 	}
 
 	/**
-	 * Returns whether or not the given block is a falling block
+	 * Returns whether or not the given block is a Craft++ falling block
 	 *
 	 * @param block The block
-	 * @return Whether or not the block is a falling block
+	 * @return Whether or not the block is a Craft++ falling block
 	 */
-	private static boolean isFallingBlock(Block block) {
-		return CppConfigHandler.additionalFallingBlocks.contains(block) || block instanceof BlockFalling || block instanceof BlockDragonEgg;
+	public static boolean isFallingBlock(Block block) {
+		return CppConfigHandler.additionalFallingBlocks.contains(block);
 	}
 }

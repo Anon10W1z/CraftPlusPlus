@@ -2,11 +2,11 @@
   "versionList": [
     {
       "mcVersion": "Minecraft 1.8",
-      "modVersion": "3.6.11",
+      "modVersion": "3.6.13",
       "changeLog": [
-        "Version 3.6.12 allows cacti to be placed next to solid blocks."
+        "Version 3.6.13 fixes non-falling blocks having a fixed tick rate of 10."
       ],
-      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/3.6.12/CraftPlusPlus-3.6.12.jar",
+      "updateURL": "https://github.com/Anon10W1z/CraftPlusPlus/releases/download/3.6.13/CraftPlusPlus-3.6.13.jar",
       "isDirectLink": "true",
       "newFileName": ""
     }
