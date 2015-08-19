@@ -1,5 +1,6 @@
 package io.github.anon10w1z.cpp.items;
 
+import io.github.anon10w1z.cpp.handlers.CppConfigHandler;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
@@ -26,8 +27,10 @@ public class CppItems {
 		GameRegistry.registerItem(fried_egg, "egg_fried");
 		sponge_wipe = new Item().setUnlocalizedName("spongeWipe").setCreativeTab(CreativeTabs.tabMisc);
 		GameRegistry.registerItem(sponge_wipe, "sponge_wipe");
-		crafting_pad = new ItemCraftingPad();
-		GameRegistry.registerItem(crafting_pad, "crafting_pad");
+		if (CppConfigHandler.craftingTableChanges) {
+			crafting_pad = new ItemCraftingPad();
+			GameRegistry.registerItem(crafting_pad, "crafting_pad");
+		}
 		binocular_lens = new Item().setUnlocalizedName("binocularLens").setCreativeTab(CreativeTabs.tabTools);
 		GameRegistry.registerItem(binocular_lens, "binocular_lens");
 		binoculars = new ItemBinoculars();

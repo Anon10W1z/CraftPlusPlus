@@ -11,6 +11,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * The obsidian boat renderer
+ */
 @SideOnly(Side.CLIENT)
 public class RenderObsidianBoat extends Render {
 	private static final ResourceLocation boatTextures = new ResourceLocation("minecraft:textures/blocks/obsidian.png");
@@ -21,10 +24,12 @@ public class RenderObsidianBoat extends Render {
 		this.shadowSize = 0.5F;
 	}
 
+	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
 		return boatTextures;
 	}
 
+	@Override
 	public void doRender(Entity entity, double x, double y, double z, float f, float partialTicks) {
 		y += 0.3;
 		EntityObsidianBoat boat = (EntityObsidianBoat) entity;

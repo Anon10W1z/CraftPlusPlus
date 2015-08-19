@@ -37,13 +37,16 @@ public final class CppConfigHandler {
 	//Miscellaneous
 	public static boolean creeperBurnInDaylight;
 	public static boolean babyZombieBurnInDaylight;
-	public static boolean enableAutoSeedPlanting;
+	public static boolean autoSeedPlanting;
 	public static float binocularZoomAmount;
 	public static List<Block> additionalFallingBlocks;
+	public static boolean signOverhaul;
+	public static boolean sitOnStairs;
 	//Miscellaneous: Requires Restart
 	public static boolean commandBlockInRedstoneTab;
 	public static boolean enableFlintAndSteelDispenserBehavior;
 	public static boolean renameButtons;
+	public static boolean craftingTableChanges;
 
 	/**
 	 * Initializes the config handler for Craft++
@@ -82,15 +85,18 @@ public final class CppConfigHandler {
 		String miscCategory = Configuration.CATEGORY_GENERAL + Configuration.CATEGORY_SPLITTER + "Miscellaneous";
 		creeperBurnInDaylight = get(miscCategory, "Creepers burn in daylight", true, "Do creepers burn in daylight?");
 		babyZombieBurnInDaylight = get(miscCategory, "Baby zombies burn in daylight", true, "Do baby zombies burn in daylight?");
-		enableAutoSeedPlanting = get(miscCategory, "Enable automatic seed planting", true, "Do dropped seeds plant themselves?");
+		autoSeedPlanting = get(miscCategory, "Enable automatic seed planting", true, "Do dropped seeds plant themselves?");
 		binocularZoomAmount = (float) get(miscCategory, "Binocular Zoom Amount", 4, "By how much do binoculars divide your FOV?", false).setMinValue(1D).getDouble();
 		additionalFallingBlocks = Arrays.stream(config.getStringList("Additional Falling Blocks", miscCategory, new String[]{GameRegistry.findUniqueIdentifierFor(Blocks.dirt).name, GameRegistry.findUniqueIdentifierFor(Blocks.clay).name}, "A list of additional blocks that can fall like sand.")).map(Block::getBlockFromName).filter(block -> block != null).collect(Collectors.toList());
+		signOverhaul = get(miscCategory, "Sign overhaul", true, "Is the way signs are used in Minecraft overhauled?");
+		sitOnStairs = get(miscCategory, "Sit on stairs", true, "Can you sit on stairs by right clicking with an empty hand?");
 		config.setCategoryComment(miscCategory, "Miscellaneous settings");
 		//Requires Restart
 		String miscRequiresRestartCategory = miscCategory + Configuration.CATEGORY_SPLITTER + "Requires Restart";
 		commandBlockInRedstoneTab = get(miscRequiresRestartCategory, "Command Blocks in creative menu", true, "Can command blocks be obtained from the redstone creative tab?");
 		enableFlintAndSteelDispenserBehavior = get(miscRequiresRestartCategory, "Enable flint and steel dispenser behavior", false, "Can you use flint and steel with dispensers?");
 		renameButtons = get(miscRequiresRestartCategory, "Rename buttons", true, "Do buttons get renamed based on their material?");
+		craftingTableChanges = get(miscRequiresRestartCategory, "Crafting table changes", true, "Is the way to craft in a 3x3 grid changed?");
 		config.setCategoryComment(miscRequiresRestartCategory, "Settings that require a Minecraft restart");
 		config.setCategoryRequiresMcRestart(miscRequiresRestartCategory, true);
 

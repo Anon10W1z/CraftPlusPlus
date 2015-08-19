@@ -1,9 +1,7 @@
 package io.github.anon10w1z.cpp.proxies;
 
 import io.github.anon10w1z.cpp.blocks.CppBlocks;
-import io.github.anon10w1z.cpp.entities.EntityDynamite;
-import io.github.anon10w1z.cpp.entities.EntityObsidianBoat;
-import io.github.anon10w1z.cpp.entities.RenderObsidianBoat;
+import io.github.anon10w1z.cpp.entities.*;
 import io.github.anon10w1z.cpp.items.CppItems;
 import io.github.anon10w1z.cpp.main.CppModInfo;
 import net.minecraft.block.Block;
@@ -48,6 +46,7 @@ public class CppClientProxy extends CppCommonProxy {
 		//Entities
 		RenderingRegistry.registerEntityRenderingHandler(EntityDynamite.class, new RenderSnowball(minecraft.getRenderManager(), CppItems.dynamite, minecraft.getRenderItem()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityObsidianBoat.class, new RenderObsidianBoat());
+		RenderingRegistry.registerEntityRenderingHandler(EntitySitPoint.class, new RenderSitPoint());
 	}
 
 	@Override
@@ -58,21 +57,22 @@ public class CppClientProxy extends CppCommonProxy {
 		Collection<PotionEffect> potionEffects = minecraft.thePlayer.getActivePotionEffects();
 		for (PotionEffect potionEffect : potionEffects) {
 			Potion potion = Potion.potionTypes[potionEffect.getPotionID()];
-			if (potion.hasStatusIcon()) {
-				GL11.glColor4f(1, 1, 1, 1);
-				GL11.glDisable(GL11.GL_LIGHTING);
-				minecraft.renderEngine.bindTexture(new ResourceLocation("textures/gui/container/inventory.png")); //draw from inventory.png
-				int iconIndex = potion.getStatusIconIndex();
-				//constants for drawing
-				final int POTION_ICON_SIZE = 18;
-				final int POTION_ICON_BASE_X_OFFSET = 0;
-				final int POTION_ICON_BASE_Y_OFFSET = 198;
-				final int POTION_ICONS_PER_ROW = 8;
-				final int POTION_ICON_SPACING = POTION_ICON_SIZE + 2;
-
-				new Gui().drawTexturedModalRect(xPos, yPos, POTION_ICON_BASE_X_OFFSET + iconIndex % POTION_ICONS_PER_ROW * POTION_ICON_SIZE, POTION_ICON_BASE_Y_OFFSET + iconIndex / POTION_ICONS_PER_ROW * POTION_ICON_SIZE, POTION_ICON_SIZE, POTION_ICON_SIZE);
-				xPos += POTION_ICON_SPACING;
-			}
+			int potionDuration = potionEffect.getDuration();
+			if (!potion.hasStatusIcon() || (potionDuration <= 200 && potionDuration >= 60 && potionDuration % 20 >= 10) || (potionDuration <= 60 && potionDuration % 10 >= 5))
+				continue;
+			GL11.glColor4f(1, 1, 1, 1);
+			GL11.glDisable(GL11.GL_LIGHTING);
+			minecraft.renderEngine.bindTexture(new ResourceLocation("textures/gui/container/inventory.png")); //draw from inventory.png
+			int iconIndex = potion.getStatusIconIndex();
+			//constants for drawing
+			final int POTION_ICON_SIZE = 18;
+			final int POTION_ICON_BASE_X_OFFSET = 0;
+			final int POTION_ICON_BASE_Y_OFFSET = 198;
+			final int POTION_ICONS_PER_ROW = 8;
+			final int POTION_ICON_SPACING = POTION_ICON_SIZE + 2;
+			GL11.glScalef(20, 20, 0);
+			new Gui().drawTexturedModalRect(xPos, yPos, POTION_ICON_BASE_X_OFFSET + iconIndex % POTION_ICONS_PER_ROW * POTION_ICON_SIZE, POTION_ICON_BASE_Y_OFFSET + iconIndex / POTION_ICONS_PER_ROW * POTION_ICON_SIZE, POTION_ICON_SIZE, POTION_ICON_SIZE);
+			xPos += POTION_ICON_SPACING;
 		}
 	}
 

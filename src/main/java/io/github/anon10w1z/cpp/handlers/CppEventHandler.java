@@ -3,16 +3,14 @@ package io.github.anon10w1z.cpp.handlers;
 import io.github.anon10w1z.cpp.enchantments.CppEnchantmentBase;
 import io.github.anon10w1z.cpp.enchantments.CppEnchantments;
 import io.github.anon10w1z.cpp.enchantments.EntityTickingEnchantment;
+import io.github.anon10w1z.cpp.entities.EntitySitPoint;
 import io.github.anon10w1z.cpp.gui.GuiCppConfig;
 import io.github.anon10w1z.cpp.items.CppItems;
 import io.github.anon10w1z.cpp.main.CppModInfo;
 import io.github.anon10w1z.cpp.main.CppUtils;
 import io.github.anon10w1z.cpp.main.CraftPlusPlus;
 import io.github.anon10w1z.cpp.misc.CppExtendedEntityProperties;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockSign;
-import net.minecraft.block.BlockStandingSign;
-import net.minecraft.block.BlockWallSign;
+import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.IEntitySelector;
@@ -171,7 +169,7 @@ public final class CppEventHandler {
 			}
 			//Signs
 			if (action == Action.RIGHT_CLICK_BLOCK) {
-				if (heldItem == Items.sign) {
+				if (CppConfigHandler.signOverhaul && heldItem == Items.sign) {
 					event.setCanceled(true);
 					Block block = world.getBlockState(event.pos).getBlock();
 					if (event.face != EnumFacing.DOWN && !(block instanceof BlockSign) && block.getMaterial().isSolid()) {
@@ -191,7 +189,7 @@ public final class CppEventHandler {
 						}
 					}
 				}
-				if (event.world.getTileEntity(event.pos) instanceof TileEntitySign) {
+				if (CppConfigHandler.signOverhaul && event.world.getTileEntity(event.pos) instanceof TileEntitySign) {
 					TileEntitySign tileEntitySign = (TileEntitySign) event.world.getTileEntity(event.pos);
 					if (heldItem == CppItems.sponge_wipe) {
 						String signText = String.join("", Arrays.stream(tileEntitySign.signText).map(chatComponent -> getTextWithoutFormattingCodes(chatComponent.getUnformattedText())).collect(Collectors.toList()));
@@ -212,6 +210,16 @@ public final class CppEventHandler {
 								player.inventory.mainInventory[player.inventory.currentItem] = null;
 						}
 					}
+				}
+				if (CppConfigHandler.sitOnStairs && heldItem == null && world.getBlockState(event.pos).getBlock() instanceof BlockStairs) {
+					for (Object entityObject : world.getEntities(EntitySitPoint.class, IEntitySelector.selectAnything)) {
+						EntitySitPoint sitPoint = (EntitySitPoint) entityObject;
+						if (sitPoint.blockPos.equals(event.pos.down())) //if there is someone already sitting in the target position
+							return;
+					}
+					EntitySitPoint sitPoint = new EntitySitPoint(world, event.pos.down());
+					world.spawnEntityInWorld(sitPoint);
+					player.mountEntity(sitPoint);
 				}
 			}
 		}
@@ -302,7 +310,7 @@ public final class CppEventHandler {
 	 */
 	@SubscribeEvent
 	public void onWorldTick(WorldTickEvent event) {
-		if (CppConfigHandler.enableAutoSeedPlanting && !event.world.isRemote) {
+		if (CppConfigHandler.autoSeedPlanting && !event.world.isRemote) {
 			World world = event.world;
 			List<EntityItem> entityItems = world.getEntities(EntityItem.class, IEntitySelector.selectAnything);
 			for (EntityItem entityItem : entityItems)
@@ -416,9 +424,35 @@ public final class CppEventHandler {
 	 */
 	@SubscribeEvent
 	public void onItemCrafted(ItemCraftedEvent event) {
-		if (event.crafting.getItem() == CppItems.crafting_pad && event.player != null)
+		if (event.crafting.getItem() == CppItems.crafting_pad)
 			event.player.triggerAchievement(AchievementList.buildWorkBench);
 	}
+
+	/*
+	* DISABLED FOR NOW
+	@SubscribeEvent
+	public void onAnvilUpdate(AnvilUpdateEvent event) {
+		if (event.right.getItem() == Items.written_book) {
+			NBTTagCompound bookTagCompound = event.right.getTagCompound();
+			NBTTagList pagesList = bookTagCompound.getTagList("pages", 8);
+			ItemStack output = event.left.copy();
+			NBTTagCompound outputTagCompound = new NBTTagCompound();
+			NBTTagList loreList = new NBTTagList();
+			int pageCount = 0;
+			for (int i = 0; i < pagesList.tagCount(); ++i) {
+				String[] pageSplit = pagesList.getStringTagAt(i).substring(1, pagesList.getStringTagAt(i).length() - 1).replace("\\n", "\n").split("\n");
+				for (String line : pageSplit)
+					loreList.appendTag(new NBTTagString(line));
+			}
+			outputTagCompound.setTag("Lore", loreList);
+			output.setTagInfo("display", outputTagCompound);
+			if (!event.name.trim().isEmpty())
+				output.setStackDisplayName(event.name);
+			event.output = output;
+			event.cost = pagesList.tagCount();
+		}
+	}
+	*/
 
 	/**
 	 * Syncs the config file if it changes

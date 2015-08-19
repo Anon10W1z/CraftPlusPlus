@@ -42,9 +42,6 @@ public class CppRecipeReplacer {
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.stone_pickaxe), "SSS", " T ", " T ", 'S', "stone", 'T', "stickWood"));
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.stone_axe), "SS", "ST", " T", 'S', "stone", 'T', "stickWood"));
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.stone_hoe), "SS", " T", " T", 'S', "stone", 'T', "stickWood"));
-
-			removeRecipes(new ItemStack(Blocks.crafting_table));
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.crafting_table), "P", "W", 'P', CppItems.crafting_pad, 'W', "plankWood"));
 		}
 		//Stairs
 		if (CppConfigHandler.useBetterStairsRecipes) {
@@ -92,6 +89,11 @@ public class CppRecipeReplacer {
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Blocks.stone_button, 4), "stone"));
 		//Repairing Items
 		removeRecipe(RecipeRepairItem.class);
+		//Crafting Table Changes
+		if (CppConfigHandler.craftingTableChanges) {
+			removeRecipes(new ItemStack(Blocks.crafting_table));
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.crafting_table), "P", "W", 'P', CppItems.crafting_pad, 'W', "plankWood"));
+		}
 	}
 
 	/**
