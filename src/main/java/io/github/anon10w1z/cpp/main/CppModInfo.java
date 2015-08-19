@@ -17,7 +17,7 @@ public final class CppModInfo {
 	/**
 	 * Craft++'s version
 	 */
-	public static final String VERSION = "3.6.14";
+	public static final String VERSION = "3.7";
 
 	/**
 	 * Craft++'s package location
