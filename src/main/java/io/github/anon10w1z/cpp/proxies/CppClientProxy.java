@@ -70,7 +70,6 @@ public class CppClientProxy extends CppCommonProxy {
 			final int POTION_ICON_BASE_Y_OFFSET = 198;
 			final int POTION_ICONS_PER_ROW = 8;
 			final int POTION_ICON_SPACING = POTION_ICON_SIZE + 2;
-			GL11.glScalef(20, 20, 0);
 			new Gui().drawTexturedModalRect(xPos, yPos, POTION_ICON_BASE_X_OFFSET + iconIndex % POTION_ICONS_PER_ROW * POTION_ICON_SIZE, POTION_ICON_BASE_Y_OFFSET + iconIndex / POTION_ICONS_PER_ROW * POTION_ICON_SIZE, POTION_ICON_SIZE, POTION_ICON_SIZE);
 			xPos += POTION_ICON_SPACING;
 		}
