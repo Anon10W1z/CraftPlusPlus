@@ -12,13 +12,6 @@ public class CppCommonProxy {
 	}
 
 	/**
-	 * Draws potion effect icons in the top-left corner
-	 */
-	public void displayPotionEffects() {
-
-	}
-
-	/**
 	 * Registers the key bindings for Craft++
 	 */
 	public void registerKeyBindings() {

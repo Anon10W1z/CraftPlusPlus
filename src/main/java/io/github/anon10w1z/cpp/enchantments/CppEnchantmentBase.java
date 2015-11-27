@@ -1,6 +1,7 @@
 package io.github.anon10w1z.cpp.enchantments;
 
 import com.google.common.collect.Lists;
+import io.github.anon10w1z.cpp.main.CppModInfo;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnumEnchantmentType;
@@ -24,7 +25,7 @@ public abstract class CppEnchantmentBase extends Enchantment {
 	public static List<CppEnchantmentBase> cppEnchantments = Lists.newArrayList();
 
 	public CppEnchantmentBase(String name, int weight, EnumEnchantmentType type) {
-		super(findFreeEnchantmentID(name), new ResourceLocation(name), weight, type);
+		super(findFreeEnchantmentID(name), new ResourceLocation(CppModInfo.MOD_ID, name), weight, type);
 		this.setName(name);
 		addToBookList(this);
 		cppEnchantments.add(this);

@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * The coremod loading plugin of Craft++
  */
-@Name("Craft++ Coremod")
+@Name(CppModInfo.NAME + " Coremod")
 @MCVersion("1.8")
 @TransformerExclusions(CppModInfo.PACKAGE_LOCATION + ".coremod")
 public class CppLoadingPlugin implements IFMLLoadingPlugin {
@@ -32,7 +32,7 @@ public class CppLoadingPlugin implements IFMLLoadingPlugin {
 
 	@Override
 	public void injectData(Map<String, Object> data) {
-
+		CppClassTransformer.obfuscated = (boolean) data.get("runtimeDeobfuscationEnabled");
 	}
 
 	@Override

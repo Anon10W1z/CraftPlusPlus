@@ -7,7 +7,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 /**
- * A dummy entity mounted on by the player for it to sit on stairs
+ * Dummy entity mounted on by the player for it to sit on stairs
  */
 public class EntitySitPoint extends Entity {
 	public BlockPos blockPos;

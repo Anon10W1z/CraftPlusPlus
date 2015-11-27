@@ -13,6 +13,8 @@ import io.github.anon10w1z.cpp.misc.CppExtendedEntityProperties;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -36,6 +38,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntityMobSpawner;
@@ -67,10 +71,9 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -358,7 +361,7 @@ public final class CppEventHandler {
 	@SubscribeEvent
 	public void onBlockBreak(BreakEvent event) {
 		EntityPlayer player = event.getPlayer();
-		if (!player.capabilities.isCreativeMode && event.state.getBlock() == Blocks.mob_spawner && EnchantmentHelper.getSilkTouchModifier(player) && player.canHarvestBlock(Blocks.mob_spawner)) {
+		if (CppConfigHandler.mobSpawnerSilkTouchDrop && !player.capabilities.isCreativeMode && event.state.getBlock() == Blocks.mob_spawner && EnchantmentHelper.getSilkTouchModifier(player) && player.canHarvestBlock(Blocks.mob_spawner)) {
 			World world = event.world;
 			BlockPos blockPos = event.pos;
 			TileEntityMobSpawner spawnerTileEntity = (TileEntityMobSpawner) world.getTileEntity(blockPos);
@@ -428,32 +431,6 @@ public final class CppEventHandler {
 			event.player.triggerAchievement(AchievementList.buildWorkBench);
 	}
 
-	/*
-	* DISABLED FOR NOW
-	@SubscribeEvent
-	public void onAnvilUpdate(AnvilUpdateEvent event) {
-		if (event.right.getItem() == Items.written_book) {
-			NBTTagCompound bookTagCompound = event.right.getTagCompound();
-			NBTTagList pagesList = bookTagCompound.getTagList("pages", 8);
-			ItemStack output = event.left.copy();
-			NBTTagCompound outputTagCompound = new NBTTagCompound();
-			NBTTagList loreList = new NBTTagList();
-			int pageCount = 0;
-			for (int i = 0; i < pagesList.tagCount(); ++i) {
-				String[] pageSplit = pagesList.getStringTagAt(i).substring(1, pagesList.getStringTagAt(i).length() - 1).replace("\\n", "\n").split("\n");
-				for (String line : pageSplit)
-					loreList.appendTag(new NBTTagString(line));
-			}
-			outputTagCompound.setTag("Lore", loreList);
-			output.setTagInfo("display", outputTagCompound);
-			if (!event.name.trim().isEmpty())
-				output.setStackDisplayName(event.name);
-			event.output = output;
-			event.cost = pagesList.tagCount();
-		}
-	}
-	*/
-
 	/**
 	 * Syncs the config file if it changes
 	 *
@@ -506,8 +483,39 @@ public final class CppEventHandler {
 		if (event.type == ElementType.CROSSHAIRS) {
 			if (CraftPlusPlus.proxy.isPotionKeyPressed())
 				displayPotionEffects = !displayPotionEffects; //toggle the potion effect overlay
-			if (displayPotionEffects && !CraftPlusPlus.proxy.isGuiOpen())
-				CraftPlusPlus.proxy.displayPotionEffects();
+			if (displayPotionEffects && !CraftPlusPlus.proxy.isGuiOpen()) {
+				int xPos = 2;
+				int yPos = 2;
+				Minecraft minecraft = Minecraft.getMinecraft();
+				List<PotionEffect> potionEffects = new ArrayList<>(minecraft.thePlayer.getActivePotionEffects());
+				Collections.sort(potionEffects, (potionEffect1, potionEffect2) -> potionEffect1.getDuration() - potionEffect2.getDuration());
+				Gui gui = new Gui();
+				for (PotionEffect potionEffect : potionEffects) {
+					Potion potion = Potion.potionTypes[potionEffect.getPotionID()];
+					int potionDuration = potionEffect.getDuration();
+					if (!potion.hasStatusIcon())
+						continue;
+					minecraft.renderEngine.bindTexture(new ResourceLocation("textures/gui/container/inventory.png")); //draw from inventory.png
+					int iconIndex = potion.getStatusIconIndex();
+					if ((potionDuration > 200 || potionDuration <= 60 || potionDuration % 20 < 10) && (potionDuration > 60 || potionDuration % 10 < 5)) {
+						//constants for drawing/loading potion icons from inventory.png
+						final int POTION_ICON_SIZE = 18;
+						final int POTION_ICON_BASE_X_OFFSET = 0;
+						final int POTION_ICON_BASE_Y_OFFSET = 198;
+						final int POTION_ICONS_PER_ROW = 8;
+						final int POTION_ICON_SPACING = POTION_ICON_SIZE + 2;
+						GL11.glPushMatrix();
+						GL11.glScalef(8 / 9F, 8 / 9F, 1);
+						gui.drawTexturedModalRect(xPos, yPos, POTION_ICON_BASE_X_OFFSET + iconIndex % POTION_ICONS_PER_ROW * POTION_ICON_SIZE, POTION_ICON_BASE_Y_OFFSET + iconIndex / POTION_ICONS_PER_ROW * POTION_ICON_SIZE, POTION_ICON_SIZE, POTION_ICON_SIZE);
+						GL11.glPopMatrix();
+						if (potionEffect.getAmplifier() > 0) {
+							FontRenderer fontRenderer = minecraft.fontRendererObj;
+							String amplifierString = Integer.toString(potionEffect.getAmplifier() + 1);
+							gui.drawString(fontRenderer, amplifierString, xPos + 17 - fontRenderer.getStringWidth(amplifierString), yPos + 9, 0xFFFFFF);
+						}
+					}
+				}
+			}
 		}
 	}
 

@@ -42,6 +42,7 @@ public final class CppConfigHandler {
 	public static List<Block> additionalFallingBlocks;
 	public static boolean signOverhaul;
 	public static boolean sitOnStairs;
+	public static boolean mobSpawnerSilkTouchDrop;
 	//Miscellaneous: Requires Restart
 	public static boolean commandBlockInRedstoneTab;
 	public static boolean enableFlintAndSteelDispenserBehavior;
@@ -90,6 +91,7 @@ public final class CppConfigHandler {
 		additionalFallingBlocks = Arrays.stream(config.getStringList("Additional Falling Blocks", miscCategory, new String[]{GameRegistry.findUniqueIdentifierFor(Blocks.dirt).name, GameRegistry.findUniqueIdentifierFor(Blocks.clay).name}, "A list of additional blocks that can fall like sand.")).map(Block::getBlockFromName).filter(block -> block != null).collect(Collectors.toList());
 		signOverhaul = get(miscCategory, "Sign overhaul", true, "Is the way signs are used in Minecraft overhauled?");
 		sitOnStairs = get(miscCategory, "Sit on stairs", true, "Can you sit on stairs by right clicking with an empty hand?");
+		mobSpawnerSilkTouchDrop = get(miscCategory, "Mob spawner silk touch drop", true, "Do mob spawners drop themselves when harvested with silk touch?");
 		config.setCategoryComment(miscCategory, "Miscellaneous settings");
 		//Requires Restart
 		String miscRequiresRestartCategory = miscCategory + Configuration.CATEGORY_SPLITTER + "Requires Restart";

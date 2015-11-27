@@ -17,6 +17,8 @@ public class CppClassTransformer implements IClassTransformer {
 	 */
 	private static final String DELEGATE_CLASS_NAME = CppModInfo.PACKAGE_LOCATION.replace('.', '/') + "/coremod/CppCoremodHooks";
 
+	protected static boolean obfuscated;
+
 	/**
 	 * Returns whether or not the given class name represents a vanilla block class
 	 *
@@ -34,7 +36,7 @@ public class CppClassTransformer implements IClassTransformer {
 			ClassReader classReader = new ClassReader(bytes);
 			classReader.accept(classNode, 0);
 			if (isVanillaBlockClass(deobfuscatedClassName) || isVanillaBlockClass(classNode.superName))
-				return this.transformBlock(bytes, !className.equals(deobfuscatedClassName), deobfuscatedClassName);
+				return this.transformBlock(bytes, deobfuscatedClassName);
 			return bytes;
 		} catch (Exception e) {
 			return bytes;
@@ -45,10 +47,9 @@ public class CppClassTransformer implements IClassTransformer {
 	 * Modifies the block class to allow Craft++'s falling blocks to fall
 	 *
 	 * @param bytes      The bytes of the block class
-	 * @param obfuscated Whether or not we are in an obfuscated environment
 	 * @return The modified bytes of the block class
 	 */
-	private byte[] transformBlock(byte[] bytes, boolean obfuscated, String deobfuscatedClassName) {
+	private byte[] transformBlock(byte[] bytes, String deobfuscatedClassName) {
 		ClassNode classNode = new ClassNode();
 		ClassReader classReader = new ClassReader(bytes);
 		classReader.accept(classNode, 0);
@@ -127,6 +128,8 @@ public class CppClassTransformer implements IClassTransformer {
 		}
 		if (patchCount > 0)
 			System.out.println("Patched " + patchCount + " method" + (patchCount > 1 ? "s" : "") + " in class " + deobfuscatedClassName);
+		else
+			return bytes;
 		ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
 		classNode.accept(classWriter);
 		return classWriter.toByteArray();
