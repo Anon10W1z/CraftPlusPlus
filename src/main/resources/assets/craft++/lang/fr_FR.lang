@@ -2,31 +2,31 @@ tile.flintBlock.name=Bloc de Flint
 tile.sugarBlock.name=Bloc de Sucre
 tile.charcoalBlock.name=Bloc de Charbon
 
-tile.buttonStone.name=Bouton de Pierre
+tile.buttonStone.name=Bouton Pierre
 tile.buttonWood.name=Bouton en Bois
 tile.sand.name=Sable/Sable Rouge
 
-item.dynamite.name=Dynamite
+item.dynamite.name=Dynamiter
 item.boatObsidian.name=Obsidian Bateau
-item.eggFried.name=Fried Egg
-item.spongeWipe.name=éponge Wipe
-item.craftingPad.name=Crafting Pad
+item.eggFried.name=Oeuf frit
+item.spongeWipe.name=Essuyez l'éponge
+item.craftingPad.name=Pad Crafting
 item.binocularLens.name=Objectif Binoculaire
 item.binoculars.name=Jumelles
 
 craft++.potionDisplay=Potion Effet Affichage
 
-craft++.Dynamite=Dynamite
+craft++.Dynamite=Dynamiter
 craft++.ObsidianBoat=ObsidianBoat
 
-enchantment.nimble=Nimble
+enchantment.nimble=Agile
 enchantment.hops=Houblon
-enchantment.vigor=Vigor
-enchantment.veteran=Veteran
-enchantment.blazing=Blazing
+enchantment.vigor=Vigueur
+enchantment.veteran=Ancien Combattant
+enchantment.blazing=Brûlant
 enchantment.siphon=Siphon
-enchantment.quickdraw=Quickdraw
-enchantment.homing=Homing
+enchantment.quickdraw=Dessin Rapide
+enchantment.homing=La Prise D'origine
 
 enchantment.level.11=XI
 enchantment.level.12=XII
