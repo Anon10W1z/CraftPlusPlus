@@ -89,16 +89,16 @@ public final class CppConfigHandler {
 		autoSeedPlanting = get(miscCategory, "Enable automatic seed planting", true, "Do dropped seeds plant themselves?");
 		binocularZoomAmount = (float) get(miscCategory, "Binocular Zoom Amount", 4, "By how much do binoculars divide your FOV?", false).setMinValue(1D).getDouble();
 		additionalFallingBlocks = Arrays.stream(config.getStringList("Additional Falling Blocks", miscCategory, new String[]{GameRegistry.findUniqueIdentifierFor(Blocks.dirt).name, GameRegistry.findUniqueIdentifierFor(Blocks.clay).name}, "A list of additional blocks that can fall like sand.")).map(Block::getBlockFromName).filter(block -> block != null).collect(Collectors.toList());
-		signOverhaul = get(miscCategory, "Sign overhaul", true, "Is the way signs are used in Minecraft overhauled?");
 		sitOnStairs = get(miscCategory, "Sit on stairs", true, "Can you sit on stairs by right clicking with an empty hand?");
 		mobSpawnerSilkTouchDrop = get(miscCategory, "Mob spawner silk touch drop", true, "Do mob spawners drop themselves when harvested with silk touch?");
 		config.setCategoryComment(miscCategory, "Miscellaneous settings");
-		//Requires Restart
+
 		String miscRequiresRestartCategory = miscCategory + Configuration.CATEGORY_SPLITTER + "Requires Restart";
 		commandBlockInRedstoneTab = get(miscRequiresRestartCategory, "Command Blocks in creative menu", true, "Can command blocks be obtained from the redstone creative tab?");
 		enableFlintAndSteelDispenserBehavior = get(miscRequiresRestartCategory, "Enable flint and steel dispenser behavior", false, "Can you use flint and steel with dispensers?");
 		renameButtons = get(miscRequiresRestartCategory, "Rename buttons", true, "Do buttons get renamed based on their material?");
-		craftingTableChanges = get(miscRequiresRestartCategory, "Crafting table changes", true, "Is the way to craft in a 3x3 grid changed?");
+		craftingTableChanges = get(miscRequiresRestartCategory, "Crafting table changes", true, "Is the way to create a 3x3 crafting device changed?");
+		signOverhaul = get(miscRequiresRestartCategory, "Sign overhaul", true, "Is the way signs are used in Minecraft overhauled?");
 		config.setCategoryComment(miscRequiresRestartCategory, "Settings that require a Minecraft restart");
 		config.setCategoryRequiresMcRestart(miscRequiresRestartCategory, true);
 

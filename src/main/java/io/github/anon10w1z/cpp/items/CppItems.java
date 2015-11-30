@@ -25,8 +25,10 @@ public class CppItems {
 		GameRegistry.registerItem(obsidian_boat, "obsidian_boat");
 		fried_egg = new ItemFood(5, 0.6F, false).setUnlocalizedName("eggFried");
 		GameRegistry.registerItem(fried_egg, "egg_fried");
-		sponge_wipe = new Item().setUnlocalizedName("spongeWipe").setCreativeTab(CreativeTabs.tabMisc);
-		GameRegistry.registerItem(sponge_wipe, "sponge_wipe");
+		if (CppConfigHandler.signOverhaul) {
+			sponge_wipe = new Item().setUnlocalizedName("spongeWipe").setCreativeTab(CreativeTabs.tabMisc);
+			GameRegistry.registerItem(sponge_wipe, "sponge_wipe");
+		}
 		if (CppConfigHandler.craftingTableChanges) {
 			crafting_pad = new ItemCraftingPad();
 			GameRegistry.registerItem(crafting_pad, "crafting_pad");
