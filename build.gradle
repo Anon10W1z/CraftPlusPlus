@@ -1,23 +1,8 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
-    }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
-    }
+plugins {
+    id "net.minecraftforge.gradle.forge" version "2.0.2"
 }
 
-apply plugin: 'forge'
-
-version = "3.7.4"
+version = "3.7.5"
 def ENV = System.getenv()
 if (ENV.DRONE_BUILD_NUMBER)
     version += "-build" + ENV.DRONE_BUILD_NUMBER
@@ -28,7 +13,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 minecraft {
-    version = "1.8-11.14.3.1502"
+    version = "1.8-11.14.4.1577"
     runDir = "eclipse"
     mappings = "snapshot_nodoc_20141130"
 }

@@ -4,7 +4,6 @@ import io.github.anon10w1z.cpp.enchantments.CppEnchantmentBase;
 import io.github.anon10w1z.cpp.enchantments.CppEnchantments;
 import io.github.anon10w1z.cpp.enchantments.EntityTickingEnchantment;
 import io.github.anon10w1z.cpp.entities.EntitySitPoint;
-import io.github.anon10w1z.cpp.gui.GuiCppConfig;
 import io.github.anon10w1z.cpp.items.CppItems;
 import io.github.anon10w1z.cpp.main.CppModInfo;
 import io.github.anon10w1z.cpp.main.CppUtils;
@@ -47,7 +46,6 @@ import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.FOVUpdateEvent;
-import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.entity.EntityEvent;
@@ -62,7 +60,6 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
-import net.minecraftforge.fml.client.GuiIngameModOptions;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
@@ -517,17 +514,5 @@ public final class CppEventHandler {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Changes the mod options GUI into Craft++'s config GUI
-	 *
-	 * @param event The GuiOpenEvent
-	 */
-	@SideOnly(Side.CLIENT)
-	@SubscribeEvent
-	public void onGuiOpen(GuiOpenEvent event) {
-		if (event.gui instanceof GuiIngameModOptions)
-			event.gui = new GuiCppConfig();
 	}
 }
