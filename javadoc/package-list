@@ -3,6 +3,7 @@ io.github.anon10w1z.cpp.coremod
 io.github.anon10w1z.cpp.dispenser
 io.github.anon10w1z.cpp.enchantments
 io.github.anon10w1z.cpp.entities
+io.github.anon10w1z.cpp.entities.render
 io.github.anon10w1z.cpp.gui
 io.github.anon10w1z.cpp.handlers
 io.github.anon10w1z.cpp.items
