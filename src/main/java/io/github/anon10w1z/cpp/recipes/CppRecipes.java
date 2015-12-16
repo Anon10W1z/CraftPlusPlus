@@ -25,6 +25,7 @@ public class CppRecipes {
 		registerStorageRecipes(new ItemStack(Items.coal, 1, 1), CppBlocks.charcoal_block);
 		//Craft++ Items
 		GameRegistry.addRecipe(new ItemStack(CppItems.dynamite, 1, 0), " W", " G", "S ", 'W', Items.string, 'G', Items.gunpowder, 'S', Blocks.sand);
+		GameRegistry.addRecipe(new ItemStack(CppItems.stone_boat), "S S", "SSS", 'S', Blocks.stone);
 		GameRegistry.addRecipe(new ItemStack(CppItems.obsidian_boat), "O O", "OOO", 'O', Blocks.obsidian);
 		if (CppConfigHandler.signOverhaul)
 			GameRegistry.addShapelessRecipe(new ItemStack(CppItems.sponge_wipe, 4), Blocks.sponge);

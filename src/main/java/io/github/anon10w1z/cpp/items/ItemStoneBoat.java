@@ -1,6 +1,6 @@
 package io.github.anon10w1z.cpp.items;
 
-import io.github.anon10w1z.cpp.entities.EntityObsidianBoat;
+import io.github.anon10w1z.cpp.entities.EntityStoneBoat;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,12 +15,12 @@ import net.minecraft.world.World;
 import java.util.List;
 
 /**
- * Obsidian boat item to alongside obsidian boat entity
+ * Stone boat item to alongside stone boat entity
  */
-public class ItemObsidianBoat extends Item {
-	public ItemObsidianBoat() {
+public class ItemStoneBoat extends Item {
+	public ItemStoneBoat() {
 		super();
-		this.setUnlocalizedName("boatObsidian");
+		this.setUnlocalizedName("boatStone");
 		this.setCreativeTab(CreativeTabs.tabTransport);
 		this.setMaxStackSize(1);
 	}
@@ -64,13 +64,13 @@ public class ItemObsidianBoat extends Item {
 			BlockPos blockPos = movingObjectPosition.getBlockPos();
 			if (world.getBlockState(blockPos).getBlock() == Blocks.snow_layer)
 				blockPos = blockPos.down();
-			EntityObsidianBoat obsidianBoat = new EntityObsidianBoat(world, (float) blockPos.getX() + 0.5, (float) blockPos.getY() + 1, (float) blockPos.getZ() + 0.5);
-			obsidianBoat.rotationYaw = (float) (((MathHelper.floor_double(player.rotationYaw * 4 / 360 + 0.5) & 3) - 1) * 90);
+			EntityStoneBoat stoneBoat = new EntityStoneBoat(world, (float) blockPos.getX() + 0.5, (float) blockPos.getY() + 1, (float) blockPos.getZ() + 0.5);
+			stoneBoat.rotationYaw = (float) (((MathHelper.floor_double(player.rotationYaw * 4 / 360 + 0.5) & 3) - 1) * 90);
 
-			if (!world.getCollidingBoundingBoxes(obsidianBoat, obsidianBoat.getEntityBoundingBox().expand(-0.1, -0.1, -0.1)).isEmpty())
+			if (!world.getCollidingBoundingBoxes(stoneBoat, stoneBoat.getEntityBoundingBox().expand(-0.1, -0.1, -0.1)).isEmpty())
 				return itemstack;
 			if (!world.isRemote)
-				world.spawnEntityInWorld(obsidianBoat);
+				world.spawnEntityInWorld(stoneBoat);
 			if (!player.capabilities.isCreativeMode)
 				--itemstack.stackSize;
 			player.triggerAchievement(StatList.objectUseStats[Item.getIdFromItem(this)]);

@@ -1,6 +1,6 @@
 package io.github.anon10w1z.cpp.dispenser;
 
-import io.github.anon10w1z.cpp.entities.EntityObsidianBoat;
+import io.github.anon10w1z.cpp.entities.EntityStoneBoat;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.material.Material;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
@@ -10,7 +10,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-public class BehaviorDispenseObsidianBoat extends BehaviorDefaultDispenseItem {
+public class BehaviorDispenseStoneBoat extends BehaviorDefaultDispenseItem {
 	@Override
 	public ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
 		EnumFacing enumfacing = BlockDispenser.getFacing(source.getBlockMetadata());
@@ -20,11 +20,11 @@ public class BehaviorDispenseObsidianBoat extends BehaviorDefaultDispenseItem {
 		double d2 = source.getZ() + (double) ((float) enumfacing.getFrontOffsetZ() * 1.125F);
 		BlockPos blockpos = source.getBlockPos().offset(enumfacing);
 		Material material = world.getBlockState(blockpos).getBlock().getMaterial();
-		if (!Material.air.equals(material) || !Material.lava.equals(world.getBlockState(blockpos.down()).getBlock().getMaterial()))
+		if (!Material.air.equals(material) || !Material.water.equals(world.getBlockState(blockpos.down()).getBlock().getMaterial()))
 			return new BehaviorDefaultDispenseItem().dispense(source, stack);
-		int d3 = material.equals(Material.lava) ? 1 : 0;
-		EntityObsidianBoat obsidianBoat = new EntityObsidianBoat(world, d0, d1 + d3, d2);
-		world.spawnEntityInWorld(obsidianBoat);
+		int d3 = material.equals(Material.water) ? 1 : 0;
+		EntityStoneBoat stoneBoat = new EntityStoneBoat(world, d0, d1 + d3, d2);
+		world.spawnEntityInWorld(stoneBoat);
 		stack.splitStack(1);
 		return stack;
 	}

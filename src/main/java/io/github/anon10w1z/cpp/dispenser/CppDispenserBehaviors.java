@@ -36,6 +36,7 @@ public class CppDispenserBehaviors {
 				registerDispenserBehavior(item, new BehaviorDefaultDispenseItem());
 		}
 		registerDispenserBehavior(CppItems.dynamite, new BehaviorDispenseDynamite());
+		registerDispenserBehavior(CppItems.stone_boat, new BehaviorDispenseStoneBoat());
 		registerDispenserBehavior(CppItems.obsidian_boat, new BehaviorDispenseObsidianBoat());
 	}
 

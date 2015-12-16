@@ -1,7 +1,13 @@
 package io.github.anon10w1z.cpp.proxies;
 
 import io.github.anon10w1z.cpp.blocks.CppBlocks;
-import io.github.anon10w1z.cpp.entities.*;
+import io.github.anon10w1z.cpp.entities.EntityDynamite;
+import io.github.anon10w1z.cpp.entities.EntityObsidianBoat;
+import io.github.anon10w1z.cpp.entities.EntitySitPoint;
+import io.github.anon10w1z.cpp.entities.EntityStoneBoat;
+import io.github.anon10w1z.cpp.entities.render.RenderObsidianBoat;
+import io.github.anon10w1z.cpp.entities.render.RenderSitPoint;
+import io.github.anon10w1z.cpp.entities.render.RenderStoneBoat;
 import io.github.anon10w1z.cpp.items.CppItems;
 import io.github.anon10w1z.cpp.main.CppModInfo;
 import net.minecraft.block.Block;
@@ -27,6 +33,7 @@ public class CppClientProxy extends CppCommonProxy {
 	public void registerRenderers() {
 		//Items
 		this.registerItemInventoryRenderer(CppItems.dynamite, "dynamite");
+		this.registerItemInventoryRenderer(CppItems.stone_boat, "stone_boat");
 		this.registerItemInventoryRenderer(CppItems.obsidian_boat, "obsidian_boat");
 		this.registerItemInventoryRenderer(CppItems.fried_egg, "egg_fried");
 		this.registerItemInventoryRenderer(CppItems.sponge_wipe, "sponge_wipe");
@@ -39,6 +46,7 @@ public class CppClientProxy extends CppCommonProxy {
 		this.registerBlockInventoryRenderer(CppBlocks.charcoal_block, "charcoal");
 		//Entities
 		RenderingRegistry.registerEntityRenderingHandler(EntityDynamite.class, new RenderSnowball(minecraft.getRenderManager(), CppItems.dynamite, minecraft.getRenderItem()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityStoneBoat.class, new RenderStoneBoat());
 		RenderingRegistry.registerEntityRenderingHandler(EntityObsidianBoat.class, new RenderObsidianBoat());
 		RenderingRegistry.registerEntityRenderingHandler(EntitySitPoint.class, new RenderSitPoint());
 	}

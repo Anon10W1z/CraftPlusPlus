@@ -7,6 +7,7 @@ tile.buttonWood.name=Wooden Button
 tile.sand.name=Sand/Red Sand
 
 item.dynamite.name=Dynamite
+item.boatStone.name=Stone Boat
 item.boatObsidian.name=Obsidian Boat
 item.eggFried.name=Fried Egg
 item.spongeWipe.name=Sponge Wipe
@@ -14,10 +15,7 @@ item.craftingPad.name=Craftin' Pad
 item.binocularLens.name=Binocular Lens
 item.binoculars.name=Binoculars
 
-craft++.potionDisplay=Potion Effect Display
-
-craft++.Dynamite=Dynamite
-craft++.ObsidianBoat=ObsidianBoat
+key.potionDisplay=Potion Effect Display
 
 enchantment.nimble=Nimble
 enchantment.hops=Hops

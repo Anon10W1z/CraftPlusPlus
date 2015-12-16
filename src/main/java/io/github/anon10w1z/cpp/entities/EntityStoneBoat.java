@@ -16,9 +16,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 
 /**
- * Obsidian boat entity to go alongside obsidian boat item
+ * Stone boat entity to go alongside stone boat item
  */
-public class EntityObsidianBoat extends Entity {
+public class EntityStoneBoat extends Entity {
 	private boolean isBoatEmpty;
 	private double speedMultiplier;
 	private int boatPosRotationIncrements;
@@ -34,7 +34,7 @@ public class EntityObsidianBoat extends Entity {
 	@SideOnly(Side.CLIENT)
 	private double velocityZ;
 
-	public EntityObsidianBoat(World world) {
+	public EntityStoneBoat(World world) {
 		super(world);
 		this.isBoatEmpty = true;
 		this.speedMultiplier = 0.07;
@@ -43,7 +43,7 @@ public class EntityObsidianBoat extends Entity {
 		this.isImmuneToFire = true;
 	}
 
-	public EntityObsidianBoat(World world, double x, double y, double z) {
+	public EntityStoneBoat(World world, double x, double y, double z) {
 		this(world);
 		this.setPosition(x, y, z);
 		this.motionX = 0;
@@ -83,7 +83,7 @@ public class EntityObsidianBoat extends Entity {
 
 	@Override
 	public double getMountedYOffset() {
-		return 0.6;
+		return -0.30000001192092896D;
 	}
 
 	@Override
@@ -103,7 +103,7 @@ public class EntityObsidianBoat extends Entity {
 				if (this.riddenByEntity != null)
 					this.riddenByEntity.mountEntity(this);
 				if (!flag)
-					this.dropItem(CppItems.obsidian_boat, 1);
+					this.dropItem(CppItems.stone_boat, 1);
 				this.setDead();
 			}
 			return true;
@@ -186,7 +186,7 @@ public class EntityObsidianBoat extends Entity {
 			double d1 = this.getEntityBoundingBox().minY + (this.getEntityBoundingBox().maxY - this.getEntityBoundingBox().minY) * (double) (i) / (double) b0 - 0.125;
 			double d3 = this.getEntityBoundingBox().minY + (this.getEntityBoundingBox().maxY - this.getEntityBoundingBox().minY) * (double) (i + 1) / (double) b0 - 0.125;
 			AxisAlignedBB axisalignedbb = new AxisAlignedBB(this.getEntityBoundingBox().minX, d1, this.getEntityBoundingBox().minZ, this.getEntityBoundingBox().maxX, d3, this.getEntityBoundingBox().maxZ);
-			if (this.worldObj.isAABBInMaterial(axisalignedbb, Material.lava))
+			if (this.worldObj.isAABBInMaterial(axisalignedbb, Material.water))
 				d0 += 1.0D / (double) b0;
 		}
 		double d9 = Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
@@ -204,11 +204,11 @@ public class EntityObsidianBoat extends Entity {
 				if (this.rand.nextBoolean()) {
 					d7 = this.posX - d2 * d5 * 0.8 + d4 * d6;
 					d8 = this.posZ - d4 * d5 * 0.8 - d2 * d6;
-					this.worldObj.spawnParticle(EnumParticleTypes.DRIP_LAVA, d7, this.posY - 0.125, d8, this.motionX, this.motionY, this.motionZ);
+					this.worldObj.spawnParticle(EnumParticleTypes.DRIP_WATER, d7, this.posY - 0.125, d8, this.motionX, this.motionY, this.motionZ);
 				} else {
 					d7 = this.posX + d2 + d4 * d5 * 0.7;
 					d8 = this.posZ + d4 - d2 * d5 * 0.7;
-					this.worldObj.spawnParticle(EnumParticleTypes.DRIP_LAVA, d7, this.posY - 0.125, d8, this.motionX, this.motionY, this.motionZ);
+					this.worldObj.spawnParticle(EnumParticleTypes.DRIP_WATER, d7, this.posY - 0.125, d8, this.motionX, this.motionY, this.motionZ);
 				}
 			}
 		}
@@ -294,10 +294,10 @@ public class EntityObsidianBoat extends Entity {
 				this.motionZ *= 0.5;
 			}
 			this.moveEntity(this.motionX, this.motionY, this.motionZ);
-			if (this.isCollidedHorizontally && d9 > 2) {
+			if (this.isCollidedHorizontally && d9 > 0.5) {
 				if (!this.worldObj.isRemote && !this.isDead) {
 					this.setDead();
-					this.dropItem(CppItems.obsidian_boat, 1);
+					this.dropItem(CppItems.stone_boat, 1);
 				}
 			} else {
 				this.motionX *= 0.9900000095367432;
@@ -319,7 +319,7 @@ public class EntityObsidianBoat extends Entity {
 			this.setRotation(this.rotationYaw, this.rotationPitch);
 			if (!this.worldObj.isRemote) {
 				List<Entity> entities = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(0.20000000298023224, 0, 0.20000000298023224));
-				entities.stream().filter(entity -> entity != this.riddenByEntity && entity.canBePushed() && entity instanceof EntityObsidianBoat).forEach(entity -> entity.applyEntityCollision(this));
+				entities.stream().filter(entity -> entity != this.riddenByEntity && entity.canBePushed() && entity instanceof EntityStoneBoat).forEach(entity -> entity.applyEntityCollision(this));
 				if (this.riddenByEntity != null && this.riddenByEntity.isDead)
 					this.riddenByEntity = null;
 			}
@@ -355,15 +355,15 @@ public class EntityObsidianBoat extends Entity {
 	@Override
 	protected void func_180433_a(double p_180433_1_, boolean p_180433_3_, Block p_180433_4_, BlockPos p_180433_5_) {
 		if (p_180433_3_) {
-			if (this.fallDistance > 60) {
+			if (this.fallDistance > 3) {
 				this.fall(this.fallDistance, 1);
 				if (!this.worldObj.isRemote && !this.isDead) {
 					this.setDead();
-					this.dropItem(CppItems.obsidian_boat, 1);
+					this.dropItem(CppItems.stone_boat, 1);
 				}
 				this.fallDistance = 0;
 			}
-		} else if (this.worldObj.getBlockState((new BlockPos(this)).down()).getBlock().getMaterial() != Material.lava && p_180433_1_ < 0.0D)
+		} else if (this.worldObj.getBlockState((new BlockPos(this)).down()).getBlock().getMaterial() != Material.water && p_180433_1_ < 0.0D)
 			this.fallDistance = (float) ((double) this.fallDistance - p_180433_1_);
 	}
 

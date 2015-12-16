@@ -7,17 +7,15 @@ tile.buttonWood.name=Botón de Madera
 tile.sand.name=Arena/Arena Roja
 
 item.dynamite.name=Dinamita
+item.boatStone.name=Barco de Piedra
 item.boatObsidian.name=Obsidiana Barco
 item.eggFried.name=Huevo Frito
 item.spongeWipe.name=Esponja Limpie
-item.craftingPad.name=Pad Crafting
+item.craftingPad.name=Almohadilla Artesanía
 item.binocularLens.name=Binocular Lente
 item.binoculars.name=Prismáticos
 
-craft++.potionDisplay=Efecto Poción Display
-
-craft++.Dynamite=Dynamite
-craft++.ObsidianBoat=ObsidianBoat
+key.potionDisplay=Efecto Poción Display
 
 enchantment.nimble=Ágil
 enchantment.hops=Lúpulo

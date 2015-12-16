@@ -1,5 +1,6 @@
-package io.github.anon10w1z.cpp.entities;
+package io.github.anon10w1z.cpp.entities.render;
 
+import io.github.anon10w1z.cpp.entities.EntityObsidianBoat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBoat;

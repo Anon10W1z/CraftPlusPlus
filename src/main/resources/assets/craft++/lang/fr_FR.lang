@@ -7,17 +7,15 @@ tile.buttonWood.name=Bouton en Bois
 tile.sand.name=Sable/Sable Rouge
 
 item.dynamite.name=Dynamiter
+item.boatStone.name=Bateau de Pierre
 item.boatObsidian.name=Obsidian Bateau
-item.eggFried.name=Oeuf frit
-item.spongeWipe.name=Essuyez l'éponge
-item.craftingPad.name=Pad Crafting
+item.eggFried.name=Oeuf Frit
+item.spongeWipe.name=Essuyez L'éponge
+item.craftingPad.name=Pad D'artisanat
 item.binocularLens.name=Objectif Binoculaire
 item.binoculars.name=Jumelles
 
-craft++.potionDisplay=Potion Effet Affichage
-
-craft++.Dynamite=Dynamiter
-craft++.ObsidianBoat=ObsidianBoat
+key.potionDisplay=Potion Effet Affichage
 
 enchantment.nimble=Agile
 enchantment.hops=Houblon

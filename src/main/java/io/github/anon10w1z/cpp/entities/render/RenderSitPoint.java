@@ -1,4 +1,4 @@
-package io.github.anon10w1z.cpp.entities;
+package io.github.anon10w1z.cpp.entities.render;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.culling.ICamera;

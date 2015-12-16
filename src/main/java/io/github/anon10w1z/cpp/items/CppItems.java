@@ -11,6 +11,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
  */
 public class CppItems {
 	public static Item dynamite;
+	public static Item stone_boat;
 	public static Item obsidian_boat;
 	public static Item fried_egg;
 	public static Item sponge_wipe;
@@ -21,6 +22,8 @@ public class CppItems {
 	public static void registerItems() {
 		dynamite = new ItemDynamite();
 		GameRegistry.registerItem(dynamite, "dynamite");
+		stone_boat = new ItemStoneBoat();
+		GameRegistry.registerItem(stone_boat, "stone_boat");
 		obsidian_boat = new ItemObsidianBoat();
 		GameRegistry.registerItem(obsidian_boat, "obsidian_boat");
 		fried_egg = new ItemFood(5, 0.6F, false).setUnlocalizedName("eggFried");
