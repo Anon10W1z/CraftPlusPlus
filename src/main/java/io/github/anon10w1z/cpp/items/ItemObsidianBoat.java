@@ -1,5 +1,7 @@
 package io.github.anon10w1z.cpp.items;
 
+import java.util.List;
+
 import io.github.anon10w1z.cpp.entities.EntityObsidianBoat;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -8,11 +10,13 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.*;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 /**
  * Obsidian boat item to alongside obsidian boat entity
@@ -33,7 +37,7 @@ public class ItemObsidianBoat extends Item {
 		double d0 = player.posX;
 		double d1 = player.posY + player.getEyeHeight();
 		double d2 = player.posZ;
-		Vec3 vec3 = new Vec3(d0, d1, d2);
+		Vec3d vec3 = new Vec3d(d0, d1, d2);
 		float f3 = MathHelper.cos(-f2 * 0.017453292F - (float) Math.PI);
 		float f4 = MathHelper.sin(-f2 * 0.017453292F - (float) Math.PI);
 		float f5 = -MathHelper.cos(-f1 * 0.017453292F);
@@ -41,12 +45,12 @@ public class ItemObsidianBoat extends Item {
 		float f7 = f4 * f5;
 		float f8 = f3 * f5;
 		int d3 = 5;
-		Vec3 vec31 = vec3.addVector((double) f7 * d3, (double) f6 * d3, (double) f8 * d3);
-		MovingObjectPosition movingObjectPosition = world.rayTraceBlocks(vec3, vec31, true);
-		if (movingObjectPosition == null)
+		Vec3d vec31 = vec3.addVector((double) f7 * d3, (double) f6 * d3, (double) f8 * d3);
+		RayTraceResult result= world.rayTraceBlocks(vec3, vec31, true);
+		if (result == null)
 			return itemstack;
 
-		Vec3 vec32 = player.getLook(1);
+		Vec3d vec32 = player.getLook(1);
 		boolean flag = false;
 		List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().addCoord(vec32.xCoord * d3, vec32.yCoord * d3, vec32.zCoord * d3).expand(1, 1, 1));
 		for (Entity entity : entities)
@@ -60,8 +64,8 @@ public class ItemObsidianBoat extends Item {
 			}
 		if (flag)
 			return itemstack;
-		if (movingObjectPosition.typeOfHit == MovingObjectType.BLOCK) {
-			BlockPos blockPos = movingObjectPosition.getBlockPos();
+		if (result.typeOfHit == Type.BLOCK) {
+			BlockPos blockPos = result.getBlockPos();
 			if (world.getBlockState(blockPos).getBlock() == Blocks.snow_layer)
 				blockPos = blockPos.down();
 			EntityObsidianBoat obsidianBoat = new EntityObsidianBoat(world, (float) blockPos.getX() + 0.5, (float) blockPos.getY() + 1, (float) blockPos.getZ() + 0.5);

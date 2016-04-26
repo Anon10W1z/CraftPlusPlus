@@ -2,8 +2,8 @@ package io.github.anon10w1z.cpp.entities;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -53,7 +53,7 @@ public class EntitySitPoint extends Entity {
 
 	@Override
 	public void onEntityUpdate() {
-		if (this.riddenByEntity == null)
+		if (this.getRidingEntity() == null)
 			this.setDead();
 	}
 

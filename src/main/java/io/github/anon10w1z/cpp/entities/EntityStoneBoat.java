@@ -1,5 +1,7 @@
 package io.github.anon10w1z.cpp.entities;
 
+import java.util.List;
+
 import io.github.anon10w1z.cpp.items.CppItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -8,12 +10,15 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.List;
 
 /**
  * Stone boat entity to go alongside stone boat item

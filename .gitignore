@@ -2,5 +2,11 @@
 .gradle/
 eclipse/
 build/
+bin/
 lib/
 CraftPlusPlus.iml
+*.classpath
+*.project
+.settings/org.eclipse.jdt.core.prefs
+CraftPlusPlus_Server.launch
+CraftPlusPlus_Client.launch

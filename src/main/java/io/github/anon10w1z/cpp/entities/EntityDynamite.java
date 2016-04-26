@@ -5,7 +5,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 /**
@@ -67,7 +67,7 @@ public class EntityDynamite extends EntityThrowable {
 	}
 
 	@Override
-	protected void onImpact(MovingObjectPosition movingObjectPosition) {
+	protected void onImpact(RayTraceResult result) {
 		World world = this.worldObj;
 		if (!world.isRemote)
 			if (this.getTicksSinceWet() < WET_TICKS) {

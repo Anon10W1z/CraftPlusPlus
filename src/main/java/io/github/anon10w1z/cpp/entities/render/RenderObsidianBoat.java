@@ -7,7 +7,6 @@ import net.minecraft.client.model.ModelBoat;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
