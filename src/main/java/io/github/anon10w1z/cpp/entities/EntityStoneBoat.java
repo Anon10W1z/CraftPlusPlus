@@ -10,6 +10,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumParticleTypes;
@@ -38,6 +41,13 @@ public class EntityStoneBoat extends Entity {
 	private double velocityY;
 	@SideOnly(Side.CLIENT)
 	private double velocityZ;
+	
+	
+	private static final DataParameter<Float> DAMAGE_TAKEN = EntityDataManager.createKey(EntityStoneBoat.class, DataSerializers.FLOAT);
+	private static final DataParameter<Integer> TIME_SINCE_HIT = EntityDataManager.createKey(EntityStoneBoat.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> FORWARD_DIRECTION = EntityDataManager.createKey(EntityStoneBoat.class, DataSerializers.VARINT);
+	
+	
 
 	public EntityStoneBoat(World world) {
 		super(world);
@@ -64,11 +74,14 @@ public class EntityStoneBoat extends Entity {
 		return false;
 	}
 
+
+		
+	
 	@Override
 	protected void entityInit() {
-		this.dataWatcher.addObject(17, 0);
-		this.dataWatcher.addObject(18, 1);
-		this.dataWatcher.addObject(19, 0F);
+		this.dataWatcher.register(TIME_SINCE_HIT, 0);
+		this.dataWatcher.register(FORWARD_DIRECTION, 1);
+		this.dataWatcher.register(DAMAGE_TAKEN, 0F);
 	}
 
 	@Override
@@ -96,7 +109,7 @@ public class EntityStoneBoat extends Entity {
 		if (this.isEntityInvulnerable(source))
 			return false;
 		if (!this.worldObj.isRemote && !this.isDead) {
-			if (this.riddenByEntity != null && this.riddenByEntity == source.getEntity() && source instanceof EntityDamageSourceIndirect)
+			if (this.getRidingEntity() != null && this.getRidingEntity() == source.getEntity() && source instanceof EntityDamageSourceIndirect)
 				return false;
 			this.setForwardDirection(-this.getForwardDirection());
 			this.setTimeSinceHit(10);
@@ -105,8 +118,8 @@ public class EntityStoneBoat extends Entity {
 			boolean flag = source.getEntity() instanceof EntityPlayer && ((EntityPlayer) source.getEntity()).capabilities.isCreativeMode;
 
 			if (flag || this.getDamageTaken() > 40) {
-				if (this.riddenByEntity != null)
-					this.riddenByEntity.mountEntity(this);
+				if (this.getRidingEntity() != null)
+					this.getRidingEntity().mountEntity(this);
 				if (!flag)
 					this.dropItem(CppItems.stone_boat, 1);
 				this.setDead();
@@ -132,7 +145,7 @@ public class EntityStoneBoat extends Entity {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void func_180426_a(double p_180426_1_, double p_180426_3_, double p_180426_5_, float p_180426_7_, float p_180426_8_, int p_180426_9_, boolean p_180426_10_) {
-		if (p_180426_10_ && this.riddenByEntity != null) {
+		if (p_180426_10_ && this.getRidingEntity() != null) {
 			this.prevPosX = this.posX = p_180426_1_;
 			this.prevPosY = this.posY = p_180426_3_;
 			this.prevPosZ = this.posZ = p_180426_5_;
@@ -253,9 +266,9 @@ public class EntityStoneBoat extends Entity {
 					this.motionY /= 2.0D;
 				this.motionY += 0.007000000216066837;
 			}
-			if (this.riddenByEntity instanceof EntityLivingBase) {
+			if (this.getRidingEntity() instanceof EntityLivingBase) {
 				EntityLivingBase livingEntity = (EntityLivingBase) this.riddenByEntity;
-				float f = this.riddenByEntity.rotationYaw + -livingEntity.moveStrafing * 90;
+				float f = this.getRidingEntity().rotationYaw + -livingEntity.moveStrafing * 90;
 				this.motionX += -Math.sin((double) (f * (float) Math.PI / 180)) * this.speedMultiplier * (double) livingEntity.moveForward * 0.05000000074505806;
 				this.motionZ += Math.cos((double) (f * (float) Math.PI / 180)) * this.speedMultiplier * (double) livingEntity.moveForward * 0.05000000074505806;
 			}
@@ -324,21 +337,23 @@ public class EntityStoneBoat extends Entity {
 			this.setRotation(this.rotationYaw, this.rotationPitch);
 			if (!this.worldObj.isRemote) {
 				List<Entity> entities = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(0.20000000298023224, 0, 0.20000000298023224));
-				entities.stream().filter(entity -> entity != this.riddenByEntity && entity.canBePushed() && entity instanceof EntityStoneBoat).forEach(entity -> entity.applyEntityCollision(this));
-				if (this.riddenByEntity != null && this.riddenByEntity.isDead)
-					this.riddenByEntity = null;
+				entities.stream().filter(entity -> entity != this.getRidingEntity() && entity.canBePushed() && entity instanceof EntityStoneBoat).forEach(entity -> entity.applyEntityCollision(this));
+				if (this.getRidingEntity() != null && this.getRidingEntity().isDead)
+					dismountRidingEntity();
 			}
 		}
 	}
-
+	
 	@Override
-	public void updateRiderPosition() {
-		if (this.riddenByEntity != null) {
+	public void updateRidden() {
+		if (this.getRidingEntity() != null) {
 			double d0 = Math.cos((double) this.rotationYaw * Math.PI / 180.0D) * 0.4;
 			double d1 = Math.sin((double) this.rotationYaw * Math.PI / 180.0D) * 0.4;
-			this.riddenByEntity.setPosition(this.posX + d0, this.posY + this.getMountedYOffset() + this.riddenByEntity.getYOffset(), this.posZ + d1);
+			this.getRidingEntity().setPosition(this.posX + d0, this.posY + this.getMountedYOffset() + this.getRidingEntity().getYOffset(), this.posZ + d1);
 		}
 	}
+
+
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbtTagCompound) {
@@ -371,28 +386,30 @@ public class EntityStoneBoat extends Entity {
 		} else if (this.worldObj.getBlockState((new BlockPos(this)).down()).getBlock().getMaterial() != Material.water && p_180433_1_ < 0.0D)
 			this.fallDistance = (float) ((double) this.fallDistance - p_180433_1_);
 	}
-
+	
+	
+	
 	public float getDamageTaken() {
-		return this.dataWatcher.getWatchableObjectFloat(19);
+		return this.dataWatcher.get(DAMAGE_TAKEN);
 	}
 
 	public void setDamageTaken(float damageTaken) {
-		this.dataWatcher.updateObject(19, damageTaken);
+		this.dataWatcher.set(DAMAGE_TAKEN, damageTaken);
 	}
 
 	public int getTimeSinceHit() {
-		return this.dataWatcher.getWatchableObjectInt(17);
+		return this.dataWatcher.get(TIME_SINCE_HIT);
 	}
 
 	public void setTimeSinceHit(int timeSinceHit) {
-		this.dataWatcher.updateObject(17, timeSinceHit);
+		this.dataWatcher.set(TIME_SINCE_HIT, timeSinceHit);
 	}
 
 	public int getForwardDirection() {
-		return this.dataWatcher.getWatchableObjectInt(18);
+		return this.dataWatcher.get(FORWARD_DIRECTION);
 	}
 
 	public void setForwardDirection(int forwardDirection) {
-		this.dataWatcher.updateObject(18, forwardDirection);
+		this.dataWatcher.set(FORWARD_DIRECTION, forwardDirection);
 	}
 }

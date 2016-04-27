@@ -4,6 +4,9 @@ import io.github.anon10w1z.cpp.items.CppItems;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
@@ -17,14 +20,20 @@ public class EntityDynamite extends EntityThrowable {
 	 */
 	private static final int WET_TICKS = 20;
 
+	
+	
 	/**
 	 * Datawatcher ID for ticks wet
 	 */
-	private static final int TICKS_WET_ID = 5;
+	private static final DataParameter<Integer> TICKSWET = EntityDataManager.createKey(EntityDynamite.class, DataSerializers.VARINT);
+	
+	
 	/**
 	 * Datawatcher ID for ticks since wet
 	 */
-	private static final int TICKS_SINCE_WET_ID = 6;
+	private static final DataParameter<Integer> TICKSSINCEWET = EntityDataManager.createKey(EntityDynamite.class, DataSerializers.VARINT);
+
+	
 
 	@SuppressWarnings("unused")
 	public EntityDynamite(World world) {
@@ -41,8 +50,8 @@ public class EntityDynamite extends EntityThrowable {
 
 	@Override
 	protected void entityInit() {
-		this.dataWatcher.addObject(TICKS_WET_ID, 0);
-		this.dataWatcher.addObject(TICKS_SINCE_WET_ID, WET_TICKS);
+		this.dataWatcher.register(TICKSWET, 0);
+		this.dataWatcher.register(TICKSSINCEWET, WET_TICKS);
 	}
 
 	@Override
@@ -84,16 +93,17 @@ public class EntityDynamite extends EntityThrowable {
 	 * @return The number of ticks wet
 	 */
 	private int getTicksWet() {
-		return this.dataWatcher.getWatchableObjectInt(TICKS_WET_ID);
+		return this.dataWatcher.get(TICKSWET);
 	}
-
+	
+	
 	/**
 	 * Sets the number of ticks wet
 	 *
 	 * @param ticksWet The number of ticks wet
 	 */
 	private void setTicksWet(int ticksWet) {
-		this.dataWatcher.updateObject(TICKS_WET_ID, ticksWet);
+		this.dataWatcher.set(TICKSWET, ticksWet);
 	}
 
 	/**
@@ -102,7 +112,7 @@ public class EntityDynamite extends EntityThrowable {
 	 * @return The number of ticks since wet
 	 */
 	private int getTicksSinceWet() {
-		return this.dataWatcher.getWatchableObjectInt(TICKS_SINCE_WET_ID);
+		return this.dataWatcher.get(TICKSSINCEWET);
 	}
 
 	/**
@@ -111,7 +121,7 @@ public class EntityDynamite extends EntityThrowable {
 	 * @param ticksSinceWet The number of ticks since wet
 	 */
 	private void setTicksSinceWet(int ticksSinceWet) {
-		this.dataWatcher.updateObject(TICKS_SINCE_WET_ID, ticksSinceWet);
+		this.dataWatcher.set(TICKSSINCEWET, ticksSinceWet);
 	}
 
 	/**
