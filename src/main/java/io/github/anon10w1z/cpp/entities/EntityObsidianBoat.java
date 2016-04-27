@@ -89,9 +89,11 @@ public class EntityObsidianBoat extends Entity {
 	
 
 	@Override
-	public AxisAlignedBB getBoundingBox() {
+	public AxisAlignedBB getCollisionBoundingBox() {
 		return this.getEntityBoundingBox();
 	}
+	
+	
 
 	@Override
 	public boolean canBePushed() {
@@ -118,7 +120,7 @@ public class EntityObsidianBoat extends Entity {
 
 			if (flag || this.getDamageTaken() > 40) {
 				if (this.getRidingEntity() != null)
-					this.getRidingEntity().mountEntity(this);
+					this.getRidingEntity().startRiding(this);
 				if (!flag)
 					this.dropItem(CppItems.obsidian_boat, 1);
 				this.setDead();
@@ -369,7 +371,7 @@ public class EntityObsidianBoat extends Entity {
 
 	@Override
 	public boolean interactFirst(EntityPlayer player) {
-		if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityPlayer && this.riddenByEntity != player)
+		if (this.getRidingEntity() != null && this.getRidingEntity() instanceof EntityPlayer && this.getRidingEntity() != player)
 			return true;
 		if (!this.worldObj.isRemote)
 			player.mountEntity(this);

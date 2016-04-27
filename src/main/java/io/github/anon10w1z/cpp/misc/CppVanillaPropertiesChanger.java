@@ -13,6 +13,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.AchievementList;
+import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.WeightedRandomFishable;
 import net.minecraftforge.common.FishingHooks;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
@@ -50,7 +51,7 @@ public class CppVanillaPropertiesChanger {
 			Blocks.wooden_button.setUnlocalizedName("buttonWood");
 		}
 		//Adding fishables
-		FishingHooks.addJunk(new WeightedRandomFishable(new ItemStack(Items.paper), 10));
+		FishingHooks.addJunk(new WeightedRandom(new ItemStack(Items.paper), 10));
 		//Modifying achievements
 		ReflectionHelper.setPrivateValue(Achievement.class, AchievementList.buildWorkBench, new ItemStack(CppItems.crafting_pad), "theItemStack", "field_75990_d");
 	}

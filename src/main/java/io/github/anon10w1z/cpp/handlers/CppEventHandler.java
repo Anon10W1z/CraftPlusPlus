@@ -44,6 +44,8 @@ import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -98,7 +100,7 @@ public final class CppEventHandler {
 	 */
 	@SubscribeEvent
 	public void onLivingDrops(LivingDropsEvent event) {
-		Entity entity = event.entity;
+		Entity entity = event.getEntity();
 		World world = entity.worldObj;
 		//New Drops
 		if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doMobLoot")) {
@@ -123,20 +125,20 @@ public final class CppEventHandler {
 			}
 			//Creepers can rarely drop a TNT
 			else if (entity instanceof EntityCreeper) {
-				if (event.source.damageType != null && CppConfigHandler.creeperDropTntChance > Math.random()) {
-					event.drops.clear();
+				if (event.getSource().damageType != null && CppConfigHandler.creeperDropTntChance > Math.random()) {
+					event.getDrops().clear();
 					entity.dropItem(Item.getItemFromBlock(Blocks.tnt), 1);
 				}
 			}
 		}
 		//Drop removals
-		List<EntityItem> drops = event.drops;
+		List<EntityItem> drops = event.getDrops();
 		List<EntityItem> dropsCopy = CppUtils.copyList(drops);
 		for (EntityItem dropEntity : dropsCopy) {
 			ItemStack dropItem = dropEntity.getEntityItem();
-			if (event.source.getEntity() != null) {
+			if (event.getSource().getEntity() != null) {
 				Item drop = dropItem.getItem();
-				Entity source = event.source.getEntity();
+				Entity source = event.getSource().getEntity();
 				if (source instanceof EntityWolf && entity instanceof EntitySheep) {
 					if (drop == Items.mutton || drop == Items.cooked_mutton)
 						drops.remove(dropEntity);
@@ -155,8 +157,8 @@ public final class CppEventHandler {
 	 */
 	@SubscribeEvent
 	public void onPlayerInteract(PlayerInteractEvent event) {
-		EntityPlayer player = event.entityPlayer;
-		World world = event.world;
+		EntityPlayer player = event.getEntityPlayer();
+		World world = event.getWorld();
 		if (!world.isRemote) {
 			Action action = event.action;
 			Item heldItem = player.getHeldItem() == null ? null : player.getHeldItem().getItem();
@@ -243,7 +245,7 @@ public final class CppEventHandler {
 	 */
 	@SubscribeEvent
 	public void onLivingUpdate(LivingUpdateEvent event) {
-		EntityLivingBase livingEntity = event.entityLiving;
+		EntityLivingBase livingEntity = event.getEntityLiving();
 		if (!livingEntity.worldObj.isRemote) {
 			World world = livingEntity.worldObj;
 			if (((livingEntity instanceof EntityCreeper && CppConfigHandler.creeperBurnInDaylight) || (livingEntity instanceof EntityZombie && livingEntity.isChild() && CppConfigHandler.babyZombieBurnInDaylight)) && world.isDaytime()) {
@@ -299,7 +301,7 @@ public final class CppEventHandler {
 	 */
 	@SubscribeEvent
 	public void onEntityConstructing(EntityEvent.EntityConstructing event) {
-		if (event.entity instanceof EntityItem)
+		if (event.getEntity() instanceof EntityItem)
 			CppExtendedEntityProperties.registerExtendedProperties((EntityItem) event.entity);
 	}
 
@@ -327,7 +329,7 @@ public final class CppEventHandler {
 	 */
 	@SubscribeEvent
 	public void onItemTooltip(ItemTooltipEvent event) {
-		ItemStack stack = event.itemStack;
+		ItemStack stack = event.getItemStack();
 		Block block = Block.getBlockFromItem(stack.getItem());
 		if (block != null && block == Blocks.mob_spawner) {
 			NBTTagCompound stackTagCompound = stack.getTagCompound();
@@ -337,13 +339,13 @@ public final class CppEventHandler {
 					String entityName = blockEntityTagCompound.getString("EntityId");
 					Class entityClass = (Class) EntityList.stringToClassMapping.get(entityName);
 					if (entityClass != null) {
-						EnumChatFormatting color = IMob.class.isAssignableFrom(entityClass) ? EnumChatFormatting.RED : EnumChatFormatting.BLUE;
+						TextFormatting color = IMob.class.isAssignableFrom(entityClass) ? TextFormatting.RED : TextFormatting.BLUE;
 						String unlocalizedEntityName = "entity." + entityName + ".name";
 						String localizedEntityName = StatCollector.translateToLocal(unlocalizedEntityName);
 						if (localizedEntityName.equals(unlocalizedEntityName))
-							event.toolTip.add(color + entityName);
+							event.getToolTip().add(color + entityName);
 						else
-							event.toolTip.add(color + localizedEntityName);
+							event.getToolTip().add(color + localizedEntityName);
 					}
 				}
 			}
@@ -358,9 +360,9 @@ public final class CppEventHandler {
 	@SubscribeEvent
 	public void onBlockBreak(BreakEvent event) {
 		EntityPlayer player = event.getPlayer();
-		if (CppConfigHandler.mobSpawnerSilkTouchDrop && !player.capabilities.isCreativeMode && event.state.getBlock() == Blocks.mob_spawner && EnchantmentHelper.getSilkTouchModifier(player) && player.canHarvestBlock(Blocks.mob_spawner)) {
-			World world = event.world;
-			BlockPos blockPos = event.pos;
+		if (CppConfigHandler.mobSpawnerSilkTouchDrop && !player.capabilities.isCreativeMode && event.getState().getBlock() == Blocks.mob_spawner && EnchantmentHelper.getSilkTouchModifier(player) && player.canHarvestBlock(Blocks.mob_spawner)) {
+			World world = event.getWorld();
+			BlockPos blockPos = event.getPos();
 			TileEntityMobSpawner spawnerTileEntity = (TileEntityMobSpawner) world.getTileEntity(blockPos);
 			NBTTagCompound spawnerTagCompound = new NBTTagCompound();
 			spawnerTileEntity.getSpawnerBaseLogic().writeToNBT(spawnerTagCompound);
@@ -382,7 +384,7 @@ public final class CppEventHandler {
 	 */
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onHarvestDrops(HarvestDropsEvent event) {
-		EntityPlayer harvester = event.harvester;
+		EntityPlayer harvester = event.getHarvester();
 		CppEnchantments.performAction("blazing", harvester, event);
 		CppEnchantments.performAction("siphon", harvester, event);
 	}
@@ -394,7 +396,7 @@ public final class CppEventHandler {
 	 */
 	@SubscribeEvent
 	public void onArrowNock(ArrowNockEvent event) {
-		CppEnchantments.performAction("quickdraw", event.entityPlayer, event);
+		CppEnchantments.performAction("quickdraw", event.getEntityPlayer(), event);
 	}
 
 	/**
@@ -404,7 +406,7 @@ public final class CppEventHandler {
 	 */
 	@SubscribeEvent
 	public void onLivingJump(LivingJumpEvent event) {
-		CppEnchantments.performAction("hops", event.entityLiving, event);
+		CppEnchantments.performAction("hops", event.getEntityLiving(), event);
 	}
 
 	/**
@@ -414,7 +416,7 @@ public final class CppEventHandler {
 	 */
 	@SubscribeEvent
 	public void onLivingFall(LivingFallEvent event) {
-		CppEnchantments.performAction("hops", event.entityLiving, event);
+		CppEnchantments.performAction("hops", event.getEntityLiving(), event);
 	}
 
 	/**
@@ -435,7 +437,7 @@ public final class CppEventHandler {
 	 */
 	@SubscribeEvent
 	public void onConfigChanged(OnConfigChangedEvent event) {
-		if (event.modID.equals(CppModInfo.MOD_ID))
+		if (event.getModID().equals(CppModInfo.MOD_ID))
 			CppConfigHandler.syncConfig();
 	}
 
@@ -446,9 +448,9 @@ public final class CppEventHandler {
 	 */
 	@SubscribeEvent
 	public void onFOVUpdate(FOVUpdateEvent event) {
-		ItemStack helmet = event.entity.getEquipmentInSlot(4);
+		ItemStack helmet = event.getEntity().getEquipmentInSlot(4);
 		if (helmet != null && helmet.getItem() == CppItems.binoculars)
-			event.newfov /= CppConfigHandler.binocularZoomAmount;
+			event.setNewfov(event.getNewfov() / CppConfigHandler.binocularZoomAmount);
 	}
 
 	/**
@@ -477,7 +479,7 @@ public final class CppEventHandler {
 	 */
 	@SubscribeEvent
 	public void onPostRenderGameOverlay(RenderGameOverlayEvent.Post event) {
-		if (event.type == ElementType.CROSSHAIRS) {
+		if (event.getType() == ElementType.CROSSHAIRS) {
 			if (CraftPlusPlus.proxy.isPotionKeyPressed())
 				displayPotionEffects = !displayPotionEffects; //toggle the potion effect overlay
 			if (displayPotionEffects && !CraftPlusPlus.proxy.isGuiOpen()) {

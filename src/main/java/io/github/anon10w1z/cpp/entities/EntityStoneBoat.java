@@ -88,11 +88,14 @@ public class EntityStoneBoat extends Entity {
 	public AxisAlignedBB getCollisionBox(Entity entity) {
 		return entity.getEntityBoundingBox();
 	}
-
+	
 	@Override
-	public AxisAlignedBB getBoundingBox() {
+	public AxisAlignedBB getCollisionBoundingBox() {
 		return this.getEntityBoundingBox();
 	}
+
+
+
 
 	@Override
 	public boolean canBePushed() {
@@ -119,7 +122,7 @@ public class EntityStoneBoat extends Entity {
 
 			if (flag || this.getDamageTaken() > 40) {
 				if (this.getRidingEntity() != null)
-					this.getRidingEntity().mountEntity(this);
+					this.getRidingEntity().startRiding(this);
 				if (!flag)
 					this.dropItem(CppItems.stone_boat, 1);
 				this.setDead();
@@ -267,7 +270,7 @@ public class EntityStoneBoat extends Entity {
 				this.motionY += 0.007000000216066837;
 			}
 			if (this.getRidingEntity() instanceof EntityLivingBase) {
-				EntityLivingBase livingEntity = (EntityLivingBase) this.riddenByEntity;
+				EntityLivingBase livingEntity = (EntityLivingBase) this.getRidingEntity();
 				float f = this.getRidingEntity().rotationYaw + -livingEntity.moveStrafing * 90;
 				this.motionX += -Math.sin((double) (f * (float) Math.PI / 180)) * this.speedMultiplier * (double) livingEntity.moveForward * 0.05000000074505806;
 				this.motionZ += Math.cos((double) (f * (float) Math.PI / 180)) * this.speedMultiplier * (double) livingEntity.moveForward * 0.05000000074505806;
@@ -362,13 +365,15 @@ public class EntityStoneBoat extends Entity {
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbtTagCompound) {
 	}
+	
+	
 
 	@Override
 	public boolean interactFirst(EntityPlayer player) {
-		if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityPlayer && this.riddenByEntity != player)
+		if (this.getRidingEntity() != null && this.getRidingEntity() instanceof EntityPlayer && this.getRidingEntity() != player)
 			return true;
 		if (!this.worldObj.isRemote)
-			player.mountEntity(this);
+			player.startRiding(this);
 		return true;
 	}
 
@@ -383,7 +388,7 @@ public class EntityStoneBoat extends Entity {
 				}
 				this.fallDistance = 0;
 			}
-		} else if (this.worldObj.getBlockState((new BlockPos(this)).down()).getBlock().getMaterial() != Material.water && p_180433_1_ < 0.0D)
+		} else if (this.worldObj.getBlockState((new BlockPos(this)).down()).getMaterial() != Material.water && p_180433_1_ < 0.0D)
 			this.fallDistance = (float) ((double) this.fallDistance - p_180433_1_);
 	}
 	
