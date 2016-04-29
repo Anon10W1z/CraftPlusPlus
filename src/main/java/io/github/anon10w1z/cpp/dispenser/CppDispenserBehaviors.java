@@ -11,7 +11,6 @@ import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemFlintAndSteel;
-import net.minecraft.util.StatCollector;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +27,7 @@ public class CppDispenserBehaviors {
 			if (item instanceof ItemBlock) {
 				Block block = ((ItemBlock) item).block;
 				List<Material> fallingMaterials = Arrays.asList(Material.sand, Material.ground, Material.clay, Material.snow, Material.craftedSnow);
-				if ((block instanceof BlockFalling || CppConfigHandler.additionalFallingBlocks.contains(block)) && fallingMaterials.contains(block.getMaterial()))
+				if ((block instanceof BlockFalling || CppConfigHandler.additionalFallingBlocks.contains(block)) && fallingMaterials.contains(block.getDefaultState().getMaterial()))
 					registerDispenserBehavior(item, new BehaviorDispenseBlockFalling());
 			}
 			//Flint And Steel (default behavior)

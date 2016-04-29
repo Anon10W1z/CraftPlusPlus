@@ -19,7 +19,7 @@ public class EnchantmentVigor extends CppEnchantmentBase {
 	private static UUID vigorUUID = UUID.fromString("18339f34-6ab5-461d-a103-9b9a3ac3eec7");
 
 	public EnchantmentVigor() {
-		super("vigor", 1, EnumEnchantmentType.ARMOR_TORSO);
+		super("vigor", 1, EnumEnchantmentType.ARMOR_CHEST);
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class EnchantmentVigor extends CppEnchantmentBase {
 	 * @param enchantmentLevel The enchantment level of the vigor buff
 	 */
 	private void addVigorBuff(EntityLivingBase livingEntity, int enchantmentLevel) {
-		IAttributeInstance vigorAttribute = livingEntity.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.maxHealth);
+		IAttributeInstance vigorAttribute = livingEntity.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH);
 		if (vigorAttribute.getModifier(vigorUUID) == null) {
 			AttributeModifier vigorModifier = new AttributeModifier(vigorUUID, "Vigor", (float) enchantmentLevel / 10, 1);
 			vigorAttribute.applyModifier(vigorModifier);
@@ -70,7 +70,7 @@ public class EnchantmentVigor extends CppEnchantmentBase {
 	 * @param enchantmentLevel The enchantment level of the vigor buff
 	 */
 	private void removeVigorBuff(EntityLivingBase livingEntity, int enchantmentLevel) {
-		IAttributeInstance vigorAttribute = livingEntity.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.maxHealth);
+		IAttributeInstance vigorAttribute = livingEntity.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH);
 		if (vigorAttribute.getModifier(vigorUUID) != null) {
 			AttributeModifier vigorModifier = new AttributeModifier(vigorUUID, "Vigor", (float) enchantmentLevel / 10, 1);
 			vigorAttribute.removeModifier(vigorModifier);

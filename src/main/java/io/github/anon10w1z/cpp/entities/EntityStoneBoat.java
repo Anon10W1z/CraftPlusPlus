@@ -5,16 +5,19 @@ import java.util.List;
 import io.github.anon10w1z.cpp.items.CppItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -144,38 +147,40 @@ public class EntityStoneBoat extends Entity {
 	public boolean canBeCollidedWith() {
 		return !this.isDead;
 	}
+	
+	
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_180426_a(double p_180426_1_, double p_180426_3_, double p_180426_5_, float p_180426_7_, float p_180426_8_, int p_180426_9_, boolean p_180426_10_) {
+	public void setPositionAndRotation2(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean p_180426_10_) {
 		if (p_180426_10_ && this.getRidingEntity() != null) {
-			this.prevPosX = this.posX = p_180426_1_;
-			this.prevPosY = this.posY = p_180426_3_;
-			this.prevPosZ = this.posZ = p_180426_5_;
-			this.rotationYaw = p_180426_7_;
-			this.rotationPitch = p_180426_8_;
+			this.prevPosX = this.posX = x;
+			this.prevPosY = this.posY = y;
+			this.prevPosZ = this.posZ = z;
+			this.rotationYaw = yaw;
+			this.rotationPitch = pitch;
 			this.boatPosRotationIncrements = 0;
-			this.setPosition(p_180426_1_, p_180426_3_, p_180426_5_);
+			this.setPosition(x, y, z);
 			this.motionX = this.velocityX = 0;
 			this.motionY = this.velocityY = 0;
 			this.motionZ = this.velocityZ = 0;
 		} else {
 			if (this.isBoatEmpty)
-				this.boatPosRotationIncrements = p_180426_9_ + 5;
+				this.boatPosRotationIncrements = posRotationIncrements + 5;
 			else {
-				double d3 = p_180426_1_ - this.posX;
-				double d4 = p_180426_3_ - this.posY;
-				double d5 = p_180426_5_ - this.posZ;
+				double d3 = x - this.posX;
+				double d4 = y - this.posY;
+				double d5 = z - this.posZ;
 				double d6 = d3 * d3 + d4 * d4 + d5 * d5;
 				if (d6 <= 1.0D)
 					return;
 				this.boatPosRotationIncrements = 3;
 			}
-			this.boatX = p_180426_1_;
-			this.boatY = p_180426_3_;
-			this.boatZ = p_180426_5_;
-			this.boatYaw = (double) p_180426_7_;
-			this.boatPitch = (double) p_180426_8_;
+			this.boatX = x;
+			this.boatY = y;
+			this.boatZ = z;
+			this.boatYaw = (double) yaw;
+			this.boatPitch = (double) pitch;
 			this.motionX = this.velocityX;
 			this.motionY = this.velocityY;
 			this.motionZ = this.velocityZ;
@@ -368,18 +373,18 @@ public class EntityStoneBoat extends Entity {
 	
 	
 
+	
 	@Override
-	public boolean interactFirst(EntityPlayer player) {
+	public boolean processInitialInteract(EntityPlayer player, ItemStack stack, EnumHand hand) {
 		if (this.getRidingEntity() != null && this.getRidingEntity() instanceof EntityPlayer && this.getRidingEntity() != player)
 			return true;
 		if (!this.worldObj.isRemote)
 			player.startRiding(this);
-		return true;
-	}
-
+		return true;}
+	
 	@Override
-	protected void func_180433_a(double p_180433_1_, boolean p_180433_3_, Block p_180433_4_, BlockPos p_180433_5_) {
-		if (p_180433_3_) {
+	protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
+		if (onGroundIn) {
 			if (this.fallDistance > 3) {
 				this.fall(this.fallDistance, 1);
 				if (!this.worldObj.isRemote && !this.isDead) {
@@ -388,9 +393,11 @@ public class EntityStoneBoat extends Entity {
 				}
 				this.fallDistance = 0;
 			}
-		} else if (this.worldObj.getBlockState((new BlockPos(this)).down()).getMaterial() != Material.water && p_180433_1_ < 0.0D)
-			this.fallDistance = (float) ((double) this.fallDistance - p_180433_1_);
+		} else if (this.worldObj.getBlockState((new BlockPos(this)).down()).getMaterial() != Material.water && y < 0.0D)
+			this.fallDistance = (float) ((double) this.fallDistance - y);
+
 	}
+
 	
 	
 	

@@ -14,7 +14,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.command.IEntitySelector;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -45,6 +44,9 @@ import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.FOVUpdateEvent;
@@ -56,10 +58,8 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
-import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -103,7 +103,7 @@ public final class CppEventHandler {
 		Entity entity = event.getEntity();
 		World world = entity.worldObj;
 		//New Drops
-		if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doMobLoot")) {
+		if (!world.isRemote && world.getGameRules().getBoolean("doMobLoot")) {
 			//Living entities drop their name tags
 			String entityNameTag = entity.getCustomNameTag();
 			if (!entityNameTag.equals("")) {
@@ -118,10 +118,10 @@ public final class CppEventHandler {
 				//Enderman drop the block they are carrying
 			else if (entity instanceof EntityEnderman && CppConfigHandler.endermanBlockDropChance > Math.random()) {
 				EntityEnderman enderman = (EntityEnderman) entity;
-				IBlockState heldBlockState = enderman.func_175489_ck();
+				IBlockState heldBlockState = enderman.getHeldBlockState();
 				Block heldBlock = heldBlockState.getBlock();
 				enderman.entityDropItem(new ItemStack(heldBlock, 1, heldBlock.getMetaFromState(heldBlockState)), 0);
-				enderman.func_175490_a(Blocks.air.getDefaultState());
+				enderman.setHeldBlockState(Blocks.air.getDefaultState());
 			}
 			//Creepers can rarely drop a TNT
 			else if (entity instanceof EntityCreeper) {
@@ -149,83 +149,83 @@ public final class CppEventHandler {
 			}
 		}
 	}
-
-	/**
-	 * Gives functionality for the creative mode ender pearl throwing
-	 *
-	 * @param event The PlayerInteractEvent
-	 */
+	
 	@SubscribeEvent
-	public void onPlayerInteract(PlayerInteractEvent event) {
+	public void rightClickAir(PlayerInteractEvent.RightClickItem event) {
 		EntityPlayer player = event.getEntityPlayer();
 		World world = event.getWorld();
-		if (!world.isRemote) {
-			Action action = event.action;
-			Item heldItem = player.getHeldItem() == null ? null : player.getHeldItem().getItem();
-			//Ender pearls
-			if (action == Action.RIGHT_CLICK_AIR && player.capabilities.isCreativeMode && heldItem == Items.ender_pearl) {
-				world.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (world.rand.nextFloat() * 0.4F + 0.8F));
-				EntityEnderPearl enderPearl = new EntityEnderPearl(world, player);
-				world.spawnEntityInWorld(enderPearl);
-				player.triggerAchievement(StatList.objectUseStats[Item.getIdFromItem(Items.ender_pearl)]);
-			}
-			//Signs
-			if (action == Action.RIGHT_CLICK_BLOCK) {
-				if (CppConfigHandler.signOverhaul && heldItem == Items.sign) {
-					event.setCanceled(true);
-					Block block = world.getBlockState(event.pos).getBlock();
-					if (event.face != EnumFacing.DOWN && !(block instanceof BlockSign) && block.getMaterial().isSolid()) {
-						EnumFacing facing = event.face;
-						BlockPos blockPos = event.pos.offset(facing);
-						if (player.canPlayerEdit(blockPos, facing, player.getHeldItem()) && Blocks.standing_sign.canPlaceBlockAt(world, blockPos)) {
-							if (facing == EnumFacing.UP) {
-								int rotation = MathHelper.floor_double(((player.rotationYaw + 180) * 16 / 360) + 0.5) & 15;
-								world.setBlockState(blockPos, Blocks.standing_sign.getDefaultState().withProperty(BlockStandingSign.ROTATION, rotation), 3);
-							} else
-								world.setBlockState(blockPos, Blocks.wall_sign.getDefaultState().withProperty(BlockWallSign.FACING, facing), 3);
-							if (!player.capabilities.isCreativeMode)
-								--player.getHeldItem().stackSize;
-							TileEntitySign tileEntitySign = (TileEntitySign) world.getTileEntity(blockPos);
-							ReflectionHelper.setPrivateValue(TileEntitySign.class, tileEntitySign, true, "isEditable", "field_145916_j");
-							return;
-						}
-					}
-				}
-				if (CppConfigHandler.signOverhaul && event.world.getTileEntity(event.pos) instanceof TileEntitySign) {
-					TileEntitySign tileEntitySign = (TileEntitySign) event.world.getTileEntity(event.pos);
-					if (heldItem == CppItems.sponge_wipe) {
-						String signText = String.join("", Arrays.stream(tileEntitySign.signText).map(chatComponent -> getTextWithoutFormattingCodes(chatComponent.getUnformattedText())).collect(Collectors.toList()));
-						if (!signText.equals("")) {
-							ReflectionHelper.setPrivateValue(TileEntitySign.class, tileEntitySign, new IChatComponent[]{new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText("")}, "signText", "field_145915_a");
-							if (player instanceof EntityPlayerMP)
-								((EntityPlayerMP) player).playerNetServerHandler.sendPacket(tileEntitySign.getDescriptionPacket());
-							if (!player.capabilities.isCreativeMode)
-								player.inventory.consumeInventoryItem(CppItems.sponge_wipe);
-						}
-					}
-					if (ItemStack.areItemsEqual(player.getHeldItem(), new ItemStack(Items.dye, 1, EnumDyeColor.BLACK.getDyeDamage()))) {
-						String signText = String.join("", Arrays.stream(tileEntitySign.signText).map(chatComponent -> getTextWithoutFormattingCodes(chatComponent.getUnformattedText())).collect(Collectors.toList()));
-						if (signText.equals("")) {
-							ReflectionHelper.setPrivateValue(TileEntitySign.class, tileEntitySign, true, "isEditable", "field_145916_j");
-							player.openEditSign(tileEntitySign);
-							if (!player.capabilities.isCreativeMode && --player.inventory.mainInventory[player.inventory.currentItem].stackSize <= 0)
-								player.inventory.mainInventory[player.inventory.currentItem] = null;
-						}
-					}
-				}
-				if (CppConfigHandler.sitOnStairs && heldItem == null && world.getBlockState(event.pos).getBlock() instanceof BlockStairs) {
-					for (Object entityObject : world.getEntities(EntitySitPoint.class, IEntitySelector.selectAnything)) {
-						EntitySitPoint sitPoint = (EntitySitPoint) entityObject;
-						if (sitPoint.blockPos.equals(event.pos.down())) //if there is someone already sitting in the target position
-							return;
-					}
-					EntitySitPoint sitPoint = new EntitySitPoint(world, event.pos.down());
-					world.spawnEntityInWorld(sitPoint);
-					player.mountEntity(sitPoint);
+		Item heldItem = player.getHeldItemMainhand() == null ? null : player.getHeldItemMainhand().getItem();
+		
+		if (player.capabilities.isCreativeMode && heldItem == Items.ender_pearl) {
+			world.playSound(player, "random.bow", 0.5F, 0.4F / (world.rand.nextFloat() * 0.4F + 0.8F));
+			EntityEnderPearl enderPearl = new EntityEnderPearl(world, player);
+			world.spawnEntityInWorld(enderPearl);
+			player.triggerAchievement(StatList.objectUseStats[Item.getIdFromItem(Items.ender_pearl)]);
+		}
+	}
+	
+	@SubscribeEvent
+	public void rightClickBlock(PlayerInteractEvent.RightClickBlock event) {
+		EntityPlayer player = event.getEntityPlayer();
+		World world = event.getWorld();
+		Item heldItem = player.getHeldItemMainhand() == null ? null : player.getHeldItemMainhand().getItem();
+	
+		if (CppConfigHandler.signOverhaul && heldItem == Items.sign) {
+			event.setCanceled(true);
+			IBlockState state = world.getBlockState(event.getPos());
+			if (event.getFace() != EnumFacing.DOWN && !(state.getBlock() instanceof BlockSign) && state.getMaterial().isSolid()) {
+				EnumFacing facing = event.getFace();
+				BlockPos blockPos = event.getPos().offset(facing);
+				if (player.canPlayerEdit(blockPos, facing, player.getHeldItemMainhand()) && Blocks.standing_sign.canPlaceBlockAt(world, blockPos)) {
+					if (facing == EnumFacing.UP) {
+						int rotation = MathHelper.floor_double(((player.rotationYaw + 180) * 16 / 360) + 0.5) & 15;
+						world.setBlockState(blockPos, Blocks.standing_sign.getDefaultState().withProperty(BlockStandingSign.ROTATION, rotation), 3);
+					} else
+						world.setBlockState(blockPos, Blocks.wall_sign.getDefaultState().withProperty(BlockWallSign.FACING, facing), 3);
+					if (!player.capabilities.isCreativeMode)
+						--player.getHeldItemMainhand().stackSize;
+					TileEntitySign tileEntitySign = (TileEntitySign) world.getTileEntity(blockPos);
+					ReflectionHelper.setPrivateValue(TileEntitySign.class, tileEntitySign, true, "isEditable", "field_145916_j");
+					return;
 				}
 			}
 		}
+		if (CppConfigHandler.signOverhaul && world.getTileEntity(event.getPos()) instanceof TileEntitySign) {
+			TileEntitySign tileEntitySign = (TileEntitySign) world.getTileEntity(event.getPos());
+			if (heldItem == CppItems.sponge_wipe) {
+				String signText = String.join("", Arrays.stream(tileEntitySign.signText).map(chatComponent -> getTextWithoutFormattingCodes(chatComponent.getUnformattedText())).collect(Collectors.toList()));
+				if (!signText.equals("")) {
+					ReflectionHelper.setPrivateValue(TileEntitySign.class, tileEntitySign, new ITextComponent[]{new TextComponentString(""), new TextComponentString(""), new TextComponentString(""), new TextComponentString("")}, "signText", "field_145915_a");
+					if (player instanceof EntityPlayerMP)
+						((EntityPlayerMP) player).playerNetServerHandler.sendPacket(tileEntitySign.getDescriptionPacket());
+					if (!player.capabilities.isCreativeMode)
+						player.inventory.consumeInventoryItem(CppItems.sponge_wipe);
+				}
+			}
+			if (ItemStack.areItemsEqual(player.getHeldItemMainhand(), new ItemStack(Items.dye, 1, EnumDyeColor.BLACK.getDyeDamage()))) {
+				String signText = String.join("", Arrays.stream(tileEntitySign.signText).map(chatComponent -> getTextWithoutFormattingCodes(chatComponent.getUnformattedText())).collect(Collectors.toList()));
+				if (signText.equals("")) {
+					ReflectionHelper.setPrivateValue(TileEntitySign.class, tileEntitySign, true, "isEditable", "field_145916_j");
+					player.openEditSign(tileEntitySign);
+					if (!player.capabilities.isCreativeMode && --player.inventory.mainInventory[player.inventory.currentItem].stackSize <= 0)
+						player.inventory.mainInventory[player.inventory.currentItem] = null;
+				}
+			}
+		}
+		if (CppConfigHandler.sitOnStairs && heldItem == null && world.getBlockState(event.getPos()).getBlock() instanceof BlockStairs) {
+			for (Object entityObject : world.getEntities(EntitySitPoint.class, IEntitySelector.selectAnything)) {
+				EntitySitPoint sitPoint = (EntitySitPoint) entityObject;
+				if (sitPoint.blockPos.equals(event.getPos().down())) //if there is someone already sitting in the target position
+					return;
+			}
+			EntitySitPoint sitPoint = new EntitySitPoint(world, event.getPos().down());
+			world.spawnEntityInWorld(sitPoint);
+			player.startRiding(sitPoint);
+		}
 	}
+	
+
+
 
 	/**
 	 * Strips the input text of its formatting codes
@@ -278,12 +278,12 @@ public final class CppEventHandler {
 	 * @param event The EntityInteractEvent
 	 */
 	@SubscribeEvent
-	public void onEntityInteract(EntityInteractEvent event) {
-		if (event.entityPlayer.getHeldItem() != null) {
-			EntityPlayer player = event.entityPlayer;
-			ItemStack heldItem = player.getHeldItem();
+	public void entityRightclick(PlayerInteractEvent.EntityInteract event) {
+		if (event.getEntityPlayer().getHeldItemMainhand() != null) {
+			EntityPlayer player = event.getEntityPlayer();
+			ItemStack heldItem = player.getHeldItemMainhand();
 			World world = player.worldObj;
-			Entity target = event.target;
+			Entity target = event.getTarget();
 			if (heldItem.getItem() instanceof ItemShears && target instanceof EntityLivingBase && target.hasCustomName() && !world.isRemote) {
 				target.playSound("mob.sheep.shear", 1, 1);
 				ItemStack nameTag = new ItemStack(Items.name_tag).setStackDisplayName(target.getCustomNameTag());
@@ -292,6 +292,7 @@ public final class CppEventHandler {
 				heldItem.damageItem(1, player);
 			}
 		}
+
 	}
 
 	/**
@@ -302,7 +303,7 @@ public final class CppEventHandler {
 	@SubscribeEvent
 	public void onEntityConstructing(EntityEvent.EntityConstructing event) {
 		if (event.getEntity() instanceof EntityItem)
-			CppExtendedEntityProperties.registerExtendedProperties((EntityItem) event.entity);
+			CppExtendedEntityProperties.registerExtendedProperties((EntityItem) event.getEntity());
 	}
 
 	/**
@@ -360,7 +361,7 @@ public final class CppEventHandler {
 	@SubscribeEvent
 	public void onBlockBreak(BreakEvent event) {
 		EntityPlayer player = event.getPlayer();
-		if (CppConfigHandler.mobSpawnerSilkTouchDrop && !player.capabilities.isCreativeMode && event.getState().getBlock() == Blocks.mob_spawner && EnchantmentHelper.getSilkTouchModifier(player) && player.canHarvestBlock(Blocks.mob_spawner)) {
+		if (CppConfigHandler.mobSpawnerSilkTouchDrop && !player.capabilities.isCreativeMode && event.getState().getBlock() == Blocks.mob_spawner && EnchantmentHelper.getSilkTouchModifier(player) && player.canHarvestBlock(Blocks.mob_spawner.getDefaultState())) {
 			World world = event.getWorld();
 			BlockPos blockPos = event.getPos();
 			TileEntityMobSpawner spawnerTileEntity = (TileEntityMobSpawner) world.getTileEntity(blockPos);

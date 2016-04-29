@@ -27,8 +27,15 @@ public abstract class CppEnchantmentBase extends Enchantment {
 	public CppEnchantmentBase(String name, int weight, EnumEnchantmentType type) {
 		super(findFreeEnchantmentID(name), new ResourceLocation(CppModInfo.MOD_ID, name), weight, type);
 		this.setName(name);
-		addToBookList(this);
 		cppEnchantments.add(this);
+	}
+	
+	/**
+	 * Allows the enchantment to get added on books. This should replace addToBookList TODO: check
+	 */
+	@Override
+	public boolean isAllowedOnBooks() {
+		return true;
 	}
 
 	/**
@@ -51,7 +58,7 @@ public abstract class CppEnchantmentBase extends Enchantment {
 	 * @return The enchantment level of this enchantment on the ItemStack
 	 */
 	protected int getEnchantmentLevel(ItemStack itemstack) {
-		return EnchantmentHelper.getEnchantmentLevel(this.effectId, itemstack);
+		return EnchantmentHelper.getEnchantmentLevel(this, itemstack);
 	}
 
 	@Override

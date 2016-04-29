@@ -21,10 +21,10 @@ public class EnchantmentSiphon extends CppEnchantmentBase {
 
 	@Override
 	public void performAction(Entity entity, Event baseEvent) {
-		if (entity != null && this.getEnchantmentLevel(((EntityLivingBase) entity).getHeldItem()) > 0) {
+		if (entity != null && this.getEnchantmentLevel(((EntityLivingBase) entity).getHeldItemMainhand()) > 0) {
 			HarvestDropsEvent event = (HarvestDropsEvent) baseEvent;
-			List<ItemStack> drops = event.drops;
-			drops.removeAll(drops.stream().filter(event.harvester.inventory::addItemStackToInventory).collect(Collectors.toList()));
+			List<ItemStack> drops = event.getDrops();
+			drops.removeAll(drops.stream().filter(event.getHarvester().inventory::addItemStackToInventory).collect(Collectors.toList()));
 		}
 	}
 

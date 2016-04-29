@@ -2,11 +2,12 @@ package io.github.anon10w1z.cpp.misc;
 
 import io.github.anon10w1z.cpp.handlers.CppConfigHandler;
 import io.github.anon10w1z.cpp.items.CppItems;
+import io.github.anon10w1z.cpp.main.CppUtils;
 import net.minecraft.block.Block;
-import net.minecraft.block.Block.SoundType;
 import net.minecraft.block.BlockFire;
 import net.minecraft.block.BlockNetherWart;
 import net.minecraft.block.BlockStem;
+import net.minecraft.block.SoundType;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -14,8 +15,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.util.WeightedRandom;
-import net.minecraft.util.WeightedRandomFishable;
-import net.minecraftforge.common.FishingHooks;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 /**
@@ -31,7 +30,7 @@ public class CppVanillaPropertiesChanger {
 		Iterable<Block> blocks = Block.blockRegistry;
 		for (Block block : blocks) {
 			if (block instanceof BlockStem || block instanceof BlockNetherWart)
-				block.setStepSound(Block.soundTypeGrass);
+				CppUtils.setStepSound(block, SoundType.GROUND);
 			else if (block instanceof BlockFire) {
 				block.setStepSound(new SoundType(null, 1.5F, 0.65F) {
 					@Override
