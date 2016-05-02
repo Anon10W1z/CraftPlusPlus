@@ -5,6 +5,7 @@ import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.Event;
@@ -18,7 +19,7 @@ import java.util.Optional;
 @EntityTickingEnchantment
 public class EnchantmentHoming extends CppEnchantmentBase {
 	public EnchantmentHoming() {
-		super("homing", 1, EnumEnchantmentType.BOW);
+		super(Rarity.VERY_RARE,EnumEnchantmentType.BOW, EntityEquipmentSlot.MAINHAND);
 	}
 
 	@Override

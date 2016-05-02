@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 import java.util.UUID;
@@ -19,14 +20,14 @@ public class EnchantmentVigor extends CppEnchantmentBase {
 	private static UUID vigorUUID = UUID.fromString("18339f34-6ab5-461d-a103-9b9a3ac3eec7");
 
 	public EnchantmentVigor() {
-		super("vigor", 1, EnumEnchantmentType.ARMOR_CHEST);
+		super(Rarity.VERY_RARE,EnumEnchantmentType.ARMOR_CHEST, EntityEquipmentSlot.CHEST);
 	}
 
 	@Override
 	public void performAction(Entity entity, Event baseEvent) {
 		if (entity instanceof EntityLivingBase) {
 			EntityLivingBase livingEntity = (EntityLivingBase) entity;
-			int enchantmentLevel = this.getEnchantmentLevel(livingEntity.getEquipmentInSlot(3));
+			int enchantmentLevel = this.getEnchantmentLevel(livingEntity.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
 			if (enchantmentLevel > 0)
 				addVigorBuff(livingEntity, enchantmentLevel);
 			else

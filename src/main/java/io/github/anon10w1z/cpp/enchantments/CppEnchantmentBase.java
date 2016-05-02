@@ -2,13 +2,14 @@ package io.github.anon10w1z.cpp.enchantments;
 
 import com.google.common.collect.Lists;
 import io.github.anon10w1z.cpp.main.CppModInfo;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 import java.util.List;
@@ -19,42 +20,38 @@ import java.util.stream.IntStream;
  * Base class for all of Craft++'s enchantments
  */
 public abstract class CppEnchantmentBase extends Enchantment {
+
 	/**
 	 * A list of all of Craft++'s enchantments
 	 */
 	public static List<CppEnchantmentBase> cppEnchantments = Lists.newArrayList();
 
-	public CppEnchantmentBase(String name, int weight, EnumEnchantmentType type) {
-		super(findFreeEnchantmentID(name), new ResourceLocation(CppModInfo.MOD_ID, name), weight, type);
-		this.setName(name);
-		cppEnchantments.add(this);
+	protected CppEnchantmentBase(Enchantment.Rarity rarityIn, EnumEnchantmentType typeIn, EntityEquipmentSlot... slots) {
+		super(rarityIn, typeIn, slots);
 	}
-	
+
+	/*
+	 * public CppEnchantmentBase(String name, int weight, EnumEnchantmentType
+	 * type) { super(findFreeEnchantmentID(name), new
+	 * ResourceLocation(CppModInfo.MOD_ID, name), weight, type);
+	 * this.setName(name); cppEnchantments.add(this); }
+	 */
+
 	/**
-	 * Allows the enchantment to get added on books. This should replace addToBookList TODO: check
+	 * Allows the enchantment to get added on books. This should replace
+	 * addToBookList TODO: check
 	 */
 	@Override
 	public boolean isAllowedOnBooks() {
 		return true;
 	}
 
-	/**
-	 * Finds the first free enchantment ID to register this enchantment
-	 *
-	 * @param enchantmentName the name of the enchantment
-	 * @return The enchantment ID for this enchantment to use
-	 */
-	private static int findFreeEnchantmentID(String enchantmentName) {
-		OptionalInt freeEnchantmentID = IntStream.range(0, 256).filter(i -> Enchantment.getEnchantmentById(i) == null).findFirst();
-		if (!freeEnchantmentID.isPresent())
-			throw new NoFreeEnchantmentIDException(enchantmentName);
-		return freeEnchantmentID.getAsInt();
-	}
 
 	/**
 	 * Gets the enchantment level of this enchantment on the specified ItemStack
 	 *
-	 * @param itemstack The ItemStack to check
+	 * @param itemstack
+	 *            The ItemStack to check
 	 * @return The enchantment level of this enchantment on the ItemStack
 	 */
 	protected int getEnchantmentLevel(ItemStack itemstack) {
@@ -74,8 +71,10 @@ public abstract class CppEnchantmentBase extends Enchantment {
 	/**
 	 * Performs the action this enchantment does
 	 *
-	 * @param entity    The entity to go along with the enchantment
-	 * @param baseEvent The event to go along with the enchantment
+	 * @param entity
+	 *            The entity to go along with the enchantment
+	 * @param baseEvent
+	 *            The event to go along with the enchantment
 	 */
 	public abstract void performAction(Entity entity, Event baseEvent);
 
@@ -85,7 +84,8 @@ public abstract class CppEnchantmentBase extends Enchantment {
 
 	private static class NoFreeEnchantmentIDException extends RuntimeException {
 		private NoFreeEnchantmentIDException(String enchantmentName) {
-			super("Could not find a free enchantment ID for " + StatCollector.translateToLocal("enchantment." + enchantmentName));
+			super("Could not find a free enchantment ID for "
+					+ I18n.format("enchantment." + enchantmentName));
 		}
 	}
 }

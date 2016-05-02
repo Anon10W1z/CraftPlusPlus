@@ -8,8 +8,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemSaddle;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.AchievementList;
 import net.minecraft.stats.StatList;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -31,7 +36,7 @@ public class ItemStoneBoat extends Item {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer player) {
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemstack, World world, EntityPlayer player, EnumHand hand) {
 		float f1 = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch);
 		float f2 = player.prevRotationYaw + (player.rotationYaw - player.prevRotationYaw);
 		double d0 = player.posX;
@@ -48,7 +53,7 @@ public class ItemStoneBoat extends Item {
 		Vec3d vec31 = vec3.addVector((double) f7 * d3, (double) f6 * d3, (double) f8 * d3);
 		RayTraceResult result = world.rayTraceBlocks(vec3, vec31, true);
 		if (result == null)
-			return itemstack;
+			return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
 
 		Vec3d vec32 = player.getLook(1);
 		boolean flag = false;
@@ -63,22 +68,24 @@ public class ItemStoneBoat extends Item {
 				}
 			}
 		if (flag)
-			return itemstack;
+			return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
 		if (result.typeOfHit ==Type.BLOCK) {
 			BlockPos blockPos = result.getBlockPos();
 			if (world.getBlockState(blockPos).getBlock() == Blocks.snow_layer)
 				blockPos = blockPos.down();
 			EntityStoneBoat stoneBoat = new EntityStoneBoat(world, (float) blockPos.getX() + 0.5, (float) blockPos.getY() + 1, (float) blockPos.getZ() + 0.5);
 			stoneBoat.rotationYaw = (float) (((MathHelper.floor_double(player.rotationYaw * 4 / 360 + 0.5) & 3) - 1) * 90);
-
-			if (!world.getCollidingBoundingBoxes(stoneBoat, stoneBoat.getEntityBoundingBox().expand(-0.1, -0.1, -0.1)).isEmpty())
-				return itemstack;
+			if (!world.getCollisionBoxes(stoneBoat.getEntityBoundingBox().expand(-0.1, -0.1, -0.1)).isEmpty())
+				return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
 			if (!world.isRemote)
 				world.spawnEntityInWorld(stoneBoat);
 			if (!player.capabilities.isCreativeMode)
 				--itemstack.stackSize;
+			//Im not sure which achievement you want here TODO: put in right achievment
+			player.addStat(AchievementList.);
+			
 			player.triggerAchievement(StatList.objectUseStats[Item.getIdFromItem(this)]);
 		}
-		return itemstack;
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
 	}
 }

@@ -5,6 +5,7 @@ import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
@@ -16,7 +17,7 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 @SuppressWarnings("unused")
 public class EnchantmentQuickdraw extends CppEnchantmentBase {
 	public EnchantmentQuickdraw() {
-		super("quickdraw", 1, EnumEnchantmentType.BOW);
+		super(Rarity.VERY_RARE, EnumEnchantmentType.BOW, EntityEquipmentSlot.MAINHAND);
 	}
 
 	@Override

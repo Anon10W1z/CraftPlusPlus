@@ -1,8 +1,10 @@
 package io.github.anon10w1z.cpp.enchantments;
 
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
@@ -16,7 +18,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("unused")
 public class EnchantmentSiphon extends CppEnchantmentBase {
 	public EnchantmentSiphon() {
-		super("siphon", 2, EnumEnchantmentType.DIGGER);
+		super(Rarity.UNCOMMON, EnumEnchantmentType.DIGGER, EntityEquipmentSlot.MAINHAND);
 	}
 
 	@Override

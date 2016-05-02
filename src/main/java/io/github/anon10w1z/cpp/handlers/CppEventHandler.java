@@ -1,5 +1,18 @@
 package io.github.anon10w1z.cpp.handlers;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import org.lwjgl.opengl.GL11;
+
+import io.github.anon10w1z.cpp.capabilities.CapabilitySelfPlanting;
+import io.github.anon10w1z.cpp.capabilities.SelfPlantingProvider;
 import io.github.anon10w1z.cpp.enchantments.CppEnchantmentBase;
 import io.github.anon10w1z.cpp.enchantments.CppEnchantments;
 import io.github.anon10w1z.cpp.enchantments.EntityTickingEnchantment;
@@ -9,11 +22,16 @@ import io.github.anon10w1z.cpp.main.CppModInfo;
 import io.github.anon10w1z.cpp.main.CppUtils;
 import io.github.anon10w1z.cpp.main.CraftPlusPlus;
 import io.github.anon10w1z.cpp.misc.CppExtendedEntityProperties;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockSign;
+import net.minecraft.block.BlockStairs;
+import net.minecraft.block.BlockStandingSign;
+import net.minecraft.block.BlockWallSign;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -25,12 +43,19 @@ import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.*;
+import net.minecraft.entity.passive.EntityBat;
+import net.minecraft.entity.passive.EntityChicken;
+import net.minecraft.entity.passive.EntityOcelot;
+import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemShears;
@@ -38,11 +63,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.stats.Achievement;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.tileentity.TileEntitySign;
-import net.minecraft.util.*;
+import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
@@ -52,6 +81,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
@@ -62,6 +93,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
@@ -70,13 +102,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
-
-import java.util.*;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
-import static net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
+import net.minecraftforge.items.CapabilityItemHandler;
 
 /**
  * The event handler for Craft++
@@ -157,10 +183,10 @@ public final class CppEventHandler {
 		Item heldItem = player.getHeldItemMainhand() == null ? null : player.getHeldItemMainhand().getItem();
 		
 		if (player.capabilities.isCreativeMode && heldItem == Items.ender_pearl) {
-			world.playSound(player, "random.bow", 0.5F, 0.4F / (world.rand.nextFloat() * 0.4F + 0.8F));
+			world.playSound(player, new BlockPos(player), SoundEvents.entity_arrow_shoot, SoundCategory.PLAYERS, 0.5F, 0.4F);
 			EntityEnderPearl enderPearl = new EntityEnderPearl(world, player);
 			world.spawnEntityInWorld(enderPearl);
-			player.triggerAchievement(StatList.objectUseStats[Item.getIdFromItem(Items.ender_pearl)]);
+			player.addStat(AchievementList.theEnd);
 		}
 	}
 	
@@ -199,7 +225,8 @@ public final class CppEventHandler {
 					if (player instanceof EntityPlayerMP)
 						((EntityPlayerMP) player).playerNetServerHandler.sendPacket(tileEntitySign.getDescriptionPacket());
 					if (!player.capabilities.isCreativeMode)
-						player.inventory.consumeInventoryItem(CppItems.sponge_wipe);
+						CppUtils.consumeItem(CppItems.sponge_wipe, player.inventory);
+					
 				}
 			}
 			if (ItemStack.areItemsEqual(player.getHeldItemMainhand(), new ItemStack(Items.dye, 1, EnumDyeColor.BLACK.getDyeDamage()))) {
@@ -213,7 +240,7 @@ public final class CppEventHandler {
 			}
 		}
 		if (CppConfigHandler.sitOnStairs && heldItem == null && world.getBlockState(event.getPos()).getBlock() instanceof BlockStairs) {
-			for (Object entityObject : world.getEntities(EntitySitPoint.class, IEntitySelector.selectAnything)) {
+			for (Object entityObject : world.getEntities(EntitySitPoint.class, EntitySelectors.IS_ALIVE)) {
 				EntitySitPoint sitPoint = (EntitySitPoint) entityObject;
 				if (sitPoint.blockPos.equals(event.getPos().down())) //if there is someone already sitting in the target position
 					return;
@@ -226,7 +253,9 @@ public final class CppEventHandler {
 	
 
 
-
+	//There is no need to compile the pattern everytime we want to use it, compile it once and reuse it
+	private static final Pattern pattern = Pattern.compile("(?i)" + '\u00a7' + "[0-9A-FK-OR]");
+	
 	/**
 	 * Strips the input text of its formatting codes
 	 *
@@ -234,7 +263,7 @@ public final class CppEventHandler {
 	 * @return The text without its formatting codes
 	 */
 	private String getTextWithoutFormattingCodes(String text) {
-		return Pattern.compile("(?i)" + '\u00a7' + "[0-9A-FK-OR]").matcher(text).replaceAll("");
+		return pattern.matcher(text).replaceAll("");
 	}
 
 	/**
@@ -253,7 +282,7 @@ public final class CppEventHandler {
 				Random random = world.rand;
 				BlockPos blockPos = new BlockPos(livingEntity.posX, Math.round(livingEntity.posY), livingEntity.posZ);
 				if (f > 0.5 && random.nextFloat() * 30 < (f - 0.4) * 2 && world.canSeeSky(blockPos)) {
-					ItemStack itemstack = livingEntity.getEquipmentInSlot(4);
+					ItemStack itemstack = livingEntity.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
 					boolean doSetFire = true;
 					if (itemstack != null) {
 						doSetFire = false;
@@ -261,7 +290,7 @@ public final class CppEventHandler {
 							itemstack.setItemDamage(itemstack.getItemDamage() + random.nextInt(2));
 							if (itemstack.getItemDamage() >= itemstack.getMaxDamage()) {
 								livingEntity.renderBrokenItemStack(itemstack);
-								livingEntity.setCurrentItemOrArmor(4, null);
+								livingEntity.setItemStackToSlot(EntityEquipmentSlot.HEAD, null);
 							}
 						}
 					}
@@ -285,7 +314,7 @@ public final class CppEventHandler {
 			World world = player.worldObj;
 			Entity target = event.getTarget();
 			if (heldItem.getItem() instanceof ItemShears && target instanceof EntityLivingBase && target.hasCustomName() && !world.isRemote) {
-				target.playSound("mob.sheep.shear", 1, 1);
+				target.playSound(SoundEvents.entity_sheep_shear, 1, 1);
 				ItemStack nameTag = new ItemStack(Items.name_tag).setStackDisplayName(target.getCustomNameTag());
 				target.entityDropItem(nameTag, 0);
 				target.setCustomNameTag("");
@@ -315,10 +344,11 @@ public final class CppEventHandler {
 	public void onWorldTick(WorldTickEvent event) {
 		if (CppConfigHandler.autoSeedPlanting && !event.world.isRemote) {
 			World world = event.world;
-			List<EntityItem> entityItems = world.getEntities(EntityItem.class, IEntitySelector.selectAnything);
+			List<EntityItem> entityItems = world.getEntities(EntityItem.class, EntitySelectors.IS_ALIVE);
 			for (EntityItem entityItem : entityItems)
-				CppExtendedEntityProperties.getExtendedProperties(entityItem).handlePlantingLogic();
-			for (Object entityObject : world.getEntities(Entity.class, IEntitySelector.selectAnything))
+				if(entityItem.hasCapability(CapabilitySelfPlanting.CAPABILITY_SELF_PLANTING, null))
+					entityItem.getCapability(CapabilitySelfPlanting.CAPABILITY_SELF_PLANTING, null).handlePlantingLogic(entityItem);
+			for (Object entityObject : world.getEntities(Entity.class, EntitySelectors.IS_ALIVE))
 				CppEnchantmentBase.cppEnchantments.stream().filter(cppEnchantment -> cppEnchantment.getClass().isAnnotationPresent(EntityTickingEnchantment.class)).forEach(cppEnchantment -> cppEnchantment.performAction((Entity) entityObject, null));
 		}
 	}
@@ -342,7 +372,7 @@ public final class CppEventHandler {
 					if (entityClass != null) {
 						TextFormatting color = IMob.class.isAssignableFrom(entityClass) ? TextFormatting.RED : TextFormatting.BLUE;
 						String unlocalizedEntityName = "entity." + entityName + ".name";
-						String localizedEntityName = StatCollector.translateToLocal(unlocalizedEntityName);
+						String localizedEntityName =I18n.format(unlocalizedEntityName);
 						if (localizedEntityName.equals(unlocalizedEntityName))
 							event.getToolTip().add(color + entityName);
 						else
@@ -361,7 +391,8 @@ public final class CppEventHandler {
 	@SubscribeEvent
 	public void onBlockBreak(BreakEvent event) {
 		EntityPlayer player = event.getPlayer();
-		if (CppConfigHandler.mobSpawnerSilkTouchDrop && !player.capabilities.isCreativeMode && event.getState().getBlock() == Blocks.mob_spawner && EnchantmentHelper.getSilkTouchModifier(player) && player.canHarvestBlock(Blocks.mob_spawner.getDefaultState())) {
+		//TODO: check if silk touch works correct here
+		if (CppConfigHandler.mobSpawnerSilkTouchDrop && !player.capabilities.isCreativeMode && event.getState().getBlock() == Blocks.mob_spawner && EnchantmentHelper.getEnchantmentLevel(Enchantments.silkTouch, player.getHeldItemMainhand())!=0 && player.canHarvestBlock(Blocks.mob_spawner.getDefaultState())) {
 			World world = event.getWorld();
 			BlockPos blockPos = event.getPos();
 			TileEntityMobSpawner spawnerTileEntity = (TileEntityMobSpawner) world.getTileEntity(blockPos);
@@ -428,7 +459,7 @@ public final class CppEventHandler {
 	@SubscribeEvent
 	public void onItemCrafted(ItemCraftedEvent event) {
 		if (event.crafting.getItem() == CppItems.crafting_pad)
-			event.player.triggerAchievement(AchievementList.buildWorkBench);
+			event.player.addStat(AchievementList.buildWorkBench);
 	}
 
 	/**
@@ -449,7 +480,7 @@ public final class CppEventHandler {
 	 */
 	@SubscribeEvent
 	public void onFOVUpdate(FOVUpdateEvent event) {
-		ItemStack helmet = event.getEntity().getEquipmentInSlot(4);
+		ItemStack helmet = event.getEntity().getItemStackFromSlot(EntityEquipmentSlot.HEAD);
 		if (helmet != null && helmet.getItem() == CppItems.binoculars)
 			event.setNewfov(event.getNewfov() / CppConfigHandler.binocularZoomAmount);
 	}
@@ -464,10 +495,10 @@ public final class CppEventHandler {
 	public void onClientTick(ClientTickEvent event) {
 		World world = Minecraft.getMinecraft().theWorld;
 		if (world != null) {
-			List<Entity> arrows = world.getEntities(EntityArrow.class, IEntitySelector.selectAnything);
+			List<Entity> arrows = world.getEntities(EntityArrow.class, EntitySelectors.IS_ALIVE);
 			for (Entity arrow : arrows)
 				CppEnchantments.performAction("homing", arrow, null);
-			List<Entity> xpOrbs = world.getEntities(EntityXPOrb.class, IEntitySelector.selectAnything);
+			List<Entity> xpOrbs = world.getEntities(EntityXPOrb.class, EntitySelectors.IS_ALIVE);
 			for (Entity xpOrb : xpOrbs)
 				CppEnchantments.performAction("veteran", xpOrb, null);
 		}
@@ -491,7 +522,8 @@ public final class CppEventHandler {
 				Collections.sort(potionEffects, (potionEffect1, potionEffect2) -> potionEffect1.getDuration() - potionEffect2.getDuration());
 				Gui gui = new Gui();
 				for (PotionEffect potionEffect : potionEffects) {
-					Potion potion = Potion.potionTypes[potionEffect.getPotionID()];
+					
+					Potion potion = potionEffect.getPotion();
 					int potionDuration = potionEffect.getDuration();
 					if (!potion.hasStatusIcon())
 						continue;
@@ -517,5 +549,10 @@ public final class CppEventHandler {
 				}
 			}
 		}
+	}
+	
+	@SubscribeEvent
+	public void addItemCaps(AttachCapabilitiesEvent.Item event) {
+		event.addCapability(new ResourceLocation(CppModInfo.MOD_ID), new SelfPlantingProvider());
 	}
 }

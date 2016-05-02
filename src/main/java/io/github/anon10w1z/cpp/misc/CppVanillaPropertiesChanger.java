@@ -11,6 +11,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.AchievementList;
@@ -32,12 +33,17 @@ public class CppVanillaPropertiesChanger {
 			if (block instanceof BlockStem || block instanceof BlockNetherWart)
 				CppUtils.setStepSound(block, SoundType.GROUND);
 			else if (block instanceof BlockFire) {
+				SoundType type = new SoundType(1.5F, 0.65F, null, SoundEvents.block_fire_ambient, null, SoundEvents.block_fire_extinguish, null);
+				CppUtils.setStepSound(block, type);
+				//TODO: check if I messed up ;)
+				/*
 				block.setStepSound(new SoundType(null, 1.5F, 0.65F) {
 					@Override
 					public String getStepSound() {
 						return "fire.fire";
 					}
 				});
+				*/
 			}
 		}
 		//Modifying block creative tabs

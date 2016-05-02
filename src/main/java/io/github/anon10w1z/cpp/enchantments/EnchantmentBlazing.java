@@ -9,6 +9,7 @@ import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Enchantments;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -23,7 +24,9 @@ public class EnchantmentBlazing extends CppEnchantmentBase {
 	private static Random random = new Random();
 
 	public EnchantmentBlazing() {
-		super("blazing", 1, EnumEnchantmentType.DIGGER);
+//	protected CppEnchantmentBase(Enchantment.Rarity rarityIn, EnumEnchantmentType typeIn, EntityEquipmentSlot[] slots) {
+
+		super(Rarity.VERY_RARE, EnumEnchantmentType.DIGGER, EntityEquipmentSlot.MAINHAND);
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -46,7 +47,7 @@ public class CppDispenserBehaviors {
 	 * @param dispenserBehavior The dispenser behavior carried out for the item
 	 */
 	private static void registerDispenserBehavior(Item item, BehaviorDefaultDispenseItem dispenserBehavior) {
-		String localizedName = StatCollector.translateToLocal(item.getUnlocalizedName() + ".name");
+		String localizedName = I18n.format(item.getUnlocalizedName()+".name", null);
 		if (dispenserBehavior.getClass() != BehaviorDefaultDispenseItem.class)
 			CraftPlusPlus.logInfo("Registering dispenser behavior for " + localizedName);
 		else
