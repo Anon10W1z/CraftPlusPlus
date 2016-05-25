@@ -4,10 +4,11 @@ import io.github.anon10w1z.cpp.handlers.CppConfigHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 
@@ -41,8 +42,9 @@ public class CppCoremodHooks {
 			if (world.isAirBlock(blockPos.down()))
 				canFallInto = true;
 			else {
-				Block block1 = world.getBlockState(blockPos.down()).getBlock();
-				Material material = block1.getMaterial();
+				IBlockState state = world.getBlockState(blockPos.down());
+				Block block1 = state.getBlock();
+				Material material = state.getMaterial();
 				canFallInto = block1 == Blocks.fire || material == Material.air || material == Material.water || material == Material.lava;
 			}
 			if (canFallInto && blockPos.getY() >= 0) {
@@ -56,8 +58,9 @@ public class CppCoremodHooks {
 					while (canFallInto && blockPos1.getY() > 0) {
 						blockPos1 = blockPos1.down();
 						if (!world.isAirBlock(blockPos1)) {
-							Block block1 = world.getBlockState(blockPos).getBlock();
-							Material material = block1.getMaterial();
+							IBlockState state = world.getBlockState(blockPos);
+							Block block1 = state.getBlock();
+							Material material = state.getMaterial();
 							canFallInto = block1 == Blocks.fire || material == Material.air || material == Material.water || material == Material.lava;
 						}
 					}
@@ -77,7 +80,8 @@ public class CppCoremodHooks {
 	 * @return Whether the given cactus block can stay at the block position in the world
 	 */
 	public static boolean canCactusStay(World world, BlockPos blockPos, Block block) {
-		return world.getBlockState(blockPos.down()).getBlock().canSustainPlant(world, blockPos.down(), EnumFacing.UP, (IPlantable) block);
+		IBlockState state = world.getBlockState(blockPos.down());
+		return state.getBlock().canSustainPlant(state,world, blockPos.down(), EnumFacing.UP, (IPlantable) block);
 	}
 
 	/**

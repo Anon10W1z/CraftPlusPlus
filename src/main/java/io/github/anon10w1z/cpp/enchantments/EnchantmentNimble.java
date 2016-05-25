@@ -1,11 +1,13 @@
 package io.github.anon10w1z.cpp.enchantments;
 
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 import java.util.UUID;
@@ -19,14 +21,14 @@ public class EnchantmentNimble extends CppEnchantmentBase {
 	private static UUID nimbleUUID = UUID.fromString("05b61a62-ae84-492e-8536-f365b7143296");
 
 	public EnchantmentNimble() {
-		super("nimble", 2, EnumEnchantmentType.ARMOR_FEET);
+		super(Rarity.UNCOMMON ,EnumEnchantmentType.ARMOR_FEET, EntityEquipmentSlot.FEET);
 	}
 
 	@Override
 	public void performAction(Entity entity, Event baseEvent) {
 		if (entity instanceof EntityLivingBase) {
 			EntityLivingBase livingEntity = (EntityLivingBase) entity;
-			int enchantmentLevel = this.getEnchantmentLevel(livingEntity.getEquipmentInSlot(1));
+			int enchantmentLevel = this.getEnchantmentLevel(livingEntity.getItemStackFromSlot(EntityEquipmentSlot.FEET));
 			if (enchantmentLevel > 0)
 				addSpeedBuff(livingEntity, enchantmentLevel);
 			else
@@ -56,7 +58,7 @@ public class EnchantmentNimble extends CppEnchantmentBase {
 	 * @param enchantmentLevel The enchantment level of the speed buff
 	 */
 	private void addSpeedBuff(EntityLivingBase livingEntity, int enchantmentLevel) {
-		IAttributeInstance speedAttribute = livingEntity.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.movementSpeed);
+		IAttributeInstance speedAttribute = livingEntity.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED);
 		if (speedAttribute.getModifier(nimbleUUID) == null) {
 			AttributeModifier speedModifier = new AttributeModifier(nimbleUUID, "Nimble", (float) enchantmentLevel * 0.20000000298023224, 2);
 			speedAttribute.applyModifier(speedModifier);
@@ -70,7 +72,7 @@ public class EnchantmentNimble extends CppEnchantmentBase {
 	 * @param enchantmentLevel The enchantment level of the speed buff
 	 */
 	private void removeSpeedBuff(EntityLivingBase livingEntity, int enchantmentLevel) {
-		IAttributeInstance speedAttribute = livingEntity.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.movementSpeed);
+		IAttributeInstance speedAttribute = livingEntity.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED);
 		if (speedAttribute.getModifier(nimbleUUID) != null) {
 			AttributeModifier speedModifier = new AttributeModifier(nimbleUUID, "Nimble", (float) enchantmentLevel * 0.20000000298023224, 2);
 			speedAttribute.removeModifier(speedModifier);

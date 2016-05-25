@@ -2,19 +2,20 @@ package io.github.anon10w1z.cpp.misc;
 
 import io.github.anon10w1z.cpp.handlers.CppConfigHandler;
 import io.github.anon10w1z.cpp.items.CppItems;
+import io.github.anon10w1z.cpp.main.CppUtils;
 import net.minecraft.block.Block;
-import net.minecraft.block.Block.SoundType;
 import net.minecraft.block.BlockFire;
 import net.minecraft.block.BlockNetherWart;
 import net.minecraft.block.BlockStem;
+import net.minecraft.block.SoundType;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.AchievementList;
-import net.minecraft.util.WeightedRandomFishable;
-import net.minecraftforge.common.FishingHooks;
+import net.minecraft.util.WeightedRandom;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 /**
@@ -30,14 +31,19 @@ public class CppVanillaPropertiesChanger {
 		Iterable<Block> blocks = Block.blockRegistry;
 		for (Block block : blocks) {
 			if (block instanceof BlockStem || block instanceof BlockNetherWart)
-				block.setStepSound(Block.soundTypeGrass);
+				CppUtils.setStepSound(block, SoundType.GROUND);
 			else if (block instanceof BlockFire) {
+				SoundType type = new SoundType(1.5F, 0.65F, null, SoundEvents.block_fire_ambient, null, SoundEvents.block_fire_extinguish, null);
+				CppUtils.setStepSound(block, type);
+				//TODO: check if I messed up ;)
+				/*
 				block.setStepSound(new SoundType(null, 1.5F, 0.65F) {
 					@Override
 					public String getStepSound() {
 						return "fire.fire";
 					}
 				});
+				*/
 			}
 		}
 		//Modifying block creative tabs
@@ -50,7 +56,7 @@ public class CppVanillaPropertiesChanger {
 			Blocks.wooden_button.setUnlocalizedName("buttonWood");
 		}
 		//Adding fishables
-		FishingHooks.addJunk(new WeightedRandomFishable(new ItemStack(Items.paper), 10));
+		FishingHooks.addJunk(new WeightedRandom(new ItemStack(Items.paper), 10));
 		//Modifying achievements
 		ReflectionHelper.setPrivateValue(Achievement.class, AchievementList.buildWorkBench, new ItemStack(CppItems.crafting_pad), "theItemStack", "field_75990_d");
 	}

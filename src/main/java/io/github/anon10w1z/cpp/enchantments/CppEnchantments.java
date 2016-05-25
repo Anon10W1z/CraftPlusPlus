@@ -3,6 +3,7 @@ package io.github.anon10w1z.cpp.enchantments;
 import io.github.anon10w1z.cpp.handlers.CppConfigHandler;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Enchantments;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import org.apache.commons.io.FilenameUtils;
 

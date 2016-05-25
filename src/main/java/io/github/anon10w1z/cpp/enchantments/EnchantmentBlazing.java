@@ -1,18 +1,20 @@
 package io.github.anon10w1z.cpp.enchantments;
 
+import java.util.List;
+import java.util.Random;
+
 import io.github.anon10w1z.cpp.main.CppUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Enchantments;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
-
-import java.util.List;
-import java.util.Random;
 
 /**
  * Automatically smelts the drops of harvested blocks
@@ -22,14 +24,16 @@ public class EnchantmentBlazing extends CppEnchantmentBase {
 	private static Random random = new Random();
 
 	public EnchantmentBlazing() {
-		super("blazing", 1, EnumEnchantmentType.DIGGER);
+//	protected CppEnchantmentBase(Enchantment.Rarity rarityIn, EnumEnchantmentType typeIn, EntityEquipmentSlot[] slots) {
+
+		super(Rarity.VERY_RARE, EnumEnchantmentType.DIGGER, EntityEquipmentSlot.MAINHAND);
 	}
 
 	@Override
 	public void performAction(Entity entity, Event baseEvent) {
-		if (entity != null && this.getEnchantmentLevel(((EntityLivingBase) entity).getHeldItem()) > 0) {
+		if (entity != null && this.getEnchantmentLevel(((EntityLivingBase) entity).getHeldItemMainhand()) > 0) {
 			HarvestDropsEvent event = (HarvestDropsEvent) baseEvent;
-			List<ItemStack> drops = event.drops;
+			List<ItemStack> drops = event.getDrops();
 			List<ItemStack> dropsCopy = CppUtils.copyList(drops);
 			drops.clear();
 			for (ItemStack drop : dropsCopy)
@@ -38,7 +42,7 @@ public class EnchantmentBlazing extends CppEnchantmentBase {
 					if (smeltingResult != null) {
 						smeltingResult = smeltingResult.copy();
 						smeltingResult.stackSize *= drop.stackSize;
-						int fortuneLevel = event.fortuneLevel;
+						int fortuneLevel = event.getFortuneLevel();
 						if (!(smeltingResult.getItem() instanceof ItemBlock))
 							smeltingResult.stackSize *= random.nextInt(fortuneLevel + 1) + 1;
 						drops.add(smeltingResult);
@@ -60,6 +64,6 @@ public class EnchantmentBlazing extends CppEnchantmentBase {
 
 	@Override
 	public boolean canApplyTogether(Enchantment enchantment) {
-		return super.canApplyTogether(enchantment) && enchantment != Enchantment.silkTouch;
+		return super.canApplyTogether(enchantment) && enchantment != Enchantments.silkTouch;
 	}
 }

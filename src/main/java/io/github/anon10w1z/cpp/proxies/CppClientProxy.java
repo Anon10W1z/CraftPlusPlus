@@ -1,5 +1,7 @@
 package io.github.anon10w1z.cpp.proxies;
 
+import org.lwjgl.input.Keyboard;
+
 import io.github.anon10w1z.cpp.blocks.CppBlocks;
 import io.github.anon10w1z.cpp.entities.EntityDynamite;
 import io.github.anon10w1z.cpp.entities.EntityObsidianBoat;
@@ -13,13 +15,12 @@ import io.github.anon10w1z.cpp.main.CppModInfo;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.RenderSnowball;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import org.lwjgl.input.Keyboard;
 
 /**
  * The client-side proxy for Craft++

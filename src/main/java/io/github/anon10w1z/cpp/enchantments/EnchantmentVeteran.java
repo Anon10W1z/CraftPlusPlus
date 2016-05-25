@@ -4,27 +4,26 @@ import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 /**
  * Draws experience points and item entities toward the wearer
  */
-@SuppressWarnings("unused")
 @EntityTickingEnchantment
 public class EnchantmentVeteran extends CppEnchantmentBase {
 	public EnchantmentVeteran() {
-		super("veteran", 1, EnumEnchantmentType.ARMOR_HEAD);
+		super(Rarity.VERY_RARE,EnumEnchantmentType.ARMOR_HEAD, EntityEquipmentSlot.HEAD);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void performAction(Entity entity, Event baseEvent) {
 		if (entity instanceof EntityXPOrb) {
 			World world = entity.worldObj;
 			double range = 32;
 			EntityPlayer closestPlayer = world.getClosestPlayerToEntity(entity, range);
-			if (closestPlayer != null && this.getEnchantmentLevel(closestPlayer.getEquipmentInSlot(4)) > 0) {
+			if (closestPlayer != null && this.getEnchantmentLevel(closestPlayer.getItemStackFromSlot(EntityEquipmentSlot.HEAD)) > 0) {
 				double xDiff = (closestPlayer.posX - entity.posX) / range;
 				double yDiff = (closestPlayer.posY + closestPlayer.getEyeHeight() - entity.posY) / range;
 				double zDiff = (closestPlayer.posZ - entity.posZ) / range;

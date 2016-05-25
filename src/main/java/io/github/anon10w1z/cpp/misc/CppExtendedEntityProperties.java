@@ -7,15 +7,15 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeedFood;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IExtendedEntityProperties;
 
 /**
  * Adds extended properties to item entities
  */
-public class CppExtendedEntityProperties implements IExtendedEntityProperties {
+public class CppExtendedEntityProperties {
 	/**
 	 * The name of these extended properties
 	 */
@@ -52,7 +52,7 @@ public class CppExtendedEntityProperties implements IExtendedEntityProperties {
 	 * @param entityItem The item entity to register the properties for
 	 */
 	public static void registerExtendedProperties(EntityItem entityItem) {
-		entityItem.registerExtendedProperties(EXTENDED_PROPERTIES_NAME, new CppExtendedEntityProperties(entityItem));
+	//	entityItem.registerExtendedProperties(EXTENDED_PROPERTIES_NAME, new CppExtendedEntityProperties(entityItem));
 	}
 
 	/**
@@ -61,16 +61,16 @@ public class CppExtendedEntityProperties implements IExtendedEntityProperties {
 	 * @param entityItem The item entity to obtain the properties from
 	 * @return The CppExtendedProperties of the given item entity
 	 */
-	public static CppExtendedEntityProperties getExtendedProperties(EntityItem entityItem) {
-		return (CppExtendedEntityProperties) entityItem.getExtendedProperties(EXTENDED_PROPERTIES_NAME);
-	}
+	//public static CppExtendedEntityProperties getExtendedProperties(EntityItem entityItem) {
+	//	return (CppExtendedEntityProperties) entityItem.getExtendedProperties(EXTENDED_PROPERTIES_NAME);
+	//}
 
 	/**
 	 * Saves the extended properties to NBT
 	 *
 	 * @param compound The NBT tag compound to write the properties to
 	 */
-	@Override
+	//@Override
 	public void saveNBTData(NBTTagCompound compound) {
 		NBTTagCompound properties = new NBTTagCompound();
 		properties.setInteger("MinSteadyTicks", minSteadyTicks);
@@ -83,7 +83,7 @@ public class CppExtendedEntityProperties implements IExtendedEntityProperties {
 	 *
 	 * @param compound The NBT tag compound to read the properties from
 	 */
-	@Override
+	//@Override
 	public void loadNBTData(NBTTagCompound compound) {
 		NBTTagCompound properties = compound.getCompoundTag(EXTENDED_PROPERTIES_NAME);
 		this.minSteadyTicks = properties.getInteger("MinSteadyTicks");
@@ -96,7 +96,7 @@ public class CppExtendedEntityProperties implements IExtendedEntityProperties {
 	 * @param entity The entity attached to the properties
 	 * @param world  The world the entity is in
 	 */
-	@Override
+	//@Override
 	public void init(Entity entity, World world) {
 		this.minSteadyTicks = world == null ? Integer.MAX_VALUE : world.rand.nextInt(75) + 75;
 	}
@@ -113,7 +113,7 @@ public class CppExtendedEntityProperties implements IExtendedEntityProperties {
 			if (entityPosDown.compareTo(lastTickEntityPosDown) != 0)
 				this.steadyTicks = 0;
 			if (this.steadyTicks >= this.minSteadyTicks)
-				this.entityItem.getEntityItem().onItemUse(CppUtils.getFakePlayer(this.world), this.world, entityPosDown, EnumFacing.UP, 0, 0, 0);
+				this.entityItem.getEntityItem().onItemUse(CppUtils.getFakePlayer(this.world), this.world, entityPosDown, EnumHand.MAIN_HAND, EnumFacing.UP, 0, 0, 0);
 		}
 	}
 }

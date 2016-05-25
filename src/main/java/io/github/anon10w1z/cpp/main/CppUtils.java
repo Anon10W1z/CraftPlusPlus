@@ -1,16 +1,21 @@
 package io.github.anon10w1z.cpp.main;
 
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.common.util.FakePlayerFactory;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.common.util.FakePlayerFactory;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 /**
  * Contains some utility functions used by Craft++
@@ -72,6 +77,28 @@ public final class CppUtils {
 			return (List<T>) constructor.newInstance(list);
 		} catch (Exception exception) {
 			return new ArrayList<>(list);
+		}
+	}
+	
+	public static final String STEP_SOUND_FIELD ="stepSound";
+	//TODO: find obfuscated name
+	public static final String OBFUSCATED_STEP_SOUND_FIELD ="";
+	
+	
+	public static void setStepSound(Block block, SoundType type) {
+		ReflectionHelper.setPrivateValue(Block.class, block, SoundType.SAND, STEP_SOUND_FIELD, OBFUSCATED_STEP_SOUND_FIELD);
+	}
+	
+	public static void consumeItem(Item item, IInventory inventory){
+		ItemStack stack;
+		for(int i=0; i<inventory.getSizeInventory(); i++) {
+			if((stack=inventory.getStackInSlot(i))!=null && stack.getItem()==item) {
+				if(stack.stackSize>1) 
+					stack.stackSize--;
+				else
+					inventory.setInventorySlotContents(i, null);
+				return;
+			}
 		}
 	}
 }
