@@ -1,8 +1,5 @@
 package io.github.anon10w1z.cpp.enchantments;
 
-import java.util.List;
-import java.util.Random;
-
 import io.github.anon10w1z.cpp.main.CppUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
@@ -16,6 +13,9 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
+import java.util.List;
+import java.util.Random;
+
 /**
  * Automatically smelts the drops of harvested blocks
  */
@@ -24,9 +24,7 @@ public class EnchantmentBlazing extends CppEnchantmentBase {
 	private static Random random = new Random();
 
 	public EnchantmentBlazing() {
-//	protected CppEnchantmentBase(Enchantment.Rarity rarityIn, EnumEnchantmentType typeIn, EntityEquipmentSlot[] slots) {
-
-		super(Rarity.VERY_RARE, EnumEnchantmentType.DIGGER, EntityEquipmentSlot.MAINHAND);
+		super("blazing", Rarity.VERY_RARE, EnumEnchantmentType.DIGGER, EntityEquipmentSlot.MAINHAND);
 	}
 
 	@Override

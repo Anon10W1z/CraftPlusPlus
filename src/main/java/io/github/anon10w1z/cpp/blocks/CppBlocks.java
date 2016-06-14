@@ -1,46 +1,42 @@
 package io.github.anon10w1z.cpp.blocks;
 
-import java.lang.reflect.Field;
-
-import io.github.anon10w1z.cpp.main.CppUtils;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFalling;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 /**
  * Contains, initializes, and registers all of Craft++'s blocks
  */
 public class CppBlocks {
-	//Storage Blocks
 	public static Block flint_block;
 	public static Block sugar_block;
 	public static Block charcoal_block;
 
-		
-	
 	/**
 	 * Registers the blocks for Craft++
 	 */
 	public static void registerBlocks() {
-		//Storage Blocks
-		//Looks like pistons are now using the StepSounds of Stone
 		flint_block = new BlockCppStorage(Material.rock, "flint").setStepSound(SoundType.STONE).setHardness(0.8F);
-		GameRegistry.registerBlock(flint_block, "flint_block");
+		registerBlock(flint_block);
 
-		sugar_block = new BlockFalling().setUnlocalizedName("sugarBlock").setHardness(0.5F);
-		//soundtypesand
-		sugar_block.setHarvestLevel("shovel", 0);
-		GameRegistry.registerBlock(sugar_block, "sugar_block");
+		sugar_block = new BlockSugar();
+		registerBlock(sugar_block);
 
 		charcoal_block = new BlockCppStorage(Material.rock, "charcoal").setStepSound(SoundType.STONE).setHardness(5).setResistance(10);
 		Blocks.fire.setFireInfo(charcoal_block, 5, 5);
-		GameRegistry.registerBlock(charcoal_block, "charcoal_block");
-		CppUtils.setStepSound(sugar_block, SoundType.SAND);
+		registerBlock(charcoal_block);
 	}
-	
-	
+
+	/**
+	 * Registers a block with Minecraft
+	 *
+	 * @param block The block to be registered
+	 */
+	private static void registerBlock(Block block) {
+		GameRegistry.register(block);
+		GameRegistry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
+	}
 }

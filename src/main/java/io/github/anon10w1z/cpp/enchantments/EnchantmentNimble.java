@@ -1,6 +1,5 @@
 package io.github.anon10w1z.cpp.enchantments;
 
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -21,7 +20,7 @@ public class EnchantmentNimble extends CppEnchantmentBase {
 	private static UUID nimbleUUID = UUID.fromString("05b61a62-ae84-492e-8536-f365b7143296");
 
 	public EnchantmentNimble() {
-		super(Rarity.UNCOMMON ,EnumEnchantmentType.ARMOR_FEET, EntityEquipmentSlot.FEET);
+		super("nimble", Rarity.UNCOMMON, EnumEnchantmentType.ARMOR_FEET, EntityEquipmentSlot.FEET);
 	}
 
 	@Override

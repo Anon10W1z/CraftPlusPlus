@@ -16,10 +16,11 @@ import java.util.Optional;
 /**
  * Makes arrows shot out of bows track down their targets
  */
+@SuppressWarnings("unused")
 @EntityTickingEnchantment
 public class EnchantmentHoming extends CppEnchantmentBase {
 	public EnchantmentHoming() {
-		super(Rarity.VERY_RARE,EnumEnchantmentType.BOW, EntityEquipmentSlot.MAINHAND);
+		super("homing", Rarity.VERY_RARE, EnumEnchantmentType.BOW, EntityEquipmentSlot.MAINHAND);
 	}
 
 	@Override

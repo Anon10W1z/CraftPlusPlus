@@ -1,6 +1,7 @@
 package io.github.anon10w1z.cpp.main;
 
 import io.github.anon10w1z.cpp.blocks.CppBlocks;
+import io.github.anon10w1z.cpp.capabilities.CapabilitySelfPlanting;
 import io.github.anon10w1z.cpp.dispenser.CppDispenserBehaviors;
 import io.github.anon10w1z.cpp.enchantments.CppEnchantments;
 import io.github.anon10w1z.cpp.entities.CppEntities;
@@ -15,7 +16,6 @@ import io.github.anon10w1z.cpp.recipes.CppRecipeReplacer;
 import io.github.anon10w1z.cpp.recipes.CppRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -112,6 +112,7 @@ public final class CraftPlusPlus {
 	 * - Registers the fuel handler <br>
 	 * - Registers the crafting recipes <br>
 	 * - Registers the dispenser behaviors <br>
+	 * - Registers the self-planting <br>
 	 * - Initializes the vanilla properties changer <br>
 	 * - Initializes the recipe remover
 	 *
@@ -129,15 +130,14 @@ public final class CraftPlusPlus {
 		CppEnchantments.registerEnchantments();
 		logInfo("Registering the event handler");
 		MinecraftForge.EVENT_BUS.register(CppEventHandler.instance);
-		FMLCommonHandler.instance().bus().register(CppEventHandler.instance);
-		logInfo("Registering the key bindings");
-		proxy.registerKeyBindings();
 		logInfo("Registering the fuel handler");
 		GameRegistry.registerFuelHandler(new CppFuelHandler());
 		logInfo("Registering the crafting/furnace recipes");
 		CppRecipes.registerRecipes();
 		logInfo("Registering the dispenser behaviors");
 		CppDispenserBehaviors.registerDispenserBehaviors();
+		logInfo("Registering the self-planting");
+		CapabilitySelfPlanting.register();
 		logInfo("Initializing the vanilla properties changer");
 		CppVanillaPropertiesChanger.init();
 		logInfo("Initializing the crafting recipe remover");

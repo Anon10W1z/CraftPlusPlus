@@ -1,6 +1,7 @@
 package io.github.anon10w1z.cpp.items;
 
 import io.github.anon10w1z.cpp.handlers.CppConfigHandler;
+import io.github.anon10w1z.cpp.main.CppModInfo;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
@@ -14,31 +15,24 @@ public class CppItems {
 	public static Item stone_boat;
 	public static Item obsidian_boat;
 	public static Item fried_egg;
-	public static Item sponge_wipe;
 	public static Item crafting_pad;
 	public static Item binocular_lens;
 	public static Item binoculars;
 
 	public static void registerItems() {
 		dynamite = new ItemDynamite();
-		GameRegistry.registerItem(dynamite, "dynamite");
-		stone_boat = new ItemStoneBoat();
-		GameRegistry.registerItem(stone_boat, "stone_boat");
+		GameRegistry.register(dynamite);
 		obsidian_boat = new ItemObsidianBoat();
-		GameRegistry.registerItem(obsidian_boat, "obsidian_boat");
-		fried_egg = new ItemFood(5, 0.6F, false).setUnlocalizedName("eggFried");
-		GameRegistry.registerItem(fried_egg, "egg_fried");
-		if (CppConfigHandler.signOverhaul) {
-			sponge_wipe = new Item().setUnlocalizedName("spongeWipe").setCreativeTab(CreativeTabs.tabMisc);
-			GameRegistry.registerItem(sponge_wipe, "sponge_wipe");
-		}
+		GameRegistry.register(obsidian_boat);
+		fried_egg = new ItemFood(5, 0.6F, false).setUnlocalizedName("eggFried").setRegistryName(CppModInfo.MOD_ID, "egg_fried");
+		GameRegistry.register(fried_egg);
 		if (CppConfigHandler.craftingTableChanges) {
 			crafting_pad = new ItemCraftingPad();
-			GameRegistry.registerItem(crafting_pad, "crafting_pad");
+			GameRegistry.register(crafting_pad);
 		}
-		binocular_lens = new Item().setUnlocalizedName("binocularLens").setCreativeTab(CreativeTabs.tabTools);
-		GameRegistry.registerItem(binocular_lens, "binocular_lens");
+		binocular_lens = new Item().setUnlocalizedName("binocularLens").setRegistryName(CppModInfo.MOD_ID, "binocular_lens").setCreativeTab(CreativeTabs.tabTools);
+		GameRegistry.register(binocular_lens);
 		binoculars = new ItemBinoculars();
-		GameRegistry.registerItem(binoculars, "binoculars");
+		GameRegistry.register(binoculars);
 	}
 }

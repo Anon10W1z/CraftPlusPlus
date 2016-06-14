@@ -11,6 +11,7 @@ import net.minecraftforge.fml.client.config.GuiConfig;
  * The config GUI for Craft++
  */
 public class GuiCppConfig extends GuiConfig {
+	@SuppressWarnings("unused")
 	public GuiCppConfig() {
 		this(null);
 	}

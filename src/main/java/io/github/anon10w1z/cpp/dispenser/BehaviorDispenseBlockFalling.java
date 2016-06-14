@@ -17,7 +17,7 @@ public class BehaviorDispenseBlockFalling extends BehaviorDefaultDispenseItem {
 	protected ItemStack dispenseStack(IBlockSource blockSource, ItemStack itemstack) {
 		World world = blockSource.getWorld();
 		EnumFacing facing = BlockDispenser.getFacing(blockSource.getBlockMetadata());
-		itemstack.onItemUse(CppUtils.getFakePlayer(world), world, blockSource.getBlockPos(),EnumHand.MAIN_HAND, facing, 0, 0, 0);
+		itemstack.onItemUse(CppUtils.getFakePlayer(world), world, blockSource.getBlockPos(), EnumHand.MAIN_HAND, facing, 0, 0, 0);
 		return itemstack;
 	}
 }

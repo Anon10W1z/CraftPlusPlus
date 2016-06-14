@@ -46,7 +46,7 @@ public class CppClassTransformer implements IClassTransformer {
 	/**
 	 * Modifies the block class to allow Craft++'s falling blocks to fall
 	 *
-	 * @param bytes      The bytes of the block class
+	 * @param bytes The bytes of the block class
 	 * @return The modified bytes of the block class
 	 */
 	private byte[] transformBlock(byte[] bytes, String deobfuscatedClassName) {
@@ -59,13 +59,13 @@ public class CppClassTransformer implements IClassTransformer {
 		String targetMethodName2 = obfuscated ? "b" : "updateTick";
 		String targetMethodName3 = obfuscated ? "a" : "tickRate";
 
-		String targetMethodDescriptor = obfuscated ? "(Laqu;Ldt;Lbec;)V" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/BlockPos;Lnet/minecraft/block/state/IBlockState;)V";
-		String targetMethodDescriptor1 = obfuscated ? "(Laqu;Ldt;Lbec;Latr;)V" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/BlockPos;Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/block/Block;)V";
-		String targetMethodDescriptor2 = obfuscated ? "(Laqu;Ldt;Lbec;Ljava/util/Random;)V" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/BlockPos;Lnet/minecraft/block/state/IBlockState;Ljava/util/Random;)V";
-		String targetMethodDescriptor3 = obfuscated ? "(Laqu;)I" : "(Lnet/minecraft/world/World;)I";
+		String targetMethodDescriptor = obfuscated ? "(Laht;Lcj;Larc;)V" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;)V";
+		String targetMethodDescriptor1 = obfuscated ? "(Laht;Lcj;Larc;Lajt;)V" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/block/Block;)V";
+		String targetMethodDescriptor2 = obfuscated ? "(Laht;Lcj;Larc;Ljava/util/Random;)V" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;Ljava/util/Random;)V";
+		String targetMethodDescriptor3 = obfuscated ? "(Laht;)I" : "(Lnet/minecraft/world/World;)I";
 
-		String delegateMethodDescriptor = obfuscated ? "(Laqu;Ldt;Latr;)V" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/BlockPos;Lnet/minecraft/block/Block;)V";
-		String delegateMethodDescriptor1 = obfuscated ? "(Latr;)Z" : "(Lnet/minecraft/block/Block;)Z";
+		String delegateMethodDescriptor = obfuscated ? "(Laht;Lcj;Lajt;)V" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/Block;)V";
+		String delegateMethodDescriptor1 = obfuscated ? "(Lajt;)Z" : "(Lnet/minecraft/block/Block;)Z";
 		int patchCount = 0;
 		for (MethodNode methodNode : classNode.methods) {
 			String methodName = methodNode.name;
@@ -112,9 +112,9 @@ public class CppClassTransformer implements IClassTransformer {
 			}
 		}
 		if (deobfuscatedClassName.equals("net.minecraft.block.BlockCactus")) {
-			String cactusTargetMethodName = obfuscated ? "d" : "canBlockStay";
-			String cactusTargetMethodDescriptor = obfuscated ? "(Laqu;Ldt;)Z" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/BlockPos;)Z";
-			String cactusDelegateMethodDescriptor = obfuscated ? "(Laqu;Ldt;Latr;)Z" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/BlockPos;Lnet/minecraft/block/Block;)Z";
+			String cactusTargetMethodName = obfuscated ? "b" : "canBlockStay";
+			String cactusTargetMethodDescriptor = obfuscated ? "(Laht;Lcj;)Z" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;)Z";
+			String cactusDelegateMethodDescriptor = obfuscated ? "(Laht;Lcj;Lajt;)Z" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/Block;)Z";
 			classNode.methods.stream().filter(methodNode -> methodNode.name.equals(cactusTargetMethodName) && methodNode.desc.equals(cactusTargetMethodDescriptor)).forEach(methodNode -> {
 				InsnList injectionList = new InsnList();
 				injectionList.add(new VarInsnNode(ALOAD, 1));

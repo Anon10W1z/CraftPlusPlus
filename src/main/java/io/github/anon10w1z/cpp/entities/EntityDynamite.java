@@ -20,20 +20,15 @@ public class EntityDynamite extends EntityThrowable {
 	 */
 	private static final int WET_TICKS = 20;
 
-	
-	
 	/**
 	 * Datawatcher ID for ticks wet
 	 */
 	private static final DataParameter<Integer> TICKSWET = EntityDataManager.createKey(EntityDynamite.class, DataSerializers.VARINT);
-	
-	
+
 	/**
 	 * Datawatcher ID for ticks since wet
 	 */
 	private static final DataParameter<Integer> TICKSSINCEWET = EntityDataManager.createKey(EntityDynamite.class, DataSerializers.VARINT);
-
-	
 
 	@SuppressWarnings("unused")
 	public EntityDynamite(World world) {
@@ -95,8 +90,7 @@ public class EntityDynamite extends EntityThrowable {
 	private int getTicksWet() {
 		return this.dataWatcher.get(TICKSWET);
 	}
-	
-	
+
 	/**
 	 * Sets the number of ticks wet
 	 *

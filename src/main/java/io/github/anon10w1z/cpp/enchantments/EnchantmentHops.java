@@ -1,10 +1,8 @@
 package io.github.anon10w1z.cpp.enchantments;
 
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
@@ -16,20 +14,17 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 @SuppressWarnings("unused")
 public class EnchantmentHops extends CppEnchantmentBase {
 	public EnchantmentHops() {
-	
-		super(Rarity.UNCOMMON,EnumEnchantmentType.ARMOR_FEET, EntityEquipmentSlot.FEET);
+		super("hops", Rarity.UNCOMMON, EnumEnchantmentType.ARMOR_FEET, EntityEquipmentSlot.FEET);
 	}
 
 	@Override
 	public void performAction(Entity entity, Event baseEvent) {
-		EntityPlayer player;
 		float enchantmentLevel = this.getEnchantmentLevel(((EntityLivingBase) entity).getItemStackFromSlot(EntityEquipmentSlot.FEET));
 		if (baseEvent instanceof LivingJumpEvent)
 			entity.motionY += enchantmentLevel / 10;
 		else if (baseEvent instanceof LivingFallEvent) {
 			LivingFallEvent fallEvent = (LivingFallEvent) baseEvent;
-			fallEvent.setDistance(fallEvent.getDistance()-enchantmentLevel);
-	
+			fallEvent.setDistance(fallEvent.getDistance() - enchantmentLevel);
 		}
 	}
 

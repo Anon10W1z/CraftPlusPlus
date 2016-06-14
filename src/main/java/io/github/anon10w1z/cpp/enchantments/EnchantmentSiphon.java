@@ -1,6 +1,5 @@
 package io.github.anon10w1z.cpp.enchantments;
 
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -18,7 +17,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("unused")
 public class EnchantmentSiphon extends CppEnchantmentBase {
 	public EnchantmentSiphon() {
-		super(Rarity.UNCOMMON, EnumEnchantmentType.DIGGER, EntityEquipmentSlot.MAINHAND);
+		super("siphon", Rarity.UNCOMMON, EnumEnchantmentType.DIGGER, EntityEquipmentSlot.MAINHAND);
 	}
 
 	@Override

@@ -19,9 +19,7 @@ public class CppEntities {
 	public static void registerEntities(CraftPlusPlus mod) {
 		currentMod = mod;
 		registerEntity(EntityDynamite.class, "Dynamite");
-		registerEntity(EntityStoneBoat.class, "StoneBoat");
 		registerEntity(EntityObsidianBoat.class, "ObsidianBoat");
-		registerEntity(EntitySitPoint.class, "SitPoint");
 	}
 
 	private static void registerEntity(Class<? extends Entity> entityClass, String entityName) {

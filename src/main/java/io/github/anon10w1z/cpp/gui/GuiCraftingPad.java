@@ -28,7 +28,7 @@ public class GuiCraftingPad extends GuiContainer {
 			registerGuiOverlayHandlerMethod.invoke(null, GuiCraftingPad.class, defaultOverlayHandler.newInstance(), "crafting");
 			CraftPlusPlus.logInfo("Registered NEI integration for crafting pad");
 		} catch (NoSuchMethodException | ClassNotFoundException ignored) {
-
+			CraftPlusPlus.logInfo("Could not find NEI; skipping NEI integration for crafting pad");
 		} catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
 			e.printStackTrace();
 		}

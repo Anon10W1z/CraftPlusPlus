@@ -4,12 +4,10 @@ import com.google.common.collect.Maps;
 import io.github.anon10w1z.cpp.enchantments.CppEnchantments;
 import io.github.anon10w1z.cpp.main.CraftPlusPlus;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.config.GuiConfigEntries.NumberSliderEntry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.io.File;
 import java.util.Arrays;
@@ -27,7 +25,6 @@ public final class CppConfigHandler {
 	public static Configuration config;
 	//Mob Drops
 	public static double creeperDropTntChance;
-	public static double endermanBlockDropChance;
 	public static double batLeatherDropChance;
 	//Recipes
 	public static boolean useBetterStoneToolRecipes;
@@ -40,8 +37,6 @@ public final class CppConfigHandler {
 	public static boolean autoSeedPlanting;
 	public static float binocularZoomAmount;
 	public static List<Block> additionalFallingBlocks;
-	public static boolean signOverhaul;
-	public static boolean sitOnStairs;
 	public static boolean mobSpawnerSilkTouchDrop;
 	//Miscellaneous: Requires Restart
 	public static boolean commandBlockInRedstoneTab;
@@ -67,7 +62,6 @@ public final class CppConfigHandler {
 		CraftPlusPlus.logInfo("Syncing config file");
 		String mobDropsCategory = Configuration.CATEGORY_GENERAL + Configuration.CATEGORY_SPLITTER + "Mob Drops";
 		creeperDropTntChance = get(mobDropsCategory, "Chance of creepers dropping TNT", 1D, "The chance of creepers dropping TNT, out of 10.", true).setMinValue(0).setMaxValue(10).getDouble() / 10;
-		endermanBlockDropChance = get(mobDropsCategory, "Chance of enderman dropping held block", 10D, "The chance of enderman dropping their held block, out of 10.", true).setMinValue(0).setMaxValue(10).getDouble() / 10;
 		batLeatherDropChance = get(mobDropsCategory, "Chance of bats dropping leather", 10D, "The chance of bats dropping leather, out of 10.", true).setMinValue(0).setMaxValue(10).getDouble() / 10;
 		config.setCategoryComment(mobDropsCategory, "Modify mob drops");
 
@@ -88,10 +82,7 @@ public final class CppConfigHandler {
 		babyZombieBurnInDaylight = get(miscCategory, "Baby zombies burn in daylight", true, "Do baby zombies burn in daylight?");
 		autoSeedPlanting = get(miscCategory, "Enable automatic seed planting", true, "Do dropped seeds plant themselves?");
 		binocularZoomAmount = (float) get(miscCategory, "Binocular Zoom Amount", 4, "By how much do binoculars divide your FOV?", false).setMinValue(1D).getDouble();
-		//Block.blockRegistry.getObject(name)
-		
-		additionalFallingBlocks = Arrays.stream(config.getStringList("Additional Falling Blocks", miscCategory, new String[]{GameRegistry.findUniqueIdentifierFor(Blocks.dirt).name, GameRegistry.findUniqueIdentifierFor(Blocks.clay).name}, "A list of additional blocks that can fall like sand.")).map(Block::getBlockFromName).filter(block -> block != null).collect(Collectors.toList());
-		sitOnStairs = get(miscCategory, "Sit on stairs", true, "Can you sit on stairs by right clicking with an empty hand?");
+		additionalFallingBlocks = Arrays.stream(config.getStringList("Additional Falling Blocks", miscCategory, new String[]{"minecraft:dirt", "minecraft:clay"}, "A list of additional blocks that can fall like sand.")).map(Block::getBlockFromName).filter(block -> block != null).collect(Collectors.toList());
 		mobSpawnerSilkTouchDrop = get(miscCategory, "Mob spawner silk touch drop", true, "Do mob spawners drop themselves when harvested with silk touch?");
 		config.setCategoryComment(miscCategory, "Miscellaneous settings");
 
@@ -100,7 +91,6 @@ public final class CppConfigHandler {
 		enableFlintAndSteelDispenserBehavior = get(miscRequiresRestartCategory, "Enable flint and steel dispenser behavior", false, "Can you use flint and steel with dispensers?");
 		renameButtons = get(miscRequiresRestartCategory, "Rename buttons", true, "Do buttons get renamed based on their material?");
 		craftingTableChanges = get(miscRequiresRestartCategory, "Crafting table changes", true, "Is the way to create a 3x3 crafting device changed?");
-		signOverhaul = get(miscRequiresRestartCategory, "Sign overhaul", true, "Is the way signs are used in Minecraft overhauled?");
 		config.setCategoryComment(miscRequiresRestartCategory, "Settings that require a Minecraft restart");
 		config.setCategoryRequiresMcRestart(miscRequiresRestartCategory, true);
 

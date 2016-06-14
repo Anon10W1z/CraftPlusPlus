@@ -11,8 +11,6 @@ import net.minecraft.world.World;
  * Dispenser behavior for dynamite
  */
 public class BehaviorDispenseDynamite extends BehaviorProjectileDispense {
-	
-
 	@Override
 	protected IProjectile getProjectileEntity(World world, IPosition position, ItemStack stack) {
 		return new EntityDynamite(world, position.getX(), position.getY(), position.getZ());

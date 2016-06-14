@@ -1,90 +1,96 @@
 package io.github.anon10w1z.cpp.items;
 
-import java.util.List;
-
 import io.github.anon10w1z.cpp.entities.EntityObsidianBoat;
+import io.github.anon10w1z.cpp.main.CppModInfo;
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.AchievementList;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.RayTraceResult.Type;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 /**
  * Obsidian boat item to alongside obsidian boat entity
  */
 public class ItemObsidianBoat extends Item {
 	public ItemObsidianBoat() {
-		super();
 		this.setUnlocalizedName("boatObsidian");
+		this.setRegistryName(CppModInfo.MOD_ID, "obsidian_boat");
 		this.setCreativeTab(CreativeTabs.tabTransport);
 		this.setMaxStackSize(1);
 	}
-	
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemstack, World world, EntityPlayer player, EnumHand hand) {
-		float f1 = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch);
-		float f2 = player.prevRotationYaw + (player.rotationYaw - player.prevRotationYaw);
-		double d0 = player.posX;
-		double d1 = player.posY + player.getEyeHeight();
-		double d2 = player.posZ;
-		Vec3d vec3 = new Vec3d(d0, d1, d2);
+		float f = 1.0F;
+		float f1 = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch) * f;
+		float f2 = player.prevRotationYaw + (player.rotationYaw - player.prevRotationYaw) * f;
+		double d0 = player.prevPosX + (player.posX - player.prevPosX) * (double) f;
+		double d1 = player.prevPosY + (player.posY - player.prevPosY) * (double) f + (double) player.getEyeHeight();
+		double d2 = player.prevPosZ + (player.posZ - player.prevPosZ) * (double) f;
+		Vec3d vec3d = new Vec3d(d0, d1, d2);
 		float f3 = MathHelper.cos(-f2 * 0.017453292F - (float) Math.PI);
 		float f4 = MathHelper.sin(-f2 * 0.017453292F - (float) Math.PI);
 		float f5 = -MathHelper.cos(-f1 * 0.017453292F);
 		float f6 = MathHelper.sin(-f1 * 0.017453292F);
 		float f7 = f4 * f5;
 		float f8 = f3 * f5;
-		int d3 = 5;
-		Vec3d vec31 = vec3.addVector((double) f7 * d3, (double) f6 * d3, (double) f8 * d3);
-		RayTraceResult result= world.rayTraceBlocks(vec3, vec31, true);
-		if (result == null)
-			return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
-	
-		Vec3d vec32 = player.getLook(1);
-		boolean flag = false;
-		List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().addCoord(vec32.xCoord * d3, vec32.yCoord * d3, vec32.zCoord * d3).expand(1, 1, 1));
-		for (Entity entity : entities)
-			if (entity.canBeCollidedWith()) {
-				float f10 = entity.getCollisionBorderSize();
-				AxisAlignedBB axisAlignedBB = entity.getEntityBoundingBox().expand(f10, f10, f10);
-				if (axisAlignedBB.isVecInside(vec3)) {
-					flag = true;
-					break;
+		double d3 = 5.0D;
+		Vec3d vec3d1 = vec3d.addVector((double) f7 * d3, (double) f6 * d3, (double) f8 * d3);
+		RayTraceResult raytraceresult = world.rayTraceBlocks(vec3d, vec3d1, true);
+
+		if (raytraceresult == null)
+			return new ActionResult(EnumActionResult.PASS, itemstack);
+		else {
+			Vec3d vec3d2 = player.getLook(f);
+			boolean flag = false;
+			List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().addCoord(vec3d2.xCoord * d3, vec3d2.yCoord * d3, vec3d2.zCoord * d3).expandXyz(1.0D));
+
+			for (Entity aList : list) {
+				if (aList.canBeCollidedWith()) {
+					AxisAlignedBB axisalignedbb = aList.getEntityBoundingBox().expandXyz((double) aList.getCollisionBorderSize());
+					if (axisalignedbb.isVecInside(vec3d))
+						flag = true;
 				}
 			}
-		if (flag)
-			return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
-		if (result.typeOfHit == Type.BLOCK) {
-			BlockPos blockPos = result.getBlockPos();
-			if (world.getBlockState(blockPos).getBlock() == Blocks.snow_layer)
-				blockPos = blockPos.down();
-			EntityObsidianBoat obsidianBoat = new EntityObsidianBoat(world, (float) blockPos.getX() + 0.5, (float) blockPos.getY() + 1, (float) blockPos.getZ() + 0.5);
-			obsidianBoat.rotationYaw = (float) (((MathHelper.floor_double(player.rotationYaw * 4 / 360 + 0.5) & 3) - 1) * 90);
-			if (!world.getCollisionBoxes(obsidianBoat.getEntityBoundingBox().expand(-0.1, -0.1, -0.1)).isEmpty())
-				return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
-			if (!world.isRemote)
-				world.spawnEntityInWorld(obsidianBoat);
-			if (!player.capabilities.isCreativeMode)
-				--itemstack.stackSize;
-			//Im not sure which achievement you want here TODO: put in right achievment
-			player.addStat(AchievementList.);
-			player.triggerAchievement(StatList.objectUseStats[Item.getIdFromItem(this)]);
+
+			if (flag)
+				return new ActionResult(EnumActionResult.PASS, itemstack);
+			else if (raytraceresult.typeOfHit != Type.BLOCK)
+				return new ActionResult(EnumActionResult.PASS, itemstack);
+			else {
+				Block block = world.getBlockState(raytraceresult.getBlockPos()).getBlock();
+				boolean flag1 = block == Blocks.lava || block == Blocks.flowing_lava;
+				EntityObsidianBoat entityobsidianboat = new EntityObsidianBoat(world, raytraceresult.hitVec.xCoord, flag1 ? raytraceresult.hitVec.yCoord - 0.12D : raytraceresult.hitVec.yCoord, raytraceresult.hitVec.zCoord);
+				entityobsidianboat.rotationYaw = player.rotationYaw;
+
+				if (!world.getCubes(entityobsidianboat, entityobsidianboat.getEntityBoundingBox().expandXyz(-0.1D)).isEmpty())
+					return new ActionResult(EnumActionResult.FAIL, itemstack);
+				else {
+					if (!world.isRemote)
+						world.spawnEntityInWorld(entityobsidianboat);
+
+					if (!player.capabilities.isCreativeMode)
+						--itemstack.stackSize;
+
+					player.addStat(StatList.func_188057_b(this));
+					return new ActionResult(EnumActionResult.SUCCESS, itemstack);
+				}
+			}
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
 	}
 }

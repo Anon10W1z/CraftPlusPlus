@@ -20,7 +20,7 @@ public class EnchantmentVigor extends CppEnchantmentBase {
 	private static UUID vigorUUID = UUID.fromString("18339f34-6ab5-461d-a103-9b9a3ac3eec7");
 
 	public EnchantmentVigor() {
-		super(Rarity.VERY_RARE,EnumEnchantmentType.ARMOR_CHEST, EntityEquipmentSlot.CHEST);
+		super("vigor", Rarity.VERY_RARE, EnumEnchantmentType.ARMOR_CHEST, EntityEquipmentSlot.CHEST);
 	}
 
 	@Override

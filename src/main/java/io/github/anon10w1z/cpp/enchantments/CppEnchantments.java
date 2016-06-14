@@ -1,9 +1,7 @@
 package io.github.anon10w1z.cpp.enchantments;
 
 import io.github.anon10w1z.cpp.handlers.CppConfigHandler;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Enchantments;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import org.apache.commons.io.FilenameUtils;
 
@@ -15,14 +13,13 @@ import java.util.Optional;
  * Initializes Craft++'s enchantments
  */
 public final class CppEnchantments {
-	public static List<String> enchantmentNames = Arrays.asList("Nimble", "Hops", "Vigor", "Veteran", "Blazing", "Siphon", "Quickdraw", "Homing");
+	public static List<String> enchantmentNames = Arrays.asList("Nimble", "Hops", "Vigor", "Veteran", "Blazing", "Siphon", "Homing");
 
 	/**
 	 * Registers the enchantments for Craft++
 	 */
 	public static void registerEnchantments() {
 		enchantmentNames.stream().filter(CppConfigHandler.enchantmentNameToEnable::get).forEach(CppEnchantments::instantiateEnchantment);
-		Arrays.sort(Enchantment.enchantmentsBookList, (enchantment1, enchantment2) -> Integer.compare(enchantment1.effectId, enchantment2.effectId));
 	}
 
 	private static void instantiateEnchantment(String enchantmentName) {

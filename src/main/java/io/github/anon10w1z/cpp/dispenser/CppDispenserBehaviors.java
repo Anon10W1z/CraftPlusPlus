@@ -36,7 +36,6 @@ public class CppDispenserBehaviors {
 				registerDispenserBehavior(item, new BehaviorDefaultDispenseItem());
 		}
 		registerDispenserBehavior(CppItems.dynamite, new BehaviorDispenseDynamite());
-		registerDispenserBehavior(CppItems.stone_boat, new BehaviorDispenseStoneBoat());
 		registerDispenserBehavior(CppItems.obsidian_boat, new BehaviorDispenseObsidianBoat());
 	}
 
@@ -47,7 +46,7 @@ public class CppDispenserBehaviors {
 	 * @param dispenserBehavior The dispenser behavior carried out for the item
 	 */
 	private static void registerDispenserBehavior(Item item, BehaviorDefaultDispenseItem dispenserBehavior) {
-		String localizedName = I18n.format(item.getUnlocalizedName()+".name", null);
+		String localizedName = I18n.format(item.getUnlocalizedName() + ".name");
 		if (dispenserBehavior.getClass() != BehaviorDefaultDispenseItem.class)
 			CraftPlusPlus.logInfo("Registering dispenser behavior for " + localizedName);
 		else

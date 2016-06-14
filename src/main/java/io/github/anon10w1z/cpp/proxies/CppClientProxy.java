@@ -1,25 +1,16 @@
 package io.github.anon10w1z.cpp.proxies;
 
-import org.lwjgl.input.Keyboard;
-
 import io.github.anon10w1z.cpp.blocks.CppBlocks;
 import io.github.anon10w1z.cpp.entities.EntityDynamite;
 import io.github.anon10w1z.cpp.entities.EntityObsidianBoat;
-import io.github.anon10w1z.cpp.entities.EntitySitPoint;
-import io.github.anon10w1z.cpp.entities.EntityStoneBoat;
 import io.github.anon10w1z.cpp.entities.render.RenderObsidianBoat;
-import io.github.anon10w1z.cpp.entities.render.RenderSitPoint;
-import io.github.anon10w1z.cpp.entities.render.RenderStoneBoat;
 import io.github.anon10w1z.cpp.items.CppItems;
 import io.github.anon10w1z.cpp.main.CppModInfo;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.RenderSnowball;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.Item;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 /**
@@ -28,8 +19,8 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 @SuppressWarnings("unused")
 public class CppClientProxy extends CppCommonProxy {
 	private static final Minecraft minecraft = Minecraft.getMinecraft(); //the Minecraft instance
-	private static KeyBinding potionKey; //the key binding for toggling the potion overlay
 
+	@SuppressWarnings({"deprecation", "unchecked"})
 	@Override
 	public void registerRenderers() {
 		//Items
@@ -37,7 +28,6 @@ public class CppClientProxy extends CppCommonProxy {
 		this.registerItemInventoryRenderer(CppItems.stone_boat, "stone_boat");
 		this.registerItemInventoryRenderer(CppItems.obsidian_boat, "obsidian_boat");
 		this.registerItemInventoryRenderer(CppItems.fried_egg, "egg_fried");
-		this.registerItemInventoryRenderer(CppItems.sponge_wipe, "sponge_wipe");
 		this.registerItemInventoryRenderer(CppItems.crafting_pad, "crafting_pad");
 		this.registerItemInventoryRenderer(CppItems.binocular_lens, "binocular_lens");
 		this.registerItemInventoryRenderer(CppItems.binoculars, "binoculars");
@@ -47,25 +37,7 @@ public class CppClientProxy extends CppCommonProxy {
 		this.registerBlockInventoryRenderer(CppBlocks.charcoal_block, "charcoal");
 		//Entities
 		RenderingRegistry.registerEntityRenderingHandler(EntityDynamite.class, new RenderSnowball(minecraft.getRenderManager(), CppItems.dynamite, minecraft.getRenderItem()));
-		RenderingRegistry.registerEntityRenderingHandler(EntityStoneBoat.class, new RenderStoneBoat());
-		RenderingRegistry.registerEntityRenderingHandler(EntityObsidianBoat.class, new RenderObsidianBoat());
-		RenderingRegistry.registerEntityRenderingHandler(EntitySitPoint.class, new RenderSitPoint());
-	}
-
-	@Override
-	public void registerKeyBindings() {
-		potionKey = new KeyBinding("key.potionDisplay", Keyboard.KEY_P, "key.categories.ui");
-		ClientRegistry.registerKeyBinding(potionKey);
-	}
-
-	@Override
-	public boolean isPotionKeyPressed() {
-		return potionKey.isPressed();
-	}
-
-	@Override
-	public boolean isGuiOpen() {
-		return minecraft.currentScreen != null && !(minecraft.currentScreen instanceof GuiChat);
+		RenderingRegistry.registerEntityRenderingHandler(EntityObsidianBoat.class, new RenderObsidianBoat(minecraft.getRenderManager()));
 	}
 
 	private void registerItemInventoryRenderer(Item item, String name) {

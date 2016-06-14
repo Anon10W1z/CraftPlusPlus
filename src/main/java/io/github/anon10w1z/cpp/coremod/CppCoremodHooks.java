@@ -81,7 +81,7 @@ public class CppCoremodHooks {
 	 */
 	public static boolean canCactusStay(World world, BlockPos blockPos, Block block) {
 		IBlockState state = world.getBlockState(blockPos.down());
-		return state.getBlock().canSustainPlant(state,world, blockPos.down(), EnumFacing.UP, (IPlantable) block);
+		return state.getBlock().canSustainPlant(state, world, blockPos.down(), EnumFacing.UP, (IPlantable) block);
 	}
 
 	/**
