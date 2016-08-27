@@ -81,7 +81,7 @@ public class EntityObsidianBoat extends EntityBoat {
 
 	public static float func_184456_a(IBlockState p_184456_0_, IBlockAccess p_184456_1_, BlockPos p_184456_2_) {
 		int i = p_184456_0_.getValue(BlockLiquid.LEVEL);
-		return (i & 7) == 0 && p_184456_1_.getBlockState(p_184456_2_.up()).getMaterial() == Material.lava ? 1.0F : 1.0F - BlockLiquid.getLiquidHeightPercent(i);
+		return (i & 7) == 0 && p_184456_1_.getBlockState(p_184456_2_.up()).getMaterial() == Material.LAVA ? 1.0F : 1.0F - BlockLiquid.getLiquidHeightPercent(i);
 	}
 
 	public static float func_184452_b(IBlockState p_184452_0_, IBlockAccess p_184452_1_, BlockPos p_184452_2_) {
@@ -97,12 +97,12 @@ public class EntityObsidianBoat extends EntityBoat {
 	}
 
 	protected void entityInit() {
-		this.dataWatcher.register(TIME_SINCE_HIT, 0);
-		this.dataWatcher.register(FORWARD_DIRECTION, 1);
-		this.dataWatcher.register(DAMAGE_TAKEN, 0.0F);
+		this.dataManager.register(TIME_SINCE_HIT, 0);
+		this.dataManager.register(FORWARD_DIRECTION, 1);
+		this.dataManager.register(DAMAGE_TAKEN, 0.0F);
 
 		for (DataParameter aField_184468_e : field_184468_e)
-			this.dataWatcher.register(aField_184468_e, false);
+			this.dataManager.register(aField_184468_e, false);
 	}
 
 	/**
@@ -258,7 +258,7 @@ public class EntityObsidianBoat extends EntityBoat {
 				this.field_184470_f[i] = 0.0F;
 
 		this.doBlockCollisions();
-		List<Entity> list = this.worldObj.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().expand(0.20000000298023224D, -0.009999999776482582D, 0.20000000298023224D), EntitySelectors.func_188442_a(this));
+		List<Entity> list = this.worldObj.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().expand(0.20000000298023224D, -0.009999999776482582D, 0.20000000298023224D), EntitySelectors.getTeamCollisionPredicate(this));
 
 		if (!list.isEmpty()) {
 			boolean flag = !this.worldObj.isRemote && !(this.getControllingPassenger() instanceof EntityPlayer);
@@ -277,7 +277,7 @@ public class EntityObsidianBoat extends EntityBoat {
 			double d0 = this.posX + (this.boatPitch - this.posX) / (double) this.field_184476_at;
 			double d1 = this.posY + (this.field_184477_av - this.posY) / (double) this.field_184476_at;
 			double d2 = this.posZ + (this.field_184478_aw - this.posZ) / (double) this.field_184476_at;
-			double d3 = MathHelper.wrapAngleTo180_double(this.boatYaw - (double) this.rotationYaw);
+			double d3 = MathHelper.wrapDegrees(this.boatYaw - (double) this.rotationYaw);
 			this.rotationYaw = (float) ((double) this.rotationYaw + d3 / (double) this.field_184476_at);
 			this.rotationPitch = (float) ((double) this.rotationPitch + (this.field_184479_ay - (double) this.rotationPitch) / (double) this.field_184476_at);
 			--this.field_184476_at;
@@ -287,8 +287,8 @@ public class EntityObsidianBoat extends EntityBoat {
 	}
 
 	public void func_184445_a(boolean p_184445_1_, boolean p_184445_2_) {
-		this.dataWatcher.set(field_184468_e[0], p_184445_1_);
-		this.dataWatcher.set(field_184468_e[1], p_184445_2_);
+		this.dataManager.set(field_184468_e[0], p_184445_1_);
+		this.dataManager.set(field_184468_e[1], p_184445_2_);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -344,10 +344,10 @@ public class EntityObsidianBoat extends EntityBoat {
 					}
 
 					for (int i2 = i1; i2 < j1; ++i2) {
-						blockpos$pooledmutableblockpos.set(l1, k1, i2);
+						blockpos$pooledmutableblockpos.setPos(l1, k1, i2);
 						IBlockState iblockstate = this.worldObj.getBlockState(blockpos$pooledmutableblockpos);
 
-						if (iblockstate.getMaterial() == Material.lava)
+						if (iblockstate.getMaterial() == Material.LAVA)
 							f = Math.max(f, func_184456_a(iblockstate, this.worldObj, blockpos$pooledmutableblockpos));
 
 						if (f >= 1.0F) {
@@ -391,7 +391,7 @@ public class EntityObsidianBoat extends EntityBoat {
 					if (j2 != 2) {
 						for (int k2 = k; k2 < l; ++k2) {
 							if (j2 <= 0 || k2 != k && k2 != l - 1) {
-								blockpos$pooledmutableblockpos.set(l1, k2, i2);
+								blockpos$pooledmutableblockpos.setPos(l1, k2, i2);
 								IBlockState iblockstate = this.worldObj.getBlockState(blockpos$pooledmutableblockpos);
 								iblockstate.addCollisionBoxToList(this.worldObj, blockpos$pooledmutableblockpos, axisalignedbb1, list, this);
 
@@ -429,10 +429,10 @@ public class EntityObsidianBoat extends EntityBoat {
 			for (int k1 = i; k1 < j; ++k1) {
 				for (int l1 = k; l1 < l; ++l1) {
 					for (int i2 = i1; i2 < j1; ++i2) {
-						blockpos$pooledmutableblockpos.set(k1, l1, i2);
+						blockpos$pooledmutableblockpos.setPos(k1, l1, i2);
 						IBlockState iblockstate = this.worldObj.getBlockState(blockpos$pooledmutableblockpos);
 
-						if (iblockstate.getMaterial() == Material.lava) {
+						if (iblockstate.getMaterial() == Material.LAVA) {
 							float f = func_184452_b(iblockstate, this.worldObj, blockpos$pooledmutableblockpos);
 							this.field_184465_aD = Math.max((double) f, this.field_184465_aD);
 							flag |= axisalignedbb.minY < (double) f;
@@ -466,10 +466,10 @@ public class EntityObsidianBoat extends EntityBoat {
 			for (int k1 = i; k1 < j; ++k1) {
 				for (int l1 = k; l1 < l; ++l1) {
 					for (int i2 = i1; i2 < j1; ++i2) {
-						blockpos$pooledmutableblockpos.set(k1, l1, i2);
+						blockpos$pooledmutableblockpos.setPos(k1, l1, i2);
 						IBlockState iblockstate = this.worldObj.getBlockState(blockpos$pooledmutableblockpos);
 
-						if (iblockstate.getMaterial() == Material.lava && d0 < (double) func_184452_b(iblockstate, this.worldObj, blockpos$pooledmutableblockpos)) {
+						if (iblockstate.getMaterial() == Material.LAVA && d0 < (double) func_184452_b(iblockstate, this.worldObj, blockpos$pooledmutableblockpos)) {
 							if ((iblockstate.getValue(BlockLiquid.LEVEL) != 0)) {
 								return Status.UNDER_FLOWING_WATER;
 							}
@@ -604,7 +604,7 @@ public class EntityObsidianBoat extends EntityBoat {
 	 */
 	protected void applyYawToEntity(Entity entityToUpdate) {
 		entityToUpdate.setRenderYawOffset(this.rotationYaw);
-		float f = MathHelper.wrapAngleTo180_float(entityToUpdate.rotationYaw - this.rotationYaw);
+		float f = MathHelper.wrapDegrees(entityToUpdate.rotationYaw - this.rotationYaw);
 		float f1 = MathHelper.clamp_float(f, -105.0F, 105.0F);
 		entityToUpdate.prevRotationYaw += f1 - f;
 		entityToUpdate.rotationYaw += f1 - f;
@@ -664,56 +664,56 @@ public class EntityObsidianBoat extends EntityBoat {
 				}
 
 				this.fallDistance = 0.0F;
-			} else if (this.worldObj.getBlockState((new BlockPos(this)).down()).getMaterial() != Material.lava && y < 0.0D) {
+			} else if (this.worldObj.getBlockState((new BlockPos(this)).down()).getMaterial() != Material.LAVA && y < 0.0D) {
 				this.fallDistance = (float) ((double) this.fallDistance - y);
 			}
 		}
 	}
 
 	public boolean func_184457_a(int p_184457_1_) {
-		return (boolean) this.dataWatcher.get(field_184468_e[p_184457_1_]) && this.getControllingPassenger() != null;
+		return (boolean) this.dataManager.get(field_184468_e[p_184457_1_]) && this.getControllingPassenger() != null;
 	}
 
 	/**
 	 * Gets the damage taken from the last hit.
 	 */
 	public float getDamageTaken() {
-		return this.dataWatcher.get(DAMAGE_TAKEN);
+		return this.dataManager.get(DAMAGE_TAKEN);
 	}
 
 	/**
 	 * Sets the damage taken from the last hit.
 	 */
 	public void setDamageTaken(float damageTaken) {
-		this.dataWatcher.set(DAMAGE_TAKEN, damageTaken);
+		this.dataManager.set(DAMAGE_TAKEN, damageTaken);
 	}
 
 	/**
 	 * Gets the time since the last hit.
 	 */
 	public int getTimeSinceHit() {
-		return this.dataWatcher.get(TIME_SINCE_HIT);
+		return this.dataManager.get(TIME_SINCE_HIT);
 	}
 
 	/**
 	 * Sets the time to count down from since the last time entity was hit.
 	 */
 	public void setTimeSinceHit(int timeSinceHit) {
-		this.dataWatcher.set(TIME_SINCE_HIT, timeSinceHit);
+		this.dataManager.set(TIME_SINCE_HIT, timeSinceHit);
 	}
 
 	/**
 	 * Gets the forward direction of the entity.
 	 */
 	public int getForwardDirection() {
-		return this.dataWatcher.get(FORWARD_DIRECTION);
+		return this.dataManager.get(FORWARD_DIRECTION);
 	}
 
 	/**
 	 * Sets the forward direction of the entity.
 	 */
 	public void setForwardDirection(int forwardDirection) {
-		this.dataWatcher.set(FORWARD_DIRECTION, forwardDirection);
+		this.dataManager.set(FORWARD_DIRECTION, forwardDirection);
 	}
 
 	protected boolean canFitPassenger(Entity passenger) {

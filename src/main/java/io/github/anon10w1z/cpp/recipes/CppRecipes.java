@@ -20,20 +20,20 @@ public class CppRecipes {
 	 */
 	public static void registerRecipes() {
 		//Storage Blocks
-		registerStorageRecipes(new ItemStack(Items.flint), CppBlocks.flint_block);
-		registerStorageRecipes(new ItemStack(Items.sugar), CppBlocks.sugar_block);
-		registerStorageRecipes(new ItemStack(Items.coal, 1, 1), CppBlocks.charcoal_block);
+		registerStorageRecipes(new ItemStack(Items.FLINT), CppBlocks.flint_block);
+		registerStorageRecipes(new ItemStack(Items.SUGAR), CppBlocks.sugar_block);
+		registerStorageRecipes(new ItemStack(Items.COAL, 1, 1), CppBlocks.charcoal_block);
 		//Craft++ Items
-		GameRegistry.addRecipe(new ItemStack(CppItems.dynamite, 1, 0), " W", " G", "S ", 'W', Items.string, 'G', Items.gunpowder, 'S', Blocks.sand);
-		GameRegistry.addRecipe(new ItemStack(CppItems.obsidian_boat), "O O", "OOO", 'O', Blocks.obsidian);
+		GameRegistry.addRecipe(new ItemStack(CppItems.dynamite, 1, 0), " W", " G", "S ", 'W', Items.STRING, 'G', Items.GUNPOWDER, 'S', Blocks.SAND);
+		GameRegistry.addRecipe(new ItemStack(CppItems.obsidian_boat), "O O", "OOO", 'O', Blocks.OBSIDIAN);
 		if (CppConfigHandler.craftingTableChanges)
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(CppItems.crafting_pad), "PP", "PP", 'P', "plankWood"));
-		GameRegistry.addSmelting(Items.egg, new ItemStack(CppItems.fried_egg), 0.35F);
-		ItemStack dyeStack = new ItemStack(Items.dye, 1, EnumDyeColor.BLACK.getDyeDamage());
-		GameRegistry.addRecipe(new ItemStack(CppItems.binocular_lens, 4), " I ", "IPI", " I ", 'I', Items.iron_ingot, 'P', Blocks.glass_pane);
-		GameRegistry.addRecipe(new ItemStack(CppItems.binoculars), "DDD", "LIL", "DDD", 'D', dyeStack, 'L', CppItems.binocular_lens, 'I', Items.iron_ingot);
+		GameRegistry.addSmelting(Items.EGG, new ItemStack(CppItems.fried_egg), 0.35F);
+		ItemStack dyeStack = new ItemStack(Items.DYE, 1, EnumDyeColor.BLACK.getDyeDamage());
+		GameRegistry.addRecipe(new ItemStack(CppItems.binocular_lens, 4), " I ", "IPI", " I ", 'I', Items.IRON_INGOT, 'P', Blocks.GLASS_PANE);
+		GameRegistry.addRecipe(new ItemStack(CppItems.binoculars), "DDD", "LIL", "DDD", 'D', dyeStack, 'L', CppItems.binocular_lens, 'I', Items.IRON_INGOT);
 		//Better Vanilla
-		GameRegistry.addShapelessRecipe(new ItemStack(Items.string, 4), Blocks.wool);
+		GameRegistry.addShapelessRecipe(new ItemStack(Items.STRING, 4), Blocks.WOOL);
 	}
 
 	/**

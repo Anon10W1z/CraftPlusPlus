@@ -20,14 +20,14 @@ public class CppVanillaPropertiesChanger {
 	public static void init() {
 		//Modifying block creative tabs
 		if (CppConfigHandler.commandBlockInRedstoneTab)
-			Blocks.command_block.setCreativeTab(CreativeTabs.tabRedstone);
-		Blocks.dragon_egg.setCreativeTab(CreativeTabs.tabDecorations);
+			Blocks.COMMAND_BLOCK.setCreativeTab(CreativeTabs.REDSTONE);
+		Blocks.DRAGON_EGG.setCreativeTab(CreativeTabs.DECORATIONS);
 		//Modifying block names
 		if (CppConfigHandler.renameButtons) {
-			Blocks.stone_button.setUnlocalizedName("buttonStone");
-			Blocks.wooden_button.setUnlocalizedName("buttonWood");
+			Blocks.STONE_BUTTON.setUnlocalizedName("buttonStone");
+			Blocks.WOODEN_BUTTON.setUnlocalizedName("buttonWood");
 		}
 		//Modifying achievements
-		ReflectionHelper.setPrivateValue(Achievement.class, AchievementList.buildWorkBench, new ItemStack(CppItems.crafting_pad), "theItemStack", "field_75990_d");
+		ReflectionHelper.setPrivateValue(Achievement.class, AchievementList.BUILD_WORK_BENCH, new ItemStack(CppItems.crafting_pad), "theItemStack", "field_75990_d");
 	}
 }

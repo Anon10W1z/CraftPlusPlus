@@ -45,8 +45,8 @@ public class EntityDynamite extends EntityThrowable {
 
 	@Override
 	protected void entityInit() {
-		this.dataWatcher.register(TICKSWET, 0);
-		this.dataWatcher.register(TICKSSINCEWET, WET_TICKS);
+		this.dataManager.register(TICKSWET, 0);
+		this.dataManager.register(TICKSSINCEWET, WET_TICKS);
 	}
 
 	@Override
@@ -88,7 +88,7 @@ public class EntityDynamite extends EntityThrowable {
 	 * @return The number of ticks wet
 	 */
 	private int getTicksWet() {
-		return this.dataWatcher.get(TICKSWET);
+		return this.dataManager.get(TICKSWET);
 	}
 
 	/**
@@ -97,7 +97,7 @@ public class EntityDynamite extends EntityThrowable {
 	 * @param ticksWet The number of ticks wet
 	 */
 	private void setTicksWet(int ticksWet) {
-		this.dataWatcher.set(TICKSWET, ticksWet);
+		this.dataManager.set(TICKSWET, ticksWet);
 	}
 
 	/**
@@ -106,7 +106,7 @@ public class EntityDynamite extends EntityThrowable {
 	 * @return The number of ticks since wet
 	 */
 	private int getTicksSinceWet() {
-		return this.dataWatcher.get(TICKSSINCEWET);
+		return this.dataManager.get(TICKSSINCEWET);
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class EntityDynamite extends EntityThrowable {
 	 * @param ticksSinceWet The number of ticks since wet
 	 */
 	private void setTicksSinceWet(int ticksSinceWet) {
-		this.dataWatcher.set(TICKSSINCEWET, ticksSinceWet);
+		this.dataManager.set(TICKSSINCEWET, ticksSinceWet);
 	}
 
 	/**

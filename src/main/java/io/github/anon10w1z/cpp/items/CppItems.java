@@ -30,7 +30,7 @@ public class CppItems {
 			crafting_pad = new ItemCraftingPad();
 			GameRegistry.register(crafting_pad);
 		}
-		binocular_lens = new Item().setUnlocalizedName("binocularLens").setRegistryName(CppModInfo.MOD_ID, "binocular_lens").setCreativeTab(CreativeTabs.tabTools);
+		binocular_lens = new Item().setUnlocalizedName("binocularLens").setRegistryName(CppModInfo.MOD_ID, "binocular_lens").setCreativeTab(CreativeTabs.TOOLS);
 		GameRegistry.register(binocular_lens);
 		binoculars = new ItemBinoculars();
 		GameRegistry.register(binoculars);

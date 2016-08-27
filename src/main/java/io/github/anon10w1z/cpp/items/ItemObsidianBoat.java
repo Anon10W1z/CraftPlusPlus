@@ -29,11 +29,11 @@ public class ItemObsidianBoat extends Item {
 	public ItemObsidianBoat() {
 		this.setUnlocalizedName("boatObsidian");
 		this.setRegistryName(CppModInfo.MOD_ID, "obsidian_boat");
-		this.setCreativeTab(CreativeTabs.tabTransport);
+		this.setCreativeTab(CreativeTabs.TRANSPORTATION);
 		this.setMaxStackSize(1);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "NullableProblems"})
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemstack, World world, EntityPlayer player, EnumHand hand) {
 		float f = 1.0F;
@@ -74,11 +74,11 @@ public class ItemObsidianBoat extends Item {
 				return new ActionResult(EnumActionResult.PASS, itemstack);
 			else {
 				Block block = world.getBlockState(raytraceresult.getBlockPos()).getBlock();
-				boolean flag1 = block == Blocks.lava || block == Blocks.flowing_lava;
+				boolean flag1 = block == Blocks.LAVA || block == Blocks.FLOWING_LAVA;
 				EntityObsidianBoat entityobsidianboat = new EntityObsidianBoat(world, raytraceresult.hitVec.xCoord, flag1 ? raytraceresult.hitVec.yCoord - 0.12D : raytraceresult.hitVec.yCoord, raytraceresult.hitVec.zCoord);
 				entityobsidianboat.rotationYaw = player.rotationYaw;
 
-				if (!world.getCubes(entityobsidianboat, entityobsidianboat.getEntityBoundingBox().expandXyz(-0.1D)).isEmpty())
+				if (!world.getCollisionBoxes(entityobsidianboat, entityobsidianboat.getEntityBoundingBox().expandXyz(-0.1D)).isEmpty())
 					return new ActionResult(EnumActionResult.FAIL, itemstack);
 				else {
 					if (!world.isRemote)
@@ -87,7 +87,8 @@ public class ItemObsidianBoat extends Item {
 					if (!player.capabilities.isCreativeMode)
 						--itemstack.stackSize;
 
-					player.addStat(StatList.func_188057_b(this));
+					//noinspection ConstantConditions
+					player.addStat(StatList.getObjectUseStats(this));
 					return new ActionResult(EnumActionResult.SUCCESS, itemstack);
 				}
 			}

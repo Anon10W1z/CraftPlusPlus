@@ -45,7 +45,7 @@ public class CppCoremodHooks {
 				IBlockState state = world.getBlockState(blockPos.down());
 				Block block1 = state.getBlock();
 				Material material = state.getMaterial();
-				canFallInto = block1 == Blocks.fire || material == Material.air || material == Material.water || material == Material.lava;
+				canFallInto = block1 == Blocks.FIRE || material == Material.AIR || material == Material.WATER || material == Material.LAVA;
 			}
 			if (canFallInto && blockPos.getY() >= 0) {
 				byte b = 32;
@@ -61,7 +61,7 @@ public class CppCoremodHooks {
 							IBlockState state = world.getBlockState(blockPos);
 							Block block1 = state.getBlock();
 							Material material = state.getMaterial();
-							canFallInto = block1 == Blocks.fire || material == Material.air || material == Material.water || material == Material.lava;
+							canFallInto = block1 == Blocks.FIRE || material == Material.AIR || material == Material.WATER || material == Material.LAVA;
 						}
 					}
 					if (blockPos1.getY() > 0)

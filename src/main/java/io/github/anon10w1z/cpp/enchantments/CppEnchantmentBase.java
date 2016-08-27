@@ -28,7 +28,7 @@ public abstract class CppEnchantmentBase extends Enchantment {
 	protected CppEnchantmentBase(String name, Enchantment.Rarity rarityIn, EnumEnchantmentType typeIn, EntityEquipmentSlot... slots) {
 		super(rarityIn, typeIn, slots);
 		this.setName(name);
-		enchantmentRegistry.register(findFreeEnchantmentID(name), new ResourceLocation(CppModInfo.MOD_ID + ":" + name), this);
+		REGISTRY.register(findFreeEnchantmentID(name), new ResourceLocation(CppModInfo.MOD_ID + ":" + name), this);
 		cppEnchantments.add(this);
 	}
 

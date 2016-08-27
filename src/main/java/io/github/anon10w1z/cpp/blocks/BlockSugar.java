@@ -9,7 +9,7 @@ public class BlockSugar extends BlockFalling {
 		super();
 		this.setUnlocalizedName("sugarBlock");
 		this.setRegistryName(CppModInfo.MOD_ID, "sugar_block");
-		this.setStepSound(SoundType.SAND);
+		this.setSoundType(SoundType.SAND);
 		this.setHardness(0.5F);
 		this.setHarvestLevel("shovel", 0);
 	}

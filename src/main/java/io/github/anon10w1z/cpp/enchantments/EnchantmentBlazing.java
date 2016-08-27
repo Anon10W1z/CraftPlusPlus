@@ -62,6 +62,6 @@ public class EnchantmentBlazing extends CppEnchantmentBase {
 
 	@Override
 	public boolean canApplyTogether(Enchantment enchantment) {
-		return super.canApplyTogether(enchantment) && enchantment != Enchantments.silkTouch;
+		return super.canApplyTogether(enchantment) && enchantment != Enchantments.SILK_TOUCH;
 	}
 }

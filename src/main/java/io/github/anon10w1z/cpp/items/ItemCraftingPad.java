@@ -19,9 +19,10 @@ public class ItemCraftingPad extends Item {
 		super();
 		this.setUnlocalizedName("craftingPad");
 		this.setRegistryName(CppModInfo.MOD_ID, "crafting_pad");
-		this.setCreativeTab(CreativeTabs.tabTools);
+		this.setCreativeTab(CreativeTabs.TOOLS);
 	}
 
+	@SuppressWarnings("NullableProblems")
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World world, EntityPlayer player, EnumHand hand) {
 		if (!world.isRemote)

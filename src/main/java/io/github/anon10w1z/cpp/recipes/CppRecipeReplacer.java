@@ -32,21 +32,21 @@ public class CppRecipeReplacer {
 	public static void replaceRecipes() {
 		//Stone Tools
 		if (CppConfigHandler.useBetterStoneToolRecipes) {
-			removeRecipes(new ItemStack(Items.stone_sword));
-			removeRecipes(new ItemStack(Items.stone_shovel));
-			removeRecipes(new ItemStack(Items.stone_pickaxe));
-			removeRecipes(new ItemStack(Items.stone_axe));
-			removeRecipes(new ItemStack(Items.stone_hoe));
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.stone_sword), "S", "S", "T", 'S', "stone", 'T', "stickWood"));
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.stone_shovel), "S", "T", "T", 'S', "stone", 'T', "stickWood"));
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.stone_pickaxe), "SSS", " T ", " T ", 'S', "stone", 'T', "stickWood"));
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.stone_axe), "SS", "ST", " T", 'S', "stone", 'T', "stickWood"));
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.stone_hoe), "SS", " T", " T", 'S', "stone", 'T', "stickWood"));
+			removeRecipes(new ItemStack(Items.STONE_SWORD));
+			removeRecipes(new ItemStack(Items.STONE_SHOVEL));
+			removeRecipes(new ItemStack(Items.STONE_PICKAXE));
+			removeRecipes(new ItemStack(Items.STONE_AXE));
+			removeRecipes(new ItemStack(Items.STONE_HOE));
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.STONE_SWORD), "S", "S", "T", 'S', "stone", 'T', "stickWood"));
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.STONE_SHOVEL), "S", "T", "T", 'S', "stone", 'T', "stickWood"));
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.STONE_PICKAXE), "SSS", " T ", " T ", 'S', "stone", 'T', "stickWood"));
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.STONE_AXE), "SS", "ST", " T", 'S', "stone", 'T', "stickWood"));
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.STONE_HOE), "SS", " T", " T", 'S', "stone", 'T', "stickWood"));
 		}
 		//Stairs
 		if (CppConfigHandler.useBetterStairsRecipes) {
 			boolean doStairsFieldsExist = true;
-			Iterable<Block> blocks = Block.blockRegistry;
+			Iterable<Block> blocks = Block.REGISTRY;
 			for (Block block : blocks)
 				if (block instanceof BlockStairs) {
 					BlockStairs stairs = (BlockStairs) block;
@@ -66,33 +66,33 @@ public class CppRecipeReplacer {
 				}
 			if (!doStairsFieldsExist) { //backup
 				CraftPlusPlus.logInfo("Reverting to backup stairs recipe replacing");
-				replaceStairsRecipe(Blocks.oak_stairs, new ItemStack(Blocks.planks));
-				replaceStairsRecipe(Blocks.spruce_stairs, new ItemStack(Blocks.planks, 1, 1));
-				replaceStairsRecipe(Blocks.birch_stairs, new ItemStack(Blocks.planks, 1, 2));
-				replaceStairsRecipe(Blocks.jungle_stairs, new ItemStack(Blocks.planks, 1, 3));
-				replaceStairsRecipe(Blocks.acacia_stairs, new ItemStack(Blocks.planks, 1, 4));
-				replaceStairsRecipe(Blocks.dark_oak_stairs, new ItemStack(Blocks.planks, 1, 5));
+				replaceStairsRecipe(Blocks.OAK_STAIRS, new ItemStack(Blocks.PLANKS));
+				replaceStairsRecipe(Blocks.SPRUCE_STAIRS, new ItemStack(Blocks.PLANKS, 1, 1));
+				replaceStairsRecipe(Blocks.BIRCH_STAIRS, new ItemStack(Blocks.PLANKS, 1, 2));
+				replaceStairsRecipe(Blocks.JUNGLE_STAIRS, new ItemStack(Blocks.PLANKS, 1, 3));
+				replaceStairsRecipe(Blocks.ACACIA_STAIRS, new ItemStack(Blocks.PLANKS, 1, 4));
+				replaceStairsRecipe(Blocks.DARK_OAK_STAIRS, new ItemStack(Blocks.PLANKS, 1, 5));
 
-				replaceStairsRecipe(Blocks.stone_stairs, new ItemStack(Blocks.cobblestone));
-				replaceStairsRecipe(Blocks.brick_stairs, new ItemStack(Blocks.brick_block));
-				replaceStairsRecipe(Blocks.stone_brick_stairs, new ItemStack(Blocks.stonebrick, 1, OreDictionary.WILDCARD_VALUE));
-				replaceStairsRecipe(Blocks.nether_brick_stairs, new ItemStack(Blocks.nether_brick));
-				replaceStairsRecipe(Blocks.sandstone_stairs, new ItemStack(Blocks.sandstone, 1, OreDictionary.WILDCARD_VALUE));
-				replaceStairsRecipe(Blocks.red_sandstone_stairs, new ItemStack(Blocks.red_sandstone, 1, OreDictionary.WILDCARD_VALUE));
-				replaceStairsRecipe(Blocks.quartz_stairs, new ItemStack(Blocks.quartz_block, 1, OreDictionary.WILDCARD_VALUE));
+				replaceStairsRecipe(Blocks.STONE_STAIRS, new ItemStack(Blocks.COBBLESTONE));
+				replaceStairsRecipe(Blocks.BRICK_STAIRS, new ItemStack(Blocks.BRICK_BLOCK));
+				replaceStairsRecipe(Blocks.STONE_BRICK_STAIRS, new ItemStack(Blocks.STONEBRICK, 1, OreDictionary.WILDCARD_VALUE));
+				replaceStairsRecipe(Blocks.NETHER_BRICK_FENCE, new ItemStack(Blocks.NETHER_BRICK));
+				replaceStairsRecipe(Blocks.SANDSTONE_STAIRS, new ItemStack(Blocks.SANDSTONE, 1, OreDictionary.WILDCARD_VALUE));
+				replaceStairsRecipe(Blocks.RED_SANDSTONE_STAIRS, new ItemStack(Blocks.RED_SANDSTONE, 1, OreDictionary.WILDCARD_VALUE));
+				replaceStairsRecipe(Blocks.QUARTZ_STAIRS, new ItemStack(Blocks.QUARTZ_BLOCK, 1, OreDictionary.WILDCARD_VALUE));
 			}
 		}
 		//Buttons
-		removeRecipes(new ItemStack(Blocks.wooden_button));
-		removeRecipes(new ItemStack(Blocks.stone_button));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Blocks.wooden_button, 4), "plankWood"));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Blocks.stone_button, 4), "stone"));
+		removeRecipes(new ItemStack(Blocks.WOODEN_BUTTON));
+		removeRecipes(new ItemStack(Blocks.STONE_BUTTON));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Blocks.WOODEN_BUTTON, 4), "plankWood"));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Blocks.STONE_BUTTON, 4), "stone"));
 		//Repairing Items
 		removeRecipe(RecipeRepairItem.class);
 		//Crafting Table Changes
 		if (CppConfigHandler.craftingTableChanges) {
-			removeRecipes(new ItemStack(Blocks.crafting_table));
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.crafting_table), "P", "W", 'P', CppItems.crafting_pad, 'W', "plankWood"));
+			removeRecipes(new ItemStack(Blocks.CRAFTING_TABLE));
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.CRAFTING_TABLE), "P", "W", 'P', CppItems.crafting_pad, 'W', "plankWood"));
 		}
 	}
 

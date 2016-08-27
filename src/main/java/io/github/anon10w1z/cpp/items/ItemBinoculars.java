@@ -14,12 +14,13 @@ import net.minecraftforge.common.util.EnumHelper;
  */
 public class ItemBinoculars extends ItemArmor {
 	public ItemBinoculars() {
-		super(EnumHelper.addArmorMaterial("BINOCULARS", "", 0, new int[]{0, 0, 0, 0}, 0, SoundEvents.item_armor_equip_iron), 0, EntityEquipmentSlot.HEAD);
+		super(EnumHelper.addArmorMaterial("BINOCULARS", "", 0, new int[]{0, 0, 0, 0}, 0, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0), 0, EntityEquipmentSlot.HEAD);
 		this.setUnlocalizedName("binoculars");
 		this.setRegistryName(CppModInfo.MOD_ID, "binoculars");
-		this.setCreativeTab(CreativeTabs.tabMisc);
+		this.setCreativeTab(CreativeTabs.MISC);
 	}
 
+	@SuppressWarnings("NullableProblems")
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
 		return CppModInfo.MOD_ID + ":textures/armor/binoculars.png";

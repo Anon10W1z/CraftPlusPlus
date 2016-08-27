@@ -14,11 +14,12 @@ public class BlockCppStorage extends Block {
 		super(material);
 		this.setUnlocalizedName(namePrefix + "Block");
 		this.setRegistryName(CppModInfo.MOD_ID, namePrefix + "_block");
-		this.setCreativeTab(CreativeTabs.tabBlock);
+		this.setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
 	}
 
+	@SuppressWarnings("NullableProblems")
 	@Override
-	public Block setStepSound(SoundType sound) {
-		return super.setStepSound(sound);
+	public Block setSoundType(SoundType sound) {
+		return super.setSoundType(sound);
 	}
 }

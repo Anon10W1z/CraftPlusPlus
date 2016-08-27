@@ -21,21 +21,22 @@ public class ItemDynamite extends Item {
 	public ItemDynamite() {
 		this.setUnlocalizedName("dynamite");
 		this.setRegistryName(CppModInfo.MOD_ID, "dynamite");
-		this.setCreativeTab(CreativeTabs.tabMisc);
+		this.setCreativeTab(CreativeTabs.MISC);
 		this.setMaxStackSize(16);
 	}
 
+	@SuppressWarnings({"NullableProblems", "ConstantConditions"})
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
 		if (!player.capabilities.isCreativeMode)
 			--itemStack.stackSize;
-		world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.entity_snowball_throw, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+		world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 		if (!world.isRemote) {
 			EntityDynamite dynamite = new EntityDynamite(world, player);
-			dynamite.func_184538_a(player, player.rotationPitch, player.rotationYaw, 0, 1.5F, 0);
+			dynamite.setHeadingFromThrower(player, player.rotationPitch, player.rotationYaw, 0, 1.5F, 0);
 			world.spawnEntityInWorld(dynamite);
 		}
-		player.addStat(StatList.func_188057_b(this));
+		player.addStat(StatList.getObjectUseStats(this));
 		return new ActionResult<>(EnumActionResult.SUCCESS, itemStack);
 	}
 }

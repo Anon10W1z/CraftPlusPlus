@@ -22,12 +22,12 @@ public class CppDispenserBehaviors {
 	 */
 	@SuppressWarnings("unchecked")
 	public static void registerDispenserBehaviors() {
-		Iterable<Item> items = Item.itemRegistry;
+		Iterable<Item> items = Item.REGISTRY;
 		for (Item item : items) {
 			//Falling Blocks
 			if (item instanceof ItemBlock) {
 				Block block = ((ItemBlock) item).block;
-				List<Material> fallingMaterials = Arrays.asList(Material.sand, Material.ground, Material.clay, Material.snow, Material.craftedSnow);
+				List<Material> fallingMaterials = Arrays.asList(Material.SAND, Material.GROUND, Material.CLAY, Material.SNOW, Material.CRAFTED_SNOW);
 				if ((block instanceof BlockFalling || CppConfigHandler.additionalFallingBlocks.contains(block)) && fallingMaterials.contains(block.getDefaultState().getMaterial()))
 					registerDispenserBehavior(item, new BehaviorDispenseBlockFalling());
 			}
@@ -51,6 +51,6 @@ public class CppDispenserBehaviors {
 			CraftPlusPlus.logInfo("Registering dispenser behavior for " + localizedName);
 		else
 			CraftPlusPlus.logInfo("Registering default dispenser behavior for " + localizedName);
-		BlockDispenser.dispenseBehaviorRegistry.putObject(item, dispenserBehavior);
+		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(item, dispenserBehavior);
 	}
 }

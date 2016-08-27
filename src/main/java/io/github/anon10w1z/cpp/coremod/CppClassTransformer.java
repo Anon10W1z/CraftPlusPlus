@@ -55,17 +55,17 @@ public class CppClassTransformer implements IClassTransformer {
 		classReader.accept(classNode, 0);
 
 		String targetMethodName = obfuscated ? "c" : "onBlockAdded";
-		String targetMethodName1 = obfuscated ? "a" : "onNeighborBlockChange";
+		String targetMethodName1 = obfuscated ? "a" : "neighborChanged";
 		String targetMethodName2 = obfuscated ? "b" : "updateTick";
 		String targetMethodName3 = obfuscated ? "a" : "tickRate";
 
-		String targetMethodDescriptor = obfuscated ? "(Laht;Lcj;Larc;)V" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;)V";
-		String targetMethodDescriptor1 = obfuscated ? "(Laht;Lcj;Larc;Lajt;)V" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/block/Block;)V";
-		String targetMethodDescriptor2 = obfuscated ? "(Laht;Lcj;Larc;Ljava/util/Random;)V" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;Ljava/util/Random;)V";
-		String targetMethodDescriptor3 = obfuscated ? "(Laht;)I" : "(Lnet/minecraft/world/World;)I";
+		String targetMethodDescriptor = obfuscated ? "(Laid;Lcm;Lars;)V" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;)V";
+		String targetMethodDescriptor1 = obfuscated ? "(Lars;Laid;Lcm;Lakf;)V" : "(Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/Block;)V";
+		String targetMethodDescriptor2 = obfuscated ? "(Laid;Lcm;Lars;Ljava/util/Random;)V" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;Ljava/util/Random;)V";
+		String targetMethodDescriptor3 = obfuscated ? "(Laid;)I" : "(Lnet/minecraft/world/World;)I";
 
-		String delegateMethodDescriptor = obfuscated ? "(Laht;Lcj;Lajt;)V" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/Block;)V";
-		String delegateMethodDescriptor1 = obfuscated ? "(Lajt;)Z" : "(Lnet/minecraft/block/Block;)Z";
+		String delegateMethodDescriptor = obfuscated ? "(Laid;Lcm;Lakf;)V" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/Block;)V";
+		String delegateMethodDescriptor1 = obfuscated ? "(Lakf;)Z" : "(Lnet/minecraft/block/Block;)Z";
 		int patchCount = 0;
 		for (MethodNode methodNode : classNode.methods) {
 			String methodName = methodNode.name;
@@ -82,8 +82,8 @@ public class CppClassTransformer implements IClassTransformer {
 			}
 			if (methodName.equals(targetMethodName1) && methodDescriptor.equals(targetMethodDescriptor1)) {
 				InsnList injectionList = new InsnList();
-				injectionList.add(new VarInsnNode(ALOAD, 1));
 				injectionList.add(new VarInsnNode(ALOAD, 2));
+				injectionList.add(new VarInsnNode(ALOAD, 3));
 				injectionList.add(new VarInsnNode(ALOAD, 0));
 				injectionList.add(new MethodInsnNode(INVOKESTATIC, DELEGATE_CLASS_NAME, "scheduleBlockUpdate", delegateMethodDescriptor, false));
 				methodInstructions.insert(injectionList);
@@ -113,8 +113,8 @@ public class CppClassTransformer implements IClassTransformer {
 		}
 		if (deobfuscatedClassName.equals("net.minecraft.block.BlockCactus")) {
 			String cactusTargetMethodName = obfuscated ? "b" : "canBlockStay";
-			String cactusTargetMethodDescriptor = obfuscated ? "(Laht;Lcj;)Z" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;)Z";
-			String cactusDelegateMethodDescriptor = obfuscated ? "(Laht;Lcj;Lajt;)Z" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/Block;)Z";
+			String cactusTargetMethodDescriptor = obfuscated ? "(Laid;Lcm;)Z" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;)Z";
+			String cactusDelegateMethodDescriptor = obfuscated ? "(Laid;Lcm;Lakf;)Z" : "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/Block;)Z";
 			classNode.methods.stream().filter(methodNode -> methodNode.name.equals(cactusTargetMethodName) && methodNode.desc.equals(cactusTargetMethodDescriptor)).forEach(methodNode -> {
 				InsnList injectionList = new InsnList();
 				injectionList.add(new VarInsnNode(ALOAD, 1));

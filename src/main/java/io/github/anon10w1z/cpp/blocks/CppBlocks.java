@@ -19,14 +19,14 @@ public class CppBlocks {
 	 * Registers the blocks for Craft++
 	 */
 	public static void registerBlocks() {
-		flint_block = new BlockCppStorage(Material.rock, "flint").setStepSound(SoundType.STONE).setHardness(0.8F);
+		flint_block = new BlockCppStorage(Material.ROCK, "flint").setSoundType(SoundType.STONE).setHardness(0.8F);
 		registerBlock(flint_block);
 
 		sugar_block = new BlockSugar();
 		registerBlock(sugar_block);
 
-		charcoal_block = new BlockCppStorage(Material.rock, "charcoal").setStepSound(SoundType.STONE).setHardness(5).setResistance(10);
-		Blocks.fire.setFireInfo(charcoal_block, 5, 5);
+		charcoal_block = new BlockCppStorage(Material.ROCK, "charcoal").setSoundType(SoundType.STONE).setHardness(5).setResistance(10);
+		Blocks.FIRE.setFireInfo(charcoal_block, 5, 5);
 		registerBlock(charcoal_block);
 	}
 

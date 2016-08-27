@@ -12,7 +12,7 @@ import java.util.Map;
  * The coremod loading plugin of Craft++
  */
 @Name(CppModInfo.NAME + " Coremod")
-@MCVersion("1.9")
+@MCVersion("1.10.2")
 @TransformerExclusions(CppModInfo.PACKAGE_LOCATION + ".coremod")
 public class CppLoadingPlugin implements IFMLLoadingPlugin {
 	@Override

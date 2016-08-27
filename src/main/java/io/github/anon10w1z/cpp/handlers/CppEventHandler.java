@@ -11,7 +11,6 @@ import io.github.anon10w1z.cpp.main.CppUtils;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
@@ -24,7 +23,6 @@ import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -33,7 +31,6 @@ import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.AchievementList;
-import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -48,7 +45,6 @@ import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -93,18 +89,19 @@ public final class CppEventHandler {
 			//Living entities drop their name tags
 			String entityNameTag = entity.getCustomNameTag();
 			if (!entityNameTag.equals("")) {
-				ItemStack nameTag = new ItemStack(Items.name_tag);
+				ItemStack nameTag = new ItemStack(Items.NAME_TAG);
 				nameTag.setStackDisplayName(entityNameTag);
 				entity.entityDropItem(nameTag, 0);
 				entity.setCustomNameTag("");
 			}
 			//Bats drop leather
 			if (entity instanceof EntityBat && CppConfigHandler.batLeatherDropChance > Math.random())
-				entity.dropItem(Items.leather, 1);
+				entity.dropItem(Items.LEATHER, 1);
 			else if (entity instanceof EntityCreeper) {
 				if (event.getSource().damageType != null && CppConfigHandler.creeperDropTntChance > Math.random()) {
 					event.getDrops().clear();
-					entity.dropItem(Item.getItemFromBlock(Blocks.tnt), 1);
+					//noinspection ConstantConditions
+					entity.dropItem(Item.getItemFromBlock(Blocks.TNT), 1);
 				}
 			}
 		}
@@ -117,10 +114,10 @@ public final class CppEventHandler {
 				Item drop = dropItem.getItem();
 				Entity source = event.getSource().getEntity();
 				if (source instanceof EntityWolf && entity instanceof EntitySheep) {
-					if (drop == Items.mutton || drop == Items.cooked_mutton)
+					if (drop == Items.MUTTON || drop == Items.COOKED_MUTTON)
 						drops.remove(dropEntity);
 				} else if (source instanceof EntityOcelot && entity instanceof EntityChicken) {
-					if (drop == Items.chicken || drop == Items.cooked_chicken)
+					if (drop == Items.CHICKEN || drop == Items.COOKED_CHICKEN)
 						drops.remove(dropEntity);
 				}
 			}
@@ -184,9 +181,9 @@ public final class CppEventHandler {
 			ItemStack heldItem = player.getHeldItemMainhand();
 			World world = player.worldObj;
 			Entity target = event.getTarget();
-			if (heldItem.getItem() instanceof ItemShears && target instanceof EntityLivingBase && target.hasCustomName() && !world.isRemote) {
-				target.playSound(SoundEvents.entity_sheep_shear, 1, 1);
-				ItemStack nameTag = new ItemStack(Items.name_tag).setStackDisplayName(target.getCustomNameTag());
+			if (heldItem != null && heldItem.getItem() instanceof ItemShears && target instanceof EntityLivingBase && target.hasCustomName() && !world.isRemote) {
+				target.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1, 1);
+				ItemStack nameTag = new ItemStack(Items.NAME_TAG).setStackDisplayName(target.getCustomNameTag());
 				target.entityDropItem(nameTag, 0);
 				target.setCustomNameTag("");
 				heldItem.damageItem(1, player);
@@ -197,9 +194,9 @@ public final class CppEventHandler {
 			ItemStack heldItem = player.getHeldItemOffhand();
 			World world = player.worldObj;
 			Entity target = event.getTarget();
-			if (heldItem.getItem() instanceof ItemShears && target instanceof EntityLivingBase && target.hasCustomName() && !world.isRemote) {
-				target.playSound(SoundEvents.entity_sheep_shear, 1, 1);
-				ItemStack nameTag = new ItemStack(Items.name_tag).setStackDisplayName(target.getCustomNameTag());
+			if (heldItem != null && heldItem.getItem() instanceof ItemShears && target instanceof EntityLivingBase && target.hasCustomName() && !world.isRemote) {
+				target.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1, 1);
+				ItemStack nameTag = new ItemStack(Items.NAME_TAG).setStackDisplayName(target.getCustomNameTag());
 				target.entityDropItem(nameTag, 0);
 				target.setCustomNameTag("");
 				heldItem.damageItem(1, player);
@@ -207,19 +204,19 @@ public final class CppEventHandler {
 		}
 	}
 
+
 	/**
 	 * Allows thrown seeds to plant themselves in farmland, and gives the Homing enchantment functionality
 	 *
 	 * @param event The WorldTickEvent
 	 */
+	@SuppressWarnings("ConstantConditions")
 	@SubscribeEvent
 	public void onWorldTick(WorldTickEvent event) {
 		if (CppConfigHandler.autoSeedPlanting && !event.world.isRemote) {
 			World world = event.world;
 			List<EntityItem> entityItems = world.getEntities(EntityItem.class, EntitySelectors.IS_ALIVE);
-			for (EntityItem entityItem : entityItems)
-				if (entityItem.hasCapability(CapabilitySelfPlanting.CAPABILITY_SELF_PLANTING, null))
-					entityItem.getCapability(CapabilitySelfPlanting.CAPABILITY_SELF_PLANTING, null).handlePlantingLogic(entityItem);
+			entityItems.stream().filter(entityItem -> entityItem.hasCapability(CapabilitySelfPlanting.CAPABILITY_SELF_PLANTING, null)).forEach(entityItem -> entityItem.getCapability(CapabilitySelfPlanting.CAPABILITY_SELF_PLANTING, null).handlePlantingLogic(entityItem));
 			for (Object entityObject : world.getEntities(Entity.class, EntitySelectors.IS_ALIVE))
 				CppEnchantmentBase.cppEnchantments.stream().filter(cppEnchantment -> cppEnchantment.getClass().isAnnotationPresent(EntityTickingEnchantment.class)).forEach(cppEnchantment -> cppEnchantment.performAction((Entity) entityObject, null));
 		}
@@ -234,44 +231,47 @@ public final class CppEventHandler {
 	public void onItemTooltip(ItemTooltipEvent event) {
 		ItemStack stack = event.getItemStack();
 		Block block = Block.getBlockFromItem(stack.getItem());
-		if (block != null && block == Blocks.mob_spawner) {
+		if (block == Blocks.MOB_SPAWNER) {
 			NBTTagCompound stackTagCompound = stack.getTagCompound();
 			if (stackTagCompound != null) {
 				NBTTagCompound blockEntityTagCompound = stackTagCompound.getCompoundTag("BlockEntityTag");
-				if (blockEntityTagCompound != null) {
-					String entityName = blockEntityTagCompound.getString("EntityId");
-					Class entityClass = (Class) EntityList.stringToClassMapping.get(entityName);
-					if (entityClass != null) {
-						TextFormatting color = IMob.class.isAssignableFrom(entityClass) ? TextFormatting.RED : TextFormatting.BLUE;
-						String unlocalizedEntityName = "entity." + entityName + ".name";
-						String localizedEntityName = I18n.format(unlocalizedEntityName);
-						if (localizedEntityName.equals(unlocalizedEntityName))
-							event.getToolTip().add(color + entityName);
-						else
-							event.getToolTip().add(color + localizedEntityName);
-					}
+				String entityName = blockEntityTagCompound.getCompoundTag("SpawnData").getString("id");
+				Class entityClass = (Class) EntityList.NAME_TO_CLASS.get(entityName);
+				if (entityClass != null) {
+					TextFormatting color = IMob.class.isAssignableFrom(entityClass) ? TextFormatting.RED : TextFormatting.BLUE;
+					String unlocalizedEntityName = "entity." + entityName + ".name";
+					String localizedEntityName = I18n.format(unlocalizedEntityName);
+					if (localizedEntityName.equals(unlocalizedEntityName))
+						event.getToolTip().add(color + entityName);
+					else
+						event.getToolTip().add(color + localizedEntityName);
 				}
 			}
 		}
 	}
 
+	//may return someday if Mojang adjusts for proper placing of spawners
+	/*
 	/**
 	 * Enables mob spawners to drop themselves when harvested with silk touch
 	 *
 	 * @param event The (Block) BreakEvent
-	 */
+	(star) (slash) for javadoc
 	@SubscribeEvent
 	public void onBlockBreak(BreakEvent event) {
 		EntityPlayer player = event.getPlayer();
-		if (CppConfigHandler.mobSpawnerSilkTouchDrop && !player.capabilities.isCreativeMode && event.getState().getBlock() == Blocks.mob_spawner && EnchantmentHelper.getEnchantmentLevel(Enchantments.silkTouch, player.getHeldItemMainhand()) != 0 && player.canHarvestBlock(Blocks.mob_spawner.getDefaultState())) {
+		if (CppConfigHandler.mobSpawnerSilkTouchDrop && !player.capabilities.isCreativeMode && event.getState().getBlock() == Blocks.MOB_SPAWNER && EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, player.getHeldItemMainhand()) != 0 && player.canHarvestBlock(Blocks.MOB_SPAWNER.getDefaultState())) {
 			World world = event.getWorld();
 			BlockPos blockPos = event.getPos();
 			TileEntityMobSpawner spawnerTileEntity = (TileEntityMobSpawner) world.getTileEntity(blockPos);
 			NBTTagCompound spawnerTagCompound = new NBTTagCompound();
-			spawnerTileEntity.getSpawnerBaseLogic().writeToNBT(spawnerTagCompound);
+			if (spawnerTileEntity != null) {
+				spawnerTileEntity.getSpawnerBaseLogic().writeToNBT(spawnerTagCompound);
+				System.out.println("SWAG");
+			}
 			NBTTagCompound stackTagCompound = new NBTTagCompound();
 			stackTagCompound.setTag("BlockEntityTag", spawnerTagCompound);
-			ItemStack spawnerStack = new ItemStack(Blocks.mob_spawner);
+			ItemStack spawnerStack = new ItemStack(Blocks.MOB_SPAWNER);
 			spawnerStack.setTagCompound(stackTagCompound);
 			EntityItem spawnerEntityItem = new EntityItem(world, blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, spawnerStack);
 			spawnerEntityItem.setDefaultPickupDelay();
@@ -279,6 +279,7 @@ public final class CppEventHandler {
 			event.setExpToDrop(0);
 		}
 	}
+	*/
 
 	/**
 	 * Enables the Blazing enchantment functionality
@@ -330,7 +331,7 @@ public final class CppEventHandler {
 	@SubscribeEvent
 	public void onItemCrafted(ItemCraftedEvent event) {
 		if (event.crafting.getItem() == CppItems.crafting_pad)
-			event.player.addStat(AchievementList.buildWorkBench);
+			event.player.addStat(AchievementList.BUILD_WORK_BENCH);
 	}
 
 	/**
