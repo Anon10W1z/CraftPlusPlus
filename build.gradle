@@ -13,7 +13,7 @@ buildscript {
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "4.1"
+version = "4.1.1"
 def ENV = System.getenv()
 if (ENV.DRONE_BUILD_NUMBER)
     version += "-build" + ENV.DRONE_BUILD_NUMBER

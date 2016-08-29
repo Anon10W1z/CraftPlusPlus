@@ -7,11 +7,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemFlintAndSteel;
+import net.minecraft.util.text.translation.I18n;
 
 import java.util.Arrays;
 import java.util.List;
@@ -45,8 +45,9 @@ public class CppDispenserBehaviors {
 	 * @param item              The item dispensed by the dispenser
 	 * @param dispenserBehavior The dispenser behavior carried out for the item
 	 */
+	@SuppressWarnings("deprecation")
 	private static void registerDispenserBehavior(Item item, BehaviorDefaultDispenseItem dispenserBehavior) {
-		String localizedName = I18n.format(item.getUnlocalizedName() + ".name");
+		String localizedName = I18n.translateToLocal(item.getUnlocalizedName() + ".name");
 		if (dispenserBehavior.getClass() != BehaviorDefaultDispenseItem.class)
 			CraftPlusPlus.logInfo("Registering dispenser behavior for " + localizedName);
 		else

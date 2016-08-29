@@ -86,6 +86,7 @@ public final class CraftPlusPlus {
 		modMetadata.description = "A simple vanilla-enhancing mod";
 		modMetadata.authorList = Collections.singletonList("Anon10W1z");
 		modMetadata.url = "http://goo.gl/fiVx7H";
+		modMetadata.logoFile = "assets/craft++/textures/logo.png";
 		logInfo("Enabling the Version Checker Support");
 		NBTTagCompound versionCheckerTagCompound = new NBTTagCompound();
 		versionCheckerTagCompound.setString("curseProjectName", "235061-craft-by-anon10w1z");

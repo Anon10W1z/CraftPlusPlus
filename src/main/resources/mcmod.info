@@ -1,6 +1,7 @@
-[
 {
-    "modid" : "craft++",
-    "name" : "Craft++"
+    "modListVersion": 2,
+    "modList": [{
+        "modid": "craft++",
+        "name": "Craft++"
+    }]
 }
-]
