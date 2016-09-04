@@ -43,6 +43,7 @@ public final class CppConfigHandler {
 	public static boolean enableFlintAndSteelDispenserBehavior;
 	public static boolean renameButtons;
 	public static boolean craftingTableChanges;
+	public static boolean alternateLogo;
 
 	/**
 	 * Initializes the config handler for Craft++
@@ -91,6 +92,7 @@ public final class CppConfigHandler {
 		enableFlintAndSteelDispenserBehavior = get(miscRequiresRestartCategory, "Enable flint and steel dispenser behavior", false, "Can you use flint and steel with dispensers?");
 		renameButtons = get(miscRequiresRestartCategory, "Rename buttons", true, "Do buttons get renamed based on their material?");
 		craftingTableChanges = get(miscRequiresRestartCategory, "Crafting table changes", true, "Is the way to create a 3x3 crafting device changed?");
+		alternateLogo = get(miscRequiresRestartCategory, "Use alternate logo", false, "Use the alternate logo in the Mods page?");
 		config.setCategoryComment(miscRequiresRestartCategory, "Settings that require a Minecraft restart");
 		config.setCategoryRequiresMcRestart(miscRequiresRestartCategory, true);
 

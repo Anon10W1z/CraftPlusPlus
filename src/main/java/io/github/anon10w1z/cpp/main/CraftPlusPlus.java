@@ -78,6 +78,8 @@ public final class CraftPlusPlus {
 	public void onPreInit(FMLPreInitializationEvent event) {
 		logger = event.getModLog();
 		logInfo("Initialized the logger");
+		logInfo("Initializing the config handler");
+		CppConfigHandler.init(event.getSuggestedConfigurationFile());
 		logInfo("Hard-coding the mcmod.info");
 		ModMetadata modMetadata = event.getModMetadata();
 		modMetadata.modId = CppModInfo.MOD_ID;
@@ -86,15 +88,13 @@ public final class CraftPlusPlus {
 		modMetadata.description = "A simple vanilla-enhancing mod";
 		modMetadata.authorList = Collections.singletonList("Anon10W1z");
 		modMetadata.url = "http://goo.gl/fiVx7H";
-		modMetadata.logoFile = "assets/craft++/textures/logo.png";
+		modMetadata.logoFile = "assets/craft++/textures/logos/logo" + (CppConfigHandler.alternateLogo ? "_alternate" : "") + ".png";
 		logInfo("Enabling the Version Checker Support");
 		NBTTagCompound versionCheckerTagCompound = new NBTTagCompound();
 		versionCheckerTagCompound.setString("curseProjectName", "235061-craft-by-anon10w1z");
 		versionCheckerTagCompound.setString("curseFilenameParser", "craft++-[]");
 		versionCheckerTagCompound.setString("modDisplayName", "Craft++");
 		FMLInterModComms.sendRuntimeMessage(CppModInfo.MOD_ID, "VersionChecker", "addCurseCheck", versionCheckerTagCompound);
-		logInfo("Initializing the config handler");
-		CppConfigHandler.init(event.getSuggestedConfigurationFile());
 		logInfo("Registering the blocks");
 		CppBlocks.registerBlocks();
 		logInfo("Registering the items");

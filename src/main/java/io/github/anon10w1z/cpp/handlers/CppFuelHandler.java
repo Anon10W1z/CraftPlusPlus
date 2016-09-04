@@ -11,6 +11,6 @@ import net.minecraftforge.fml.common.IFuelHandler;
 public class CppFuelHandler implements IFuelHandler {
 	@Override
 	public int getBurnTime(ItemStack fuel) {
-		return fuel.getItem() == Item.getItemFromBlock(CppBlocks.charcoal_block) ? 16000 : 0;
+		return fuel.getItem() == Item.getItemFromBlock(CppBlocks.CHARCOAL_BLOCK) ? 16000 : 0;
 	}
 }

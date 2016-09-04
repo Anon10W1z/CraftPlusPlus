@@ -92,7 +92,7 @@ public class CppRecipeReplacer {
 		//Crafting Table Changes
 		if (CppConfigHandler.craftingTableChanges) {
 			removeRecipes(new ItemStack(Blocks.CRAFTING_TABLE));
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.CRAFTING_TABLE), "P", "W", 'P', CppItems.crafting_pad, 'W', "plankWood"));
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.CRAFTING_TABLE), "P", "W", 'P', CppItems.CRAFTING_PAD, 'W', "plankWood"));
 		}
 	}
 

@@ -165,7 +165,7 @@ public class EntityObsidianBoat extends EntityBoat {
 	}
 
 	public Item getItemBoat() {
-		return CppItems.obsidian_boat;
+		return CppItems.OBSIDIAN_BOAT;
 	}
 
 	/**
@@ -658,7 +658,7 @@ public class EntityObsidianBoat extends EntityBoat {
 						this.setDead();
 
 						if (this.worldObj.getGameRules().getBoolean("doEntityDrops")) {
-							this.entityDropItem(new ItemStack(CppItems.obsidian_boat), 0.0F);
+							this.entityDropItem(new ItemStack(CppItems.OBSIDIAN_BOAT), 0.0F);
 						}
 					}
 				}

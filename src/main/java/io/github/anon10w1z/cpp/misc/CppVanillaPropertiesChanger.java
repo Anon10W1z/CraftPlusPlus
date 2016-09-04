@@ -28,6 +28,7 @@ public class CppVanillaPropertiesChanger {
 			Blocks.WOODEN_BUTTON.setUnlocalizedName("buttonWood");
 		}
 		//Modifying achievements
-		ReflectionHelper.setPrivateValue(Achievement.class, AchievementList.BUILD_WORK_BENCH, new ItemStack(CppItems.crafting_pad), "theItemStack", "field_75990_d");
+		if (CppConfigHandler.craftingTableChanges)
+			ReflectionHelper.setPrivateValue(Achievement.class, AchievementList.BUILD_WORK_BENCH, new ItemStack(CppItems.CRAFTING_PAD), "theItemStack", "field_75990_d");
 	}
 }

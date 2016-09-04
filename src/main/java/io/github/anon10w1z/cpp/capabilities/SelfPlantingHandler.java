@@ -6,6 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemSeedFood;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -60,12 +61,14 @@ public class SelfPlantingHandler implements SelfPlanting, INBTSerializable<NBTTa
 			if (this.minSteadyTicks == 0)
 				this.minSteadyTicks = random.nextInt(75) + 75;
 			++this.steadyTicks;
-			BlockPos entityPosDown = new BlockPos(entity).down();
-			BlockPos lastTickEntityPosDown = new BlockPos(entity.lastTickPosX, entity.lastTickPosY, entity.lastTickPosZ).down();
-			if (entityPosDown.compareTo(lastTickEntityPosDown) != 0)
+			BlockPos entityPos = new BlockPos(entity);
+			BlockPos lastTickEntityPos = new BlockPos(entity.lastTickPosX, entity.lastTickPosY, entity.lastTickPosZ);
+			if (entityPos.compareTo(lastTickEntityPos) != 0)
 				this.steadyTicks = 0;
-			if (this.steadyTicks >= this.minSteadyTicks)
-				entity.getEntityItem().onItemUse(CppUtils.getFakePlayer(entity.worldObj), entity.worldObj, entityPosDown, EnumHand.MAIN_HAND, EnumFacing.UP, 0, 0, 0);
+			if (this.steadyTicks >= this.minSteadyTicks) {
+				if (entity.getEntityItem().onItemUse(CppUtils.getFakePlayer(entity.worldObj), entity.worldObj, entityPos, EnumHand.MAIN_HAND, EnumFacing.UP, 0, 0, 0) == EnumActionResult.FAIL)
+					System.out.println(entity.worldObj.getBlockState(entityPos).getBlock().getUnlocalizedName());
+			}
 		}
 	}
 }

@@ -24,19 +24,19 @@ public class CppClientProxy extends CppCommonProxy {
 	@Override
 	public void registerRenderers() {
 		//Items
-		this.registerItemInventoryRenderer(CppItems.dynamite, "dynamite");
-		this.registerItemInventoryRenderer(CppItems.stone_boat, "stone_boat");
-		this.registerItemInventoryRenderer(CppItems.obsidian_boat, "obsidian_boat");
-		this.registerItemInventoryRenderer(CppItems.fried_egg, "egg_fried");
-		this.registerItemInventoryRenderer(CppItems.crafting_pad, "crafting_pad");
-		this.registerItemInventoryRenderer(CppItems.binocular_lens, "binocular_lens");
-		this.registerItemInventoryRenderer(CppItems.binoculars, "binoculars");
+		this.registerItemInventoryRenderer(CppItems.DYNAMITE, "dynamite");
+		this.registerItemInventoryRenderer(CppItems.STONE_BOAT, "stone_boat");
+		this.registerItemInventoryRenderer(CppItems.OBSIDIAN_BOAT, "obsidian_boat");
+		this.registerItemInventoryRenderer(CppItems.FRIED_EGG, "egg_fried");
+		this.registerItemInventoryRenderer(CppItems.CRAFTING_PAD, "crafting_pad");
+		this.registerItemInventoryRenderer(CppItems.BINOCULAR_LENS, "binocular_lens");
+		this.registerItemInventoryRenderer(CppItems.BINOCULARS, "binoculars");
 		//Blocks
-		this.registerBlockInventoryRenderer(CppBlocks.flint_block, "flint");
-		this.registerBlockInventoryRenderer(CppBlocks.sugar_block, "sugar");
-		this.registerBlockInventoryRenderer(CppBlocks.charcoal_block, "charcoal");
+		this.registerBlockInventoryRenderer(CppBlocks.FLINT_BLOCK, "flint");
+		this.registerBlockInventoryRenderer(CppBlocks.SUGAR_BLOCK, "sugar");
+		this.registerBlockInventoryRenderer(CppBlocks.CHARCOAL_BLOCK, "charcoal");
 		//Entities
-		RenderingRegistry.registerEntityRenderingHandler(EntityDynamite.class, new RenderSnowball(minecraft.getRenderManager(), CppItems.dynamite, minecraft.getRenderItem()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityDynamite.class, new RenderSnowball(minecraft.getRenderManager(), CppItems.DYNAMITE, minecraft.getRenderItem()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityObsidianBoat.class, new RenderObsidianBoat(minecraft.getRenderManager()));
 	}
 

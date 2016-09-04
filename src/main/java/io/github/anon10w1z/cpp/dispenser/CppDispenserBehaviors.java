@@ -35,8 +35,8 @@ public class CppDispenserBehaviors {
 			if (item instanceof ItemFlintAndSteel && !CppConfigHandler.enableFlintAndSteelDispenserBehavior)
 				registerDispenserBehavior(item, new BehaviorDefaultDispenseItem());
 		}
-		registerDispenserBehavior(CppItems.dynamite, new BehaviorDispenseDynamite());
-		registerDispenserBehavior(CppItems.obsidian_boat, new BehaviorDispenseObsidianBoat());
+		registerDispenserBehavior(CppItems.DYNAMITE, new BehaviorDispenseDynamite());
+		registerDispenserBehavior(CppItems.OBSIDIAN_BOAT, new BehaviorDispenseObsidianBoat());
 	}
 
 	/**

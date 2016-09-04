@@ -11,23 +11,23 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
  * Contains, initializes, and registers all of Craft++'s blocks
  */
 public class CppBlocks {
-	public static Block flint_block;
-	public static Block sugar_block;
-	public static Block charcoal_block;
+	public static Block FLINT_BLOCK;
+	public static Block SUGAR_BLOCK;
+	public static Block CHARCOAL_BLOCK;
 
 	/**
 	 * Registers the blocks for Craft++
 	 */
 	public static void registerBlocks() {
-		flint_block = new BlockCppStorage(Material.ROCK, "flint").setSoundType(SoundType.STONE).setHardness(0.8F);
-		registerBlock(flint_block);
+		FLINT_BLOCK = new BlockCppStorage(Material.ROCK, "flint").setSoundType(SoundType.STONE).setHardness(0.8F);
+		registerBlock(FLINT_BLOCK);
 
-		sugar_block = new BlockSugar();
-		registerBlock(sugar_block);
+		SUGAR_BLOCK = new BlockSugar();
+		registerBlock(SUGAR_BLOCK);
 
-		charcoal_block = new BlockCppStorage(Material.ROCK, "charcoal").setSoundType(SoundType.STONE).setHardness(5).setResistance(10);
-		Blocks.FIRE.setFireInfo(charcoal_block, 5, 5);
-		registerBlock(charcoal_block);
+		CHARCOAL_BLOCK = new BlockCppStorage(Material.ROCK, "charcoal").setSoundType(SoundType.STONE).setHardness(5).setResistance(10);
+		Blocks.FIRE.setFireInfo(CHARCOAL_BLOCK, 5, 5);
+		registerBlock(CHARCOAL_BLOCK);
 	}
 
 	/**

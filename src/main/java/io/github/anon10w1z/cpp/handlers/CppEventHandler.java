@@ -330,7 +330,7 @@ public final class CppEventHandler {
 	 */
 	@SubscribeEvent
 	public void onItemCrafted(ItemCraftedEvent event) {
-		if (event.crafting.getItem() == CppItems.crafting_pad)
+		if (event.crafting.getItem() == CppItems.CRAFTING_PAD)
 			event.player.addStat(AchievementList.BUILD_WORK_BENCH);
 	}
 
@@ -353,7 +353,7 @@ public final class CppEventHandler {
 	@SubscribeEvent
 	public void onFOVUpdate(FOVUpdateEvent event) {
 		ItemStack helmet = event.getEntity().getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-		if (helmet != null && helmet.getItem() == CppItems.binoculars)
+		if (helmet != null && helmet.getItem() == CppItems.BINOCULARS)
 			event.setNewfov(event.getNewfov() / CppConfigHandler.binocularZoomAmount);
 	}
 

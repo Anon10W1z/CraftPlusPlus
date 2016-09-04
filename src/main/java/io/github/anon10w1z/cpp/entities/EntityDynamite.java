@@ -76,7 +76,7 @@ public class EntityDynamite extends EntityThrowable {
 		if (!world.isRemote)
 			if (this.getTicksSinceWet() < WET_TICKS) {
 				if (isNotCreativeThrower())
-					this.dropItem(CppItems.dynamite, 1);
+					this.dropItem(CppItems.DYNAMITE, 1);
 			} else
 				world.createExplosion(this, this.posX, this.posY, this.posZ, 2F, true);
 		this.setDead();

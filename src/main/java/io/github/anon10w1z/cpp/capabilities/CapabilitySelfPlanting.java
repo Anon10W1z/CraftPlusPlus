@@ -4,6 +4,7 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.Capability.IStorage;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 
@@ -12,7 +13,7 @@ public class CapabilitySelfPlanting {
 	public static Capability<SelfPlanting> CAPABILITY_SELF_PLANTING = null;
 
 	public static void register() {
-		CapabilityManager.INSTANCE.register(SelfPlanting.class, new Capability.IStorage<SelfPlanting>() {
+		CapabilityManager.INSTANCE.register(SelfPlanting.class, new IStorage<SelfPlanting>() {
 			@Override
 			public NBTBase writeNBT(Capability<SelfPlanting> capability, SelfPlanting instance, EnumFacing side) {
 				NBTTagCompound compound = new NBTTagCompound();
